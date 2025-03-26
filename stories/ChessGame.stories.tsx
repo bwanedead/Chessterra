@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import ChessGame from '@/components/ChessGame';
 

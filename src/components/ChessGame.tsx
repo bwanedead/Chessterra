@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { Chess } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
 import { motion } from 'framer-motion';
-import { useGameStore } from '@/lib/gameStore';
+import { Button } from '@headlessui/react';
 import * as d3 from 'd3';
+import { useGameStore } from '@/lib/gameStore';
 
 const squareToIndex = (square: string): number => {
   const file = square.charCodeAt(0) - 'a'.charCodeAt(0);
@@ -15,7 +16,6 @@ const squareToIndex = (square: string): number => {
 
 const calculateInfluence = (game: Chess, color: 'w' | 'b'): number[] => {
   if (!game || !game.fen) return new Array(64).fill(0);
-  
   try {
     const fen = game.fen();
     const parts = fen.split(' ');
@@ -36,21 +36,22 @@ const calculateInfluence = (game: Chess, color: 'w' | 'b'): number[] => {
 };
 
 const ChessGame: React.FC = () => {
-  // Use the game store for state management
   const { pgn, setPgn, currentMove, setCurrentMove } = useGameStore();
-  
-  // Local state
   const [game, setGame] = useState<Chess>(new Chess());
   const [fens, setFens] = useState<string[]>([]);
   const [whiteInfluence, setWhiteInfluence] = useState<number[]>(new Array(64).fill(0));
   const [blackInfluence, setBlackInfluence] = useState<number[]>(new Array(64).fill(0));
   const [heatmapMode, setHeatmapMode] = useState<'white' | 'black' | 'net'>('net');
   const [showHeatmap, setShowHeatmap] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const loadPgn = () => {
-    if (!pgn) return;
-    
+    if (!pgn) {
+      setErrorMessage('Please enter a PGN to load');
+      return;
+    }
     try {
+      setErrorMessage(null);
       const newGame = new Chess();
       newGame.loadPgn(pgn);
       const history = newGame.history({ verbose: true });
@@ -64,14 +65,12 @@ const ChessGame: React.FC = () => {
       setCurrentMove(fensList.length - 1);
     } catch (error) {
       console.error('Error loading PGN:', error);
-      alert('Invalid PGN format. Please check and try again.');
+      setErrorMessage('Invalid PGN format. Please check and try again.');
     }
   };
 
   useEffect(() => {
-    if (fens.length > 0) {
-      setGame(new Chess(fens[currentMove]));
-    }
+    if (fens.length > 0) setGame(new Chess(fens[currentMove]));
   }, [currentMove, fens]);
 
   useEffect(() => {
@@ -84,108 +83,152 @@ const ChessGame: React.FC = () => {
   }, [game]);
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="mb-4 flex items-center gap-4">
-        <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            checked={showHeatmap}
-            onChange={() => setShowHeatmap(!showHeatmap)}
-            className="h-4 w-4"
-            aria-label="Toggle heatmap visualization"
-          />
-          Show Heatmap
-        </label>
-        <select
-          value={heatmapMode}
-          onChange={(e) => setHeatmapMode(e.target.value as 'white' | 'black' | 'net')}
-          className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-chess-blue"
-          aria-label="Select heatmap mode"
-        >
-          <option value="white">White Influence</option>
-          <option value="black">Black Influence</option>
-          <option value="net">Net Influence</option>
-        </select>
-      </div>
-      <textarea
-        value={pgn}
-        onChange={(e) => setPgn(e.target.value)}
-        placeholder="Paste your PGN here"
-        rows={5}
-        className="w-full p-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-chess-blue"
-        aria-label="PGN input"
-      />
-      <button
-        onClick={loadPgn}
-        className="mb-4 px-4 py-2 bg-chess-blue text-white rounded-md hover:bg-chess-blue/80 transition-colors duration-200"
-        aria-label="Load PGN"
-      >
-        Load PGN
-      </button>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="relative w-[400px] h-[400px] md:w-[600px] md:h-[600px]"
-      >
-        <Chessboard position={game.fen()} boardWidth={400} />
-        {showHeatmap && (
-          <svg className="absolute top-0 left-0 w-full h-full">
-            {Array.from({ length: 64 }, (_, i) => {
-              const rank = Math.floor(i / 8);
-              const file = i % 8;
-              const x = file * 50;
-              const y = (7 - rank) * 50;
-              const value =
-                heatmapMode === 'white'
-                  ? Math.min(5, whiteInfluence[i] || 0)
-                  : heatmapMode === 'black'
-                  ? Math.min(5, blackInfluence[i] || 0)
-                  : Math.max(-5, Math.min(5, (whiteInfluence[i] || 0) - (blackInfluence[i] || 0)));
-              
-              const colorScale =
-                heatmapMode === 'net'
-                  ? d3.scaleLinear<string>().domain([-5, 0, 5]).range(['blue', 'white', 'red'])
-                  : d3.scaleLinear<string>().domain([0, 5]).range(['white', 'red']);
-              
-              const color = colorScale(value);
-              
-              return (
-                <rect
-                  key={i}
-                  x={x}
-                  y={y}
-                  width={50}
-                  height={50}
-                  fill={color}
-                  opacity={0.5}
-                  className="transition-opacity duration-300"
+    <div className="min-h-screen bg-gray-900">
+      {/* Navigation Bar */}
+      <nav className="bg-gray-800 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <h1 className="text-2xl font-bold text-white">Chessterra</h1>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="bg-gray-800 rounded-lg shadow-xl p-6 mb-8">
+          <h2 className="text-3xl font-semibold text-white mb-6 text-center">
+            Chess Analytics Dashboard
+          </h2>
+
+          <div className="grid md:grid-cols-[2fr_1fr] gap-8">
+            {/* Left Column - Chessboard */}
+            <div className="flex flex-col items-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="relative w-full max-w-[600px] aspect-square mb-6"
+              >
+                <Chessboard 
+                  position={game.fen()} 
+                  boardWidth={Math.min(window.innerWidth * 0.8, 600)}
+                  customBoardStyle={{
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                  }}
                 />
-              );
-            })}
-          </svg>
-        )}
-      </motion.div>
-      <div className="mt-4 flex gap-2">
-        <button
-          onClick={() => setCurrentMove(Math.max(currentMove - 1, 0))}
-          disabled={currentMove === 0 || fens.length === 0}
-          className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 disabled:bg-gray-200 disabled:text-gray-500 transition-colors duration-200"
-          aria-label="Previous move"
-        >
-          Previous
-        </button>
-        <button
-          onClick={() => setCurrentMove(Math.min(currentMove + 1, fens.length - 1))}
-          disabled={currentMove === fens.length - 1 || fens.length === 0}
-          className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 disabled:bg-gray-200 disabled:text-gray-500 transition-colors duration-200"
-          aria-label="Next move"
-        >
-          Next
-        </button>
+                {showHeatmap && (
+                  <svg className="absolute top-0 left-0 w-full h-full rounded-lg overflow-hidden">
+                    {Array.from({ length: 64 }, (_, i) => {
+                      const rank = Math.floor(i / 8);
+                      const file = i % 8;
+                      const x = file * 50;
+                      const y = (7 - rank) * 50;
+                      const value =
+                        heatmapMode === 'white'
+                          ? Math.min(5, whiteInfluence[i] || 0)
+                          : heatmapMode === 'black'
+                          ? Math.min(5, blackInfluence[i] || 0)
+                          : Math.max(-5, Math.min(5, (whiteInfluence[i] || 0) - (blackInfluence[i] || 0)));
+                      const colorScale =
+                        heatmapMode === 'net'
+                          ? d3.scaleLinear<string>().domain([-5, 0, 5]).range(['blue', 'white', 'red'])
+                          : d3.scaleLinear<string>().domain([0, 5]).range(['white', 'red']);
+                      const color = colorScale(value);
+                      return (
+                        <rect
+                          key={i}
+                          x={x}
+                          y={y}
+                          width={50}
+                          height={50}
+                          fill={color}
+                          opacity={0.5}
+                          className="transition-opacity duration-300"
+                        />
+                      );
+                    })}
+                  </svg>
+                )}
+              </motion.div>
+
+              {/* Move Controls */}
+              <div className="flex gap-3 w-full max-w-[600px] justify-center">
+                <Button
+                  onClick={() => setCurrentMove(Math.max(currentMove - 1, 0))}
+                  disabled={currentMove === 0 || fens.length === 0}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-400 disabled:text-gray-200 transition-all duration-200 shadow-lg hover:shadow-xl"
+                >
+                  ← Previous
+                </Button>
+                <Button
+                  onClick={() => setCurrentMove(Math.min(currentMove + 1, fens.length - 1))}
+                  disabled={currentMove === fens.length - 1 || fens.length === 0}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-400 disabled:text-gray-200 transition-all duration-200 shadow-lg hover:shadow-xl"
+                >
+                  Next →
+                </Button>
+              </div>
+            </div>
+
+            {/* Right Column - Controls */}
+            <div className="flex flex-col gap-4">
+              <div className="bg-gray-700 rounded-lg p-4 shadow-lg">
+                <h3 className="text-lg font-medium text-white mb-3">Visualization Options</h3>
+                <div className="flex flex-col gap-4">
+                  <label className="flex items-center gap-3 text-gray-200">
+                    <input
+                      type="checkbox"
+                      checked={showHeatmap}
+                      onChange={() => setShowHeatmap(!showHeatmap)}
+                      className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    Show Heatmap
+                  </label>
+                  <select
+                    value={heatmapMode}
+                    onChange={(e) => setHeatmapMode(e.target.value as 'white' | 'black' | 'net')}
+                    className="w-full p-2 bg-gray-600 border border-gray-500 rounded-md text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="white">White Influence</option>
+                    <option value="black">Black Influence</option>
+                    <option value="net">Net Influence</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="bg-gray-700 rounded-lg p-4 shadow-lg">
+                <h3 className="text-lg font-medium text-white mb-3">Game Import</h3>
+                <textarea
+                  value={pgn}
+                  onChange={(e) => setPgn(e.target.value)}
+                  placeholder="Paste your PGN notation here..."
+                  rows={5}
+                  className="w-full p-3 bg-gray-600 border border-gray-500 rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3"
+                />
+                {errorMessage && (
+                  <div className="mb-3 p-3 bg-red-900/50 border border-red-500 rounded-md text-red-200">
+                    {errorMessage}
+                  </div>
+                )}
+                <Button
+                  onClick={loadPgn}
+                  className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                >
+                  Load PGN
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* Footer */}
+      <footer className="bg-gray-800 border-t border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 py-4 text-center text-gray-400">
+          <p>© 2024 Chessterra. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 };
 
-export default ChessGame; 
+export default ChessGame;
