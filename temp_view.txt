@@ -1,0 +1,310 @@
+'use client';
+
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Chess } from 'chess.js';
+import { ChessboardSquare } from './ChessboardSquare';
+import { ChessPieceDescriptor, ChessPieceSprite } from './ChessPieceSprite';
+import { createScopedLogger } from '@/shared/utils/logger';
+
+interface CustomChessboardProps {
+  fen: string;
+  orientation: 'white' | 'black';
+  moveMode: boolean;
+  boardSize: number;
+  onMove: (from: string, to: string) => boolean;
+}
+
+interface BoardSquare {
+  id: string;
+  color: 'light' | 'dark';
+  piece?: ChessPieceDescriptor;
+}
+
+interface ActiveDrag {
+  piece: ChessPieceDescriptor;
+  from: string;
+  offset: { x: number; y: number };
+}
+
+const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] as const;
+const interactionLogger = createScopedLogger('chessboard/interaction');
+
+const toPieceDescriptor = (piece: ReturnType<Chess['get']>): ChessPieceDescriptor | undefined => {
+  if (!piece) {
+    return undefined;
+  }
+
+  return { color: piece.color, type: piece.type };
+};
+
+const getSquareColor = (file: number, rank: number): 'light' | 'dark' => ((file + rank) % 2 === 0 ? 'dark' : 'light');
+
+const buildBoardSquares = (fen: string, orientation: 'white' | 'black'): BoardSquare[] => {
+  const game = new Chess(fen);
+  const board = game.board();
+  const squares: BoardSquare[] = [];
+
+  for (let row = 0; row < 8; row += 1) {
+    const rankIndex = orientation === 'white' ? row : 7 - row;
+    const rank = orientation === 'white' ? 8 - row : row + 1;
+
+    for (let col = 0; col < 8; col += 1) {
+      const fileMatrixIndex = orientation === 'white' ? col : 7 - col;
+      const displayFileIndex = orientation === 'white' ? col : 7 - col;
+      const piece = board[rankIndex][fileMatrixIndex];
+      const fileChar = FILES[displayFileIndex];
+      const squareId = `${fileChar}${rank}`;
+      const isDark = getSquareColor(fileChar.charCodeAt(0) - 97, rank - 1);
+
+      squares.push({
+        id: squareId,
+        color: isDark,
+        piece: toPieceDescriptor(piece),
+      });
+    }
+  }
+
+  return squares;
+};
+
+const getSquareFromCoordinates = (
+  clientX: number,
+  clientY: number,
+  boardRect: DOMRect,
+  orientation: 'white' | 'black',
+): string | null => {
+  const squareSize = boardRect.width / 8;
+  const relativeX = clientX - boardRect.left;
+  const relativeY = clientY - boardRect.top;
+
+  if (relativeX < 0 || relativeY < 0 || relativeX > boardRect.width || relativeY > boardRect.height) {
+    return null;
+  }
+
+  const fileIndex = Math.floor(relativeX / squareSize);
+  const rankIndex = Math.floor(relativeY / squareSize);
+
+  if (fileIndex < 0 || fileIndex > 7 || rankIndex < 0 || rankIndex > 7) {
+    return null;
+  }
+
+  const file = orientation === 'white' ? FILES[fileIndex] : FILES[7 - fileIndex];
+  const rank = orientation === 'white' ? 8 - rankIndex : rankIndex + 1;
+  return `${file}${rank}`;
+};
+
+export const CustomChessboard = ({ fen, orientation, moveMode, boardSize, onMove }: CustomChessboardProps) => {
+  const boardRef = useRef<HTMLDivElement | null>(null);
+  const previewRef = useRef<HTMLDivElement | null>(null);
+  const pointerIdRef = useRef<number | null>(null);
+  const latestPositionRef = useRef<{ x: number; y: number } | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const dragMetaRef = useRef<ActiveDrag | null>(null);
+  const orientationRef = useRef(orientation);
+  const onMoveRef = useRef(onMove);
+
+  const [activeDrag, setActiveDrag] = useState<ActiveDrag | null>(null);
+
+  const squares = useMemo(() => buildBoardSquares(fen, orientation), [fen, orientation]);
+  const piecePixelSize = Math.max(24, Math.floor((boardSize / 8) * 0.9));
+
+  orientationRef.current = orientation;
+  onMoveRef.current = onMove;
+
+  const applyPreviewTransform = useCallback(() => {
+    animationFrameRef.current = null;
+
+    const preview = previewRef.current;
+    const dragMeta = dragMetaRef.current;
+    const position = latestPositionRef.current;
+    if (!preview || !dragMeta || !position) {
+      return;
+    }
+
+    const x = position.x - dragMeta.offset.x;
+    const y = position.y - dragMeta.offset.y;
+    preview.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  }, []);
+
+  const schedulePreviewSync = useCallback(() => {
+    if (animationFrameRef.current === null) {
+      animationFrameRef.current = window.requestAnimationFrame(applyPreviewTransform);
+    }
+  }, [applyPreviewTransform]);
+
+  useEffect(() => {
+    const handlePointerMove = (event: PointerEvent) => {
+      if (pointerIdRef.current !== event.pointerId) {
+        return;
+      }
+
+      latestPositionRef.current = { x: event.clientX, y: event.clientY };
+      schedulePreviewSync();
+    };
+
+    const handlePointerUp = (event: PointerEvent) => {
+      if (pointerIdRef.current !== event.pointerId) {
+        return;
+      }
+
+      const dragMeta = dragMetaRef.current;
+      pointerIdRef.current = null;
+      latestPositionRef.current = null;
+      dragMetaRef.current = null;
+
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+
+      setActiveDrag(null);
+      if (previewRef.current) {
+        previewRef.current.style.visibility = 'hidden';
+        previewRef.current.style.transform = 'translate3d(-9999px, -9999px, 0)';
+      }
+
+      const boardElement = boardRef.current;
+      if (!boardElement || !dragMeta) {
+        return;
+      }
+
+      const rect = boardElement.getBoundingClientRect();
+      const targetSquare = getSquareFromCoordinates(event.clientX, event.clientY, rect, orientationRef.current);
+
+      interactionLogger.debug('pointer-up', { pointerId: event.pointerId, targetSquare });
+
+      if (targetSquare && targetSquare !== dragMeta.from) {
+        onMoveRef.current(dragMeta.from, targetSquare);
+      }
+    };
+
+    const handlePointerCancel = (event: PointerEvent) => {
+      if (pointerIdRef.current !== event.pointerId) {
+        return;
+      }
+
+      pointerIdRef.current = null;
+      latestPositionRef.current = null;
+      dragMetaRef.current = null;
+
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+
+      setActiveDrag(null);
+      if (previewRef.current) {
+        previewRef.current.style.visibility = 'hidden';
+        previewRef.current.style.transform = 'translate3d(-9999px, -9999px, 0)';
+      }
+    };
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    window.addEventListener('pointerup', handlePointerUp);
+    window.addEventListener('pointercancel', handlePointerCancel);
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+      window.removeEventListener('pointercancel', handlePointerCancel);
+    };
+  }, [schedulePreviewSync]);
+
+  const beginDrag = useCallback(
+    (squareId: string, piece: ChessPieceDescriptor, event: React.PointerEvent<HTMLDivElement>) => {
+      if (!moveMode || event.button !== 0) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      pointerIdRef.current = event.pointerId;
+
+      const squareRect = (event.currentTarget as HTMLDivElement).getBoundingClientRect();
+      const offset = {
+        x: event.clientX - squareRect.left,
+        y: event.clientY - squareRect.top,
+      };
+
+      latestPositionRef.current = { x: event.clientX, y: event.clientY };
+      const dragMeta: ActiveDrag = { piece, from: squareId, offset };
+      dragMetaRef.current = dragMeta;
+      setActiveDrag(dragMeta);
+
+      try {
+        (event.currentTarget as HTMLDivElement).setPointerCapture(event.pointerId);
+      } catch (error) {
+        interactionLogger.debug('pointer-capture-failed', { error });
+      }
+
+      if (previewRef.current) {
+        previewRef.current.style.width = `${piecePixelSize}px`;
+        previewRef.current.style.height = `${piecePixelSize}px`;
+        previewRef.current.style.visibility = 'visible';
+      }
+
+      schedulePreviewSync();
+
+      interactionLogger.debug('pointer-down', {
+        pointerId: event.pointerId,
+        square: squareId,
+        piece,
+      });
+    },
+    [moveMode, piecePixelSize, schedulePreviewSync],
+  );
+
+  return (
+    <div
+      ref={boardRef}
+      className={`relative h-full w-full select-none ${activeDrag ? 'cursor-grabbing' : 'cursor-grab'}`}
+      style={{ touchAction: 'none', userSelect: 'none' }}
+      onContextMenu={(event) => event.preventDefault()}
+    >
+      <div
+        className="grid h-full w-full"
+        style={{
+          gridTemplateColumns: 'repeat(8, minmax(0, 1fr))',
+          gridTemplateRows: 'repeat(8, minmax(0, 1fr))',
+        }}
+      >
+        {squares.map((square) => {
+          const isDraggingSource = activeDrag?.from === square.id;
+          return (
+            <ChessboardSquare
+              key={square.id}
+              square={square.id}
+              color={square.color}
+              highlight={isDraggingSource}
+              onPointerDown={(event) => {
+                if (square.piece) {
+                  beginDrag(square.id, square.piece, event);
+                }
+              }}
+            >
+              {square.piece && (
+                <ChessPieceSprite
+                  piece={square.piece}
+                  size={piecePixelSize}
+                  className={isDraggingSource ? 'opacity-30' : undefined}
+                />
+              )}
+            </ChessboardSquare>
+          );
+        })}
+      </div>
+
+      <div
+        ref={previewRef}
+        className="pointer-events-none fixed left-0 top-0 z-50 will-change-transform"
+        style={{
+          visibility: activeDrag ? 'visible' : 'hidden',
+          transform: 'translate3d(-9999px, -9999px, 0)',
+        }}
+      >
+        {activeDrag && <ChessPieceSprite piece={activeDrag.piece} size={piecePixelSize} className="drop-shadow-2xl" />}
+      </div>
+    </div>
+  );
+};
