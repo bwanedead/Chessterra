@@ -89,29 +89,13 @@ export const usePieceDrag = ({ boardRef, orientation, moveMode, onMove }: UsePie
 
     setDragVisual((current) => {
       if (!current) {
-        interactionLogger.debug('drag-visual-update-skipped', {
-          reason: 'no-current-visual',
-          pointerId: pointerIdRef.current,
-          requestedPosition: nextPosition,
-        });
         return current;
       }
       const nextVisual = {
         ...current,
         position: nextPosition,
       };
-
-      interactionLogger.debug('drag-visual-update', {
-        square: nextVisual.square,
-        position: nextVisual.position,
-      });
-
       return nextVisual;
-    });
-
-    interactionLogger.debug('preview-transform', {
-      pointerId: pointerIdRef.current,
-      transform: nextPosition,
     });
   }, []);
 
@@ -138,10 +122,6 @@ export const usePieceDrag = ({ boardRef, orientation, moveMode, onMove }: UsePie
 
       const dragMeta = dragMetaRef.current;
       if (!dragMeta) {
-        interactionLogger.debug('drag-move-skipped', {
-          reason: 'missing-drag-meta',
-          pointerId: event.pointerId,
-        });
         return;
       }
 
@@ -196,12 +176,6 @@ export const usePieceDrag = ({ boardRef, orientation, moveMode, onMove }: UsePie
         dragMeta.boardRect,
         orientationRef.current,
       );
-
-      interactionLogger.debug('pointer-up', {
-        pointerId: event.pointerId,
-        targetSquare,
-        moveMode: moveModeRef.current,
-      });
 
       if (!targetSquare) {
         interactionLogger.debug('drag-drop-ignored', {
@@ -283,7 +257,7 @@ export const usePieceDrag = ({ boardRef, orientation, moveMode, onMove }: UsePie
       pendingPositionRef.current = position;
       setDragVisual({ square: squareId, piece, position });
 
-      interactionLogger.debug('pointer-down', {
+      interactionLogger.debug('drag-begin', {
         pointerId: event.pointerId,
         square: squareId,
         piece,
@@ -308,10 +282,7 @@ export const usePieceDrag = ({ boardRef, orientation, moveMode, onMove }: UsePie
     pendingPositionRef.current = null;
     clearAnimationFrame();
     setDragVisual(null);
-
-    interactionLogger.debug('drag-cancelled', {
-      pointerId: null,
-    });
+    interactionLogger.debug('drag-cancelled', {});
   }, [clearAnimationFrame]);
 
   return {

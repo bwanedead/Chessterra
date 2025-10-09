@@ -11,30 +11,43 @@ interface DragPreviewLayerProps {
 export const DragPreviewLayer = memo(({ dragVisual, piecePixelSize }: DragPreviewLayerProps) => {
   const previewLogger = useMemo(() => createScopedLogger('chessboard/preview'), []);
   const elementRef = useRef<HTMLDivElement | null>(null);
+  const hasLoggedActiveRef = useRef(false);
 
   useEffect(() => {
     if (!dragVisual) {
-      previewLogger.debug('preview-hidden');
+      if (hasLoggedActiveRef.current) {
+        hasLoggedActiveRef.current = false;
+        previewLogger.debug('preview-hidden');
+      }
       return;
     }
 
-    const element = elementRef.current;
-    if (!element) {
-      previewLogger.debug('preview-missing-element', { dragVisual });
+    if (hasLoggedActiveRef.current) {
       return;
     }
 
-    const rect = element.getBoundingClientRect();
-    previewLogger.debug('preview-render', {
-      square: dragVisual.square,
-      position: dragVisual.position,
-      pieceSize: piecePixelSize,
-      boundingRect: {
-        left: rect.left,
-        top: rect.top,
-        width: rect.width,
-        height: rect.height,
-      },
+    hasLoggedActiveRef.current = true;
+    requestAnimationFrame(() => {
+      const element = elementRef.current;
+      if (!element) {
+        previewLogger.warn('preview-missing-element', { square: dragVisual.square });
+        return;
+      }
+
+      const rect = element.getBoundingClientRect();
+      const computedZ = window.getComputedStyle(element).zIndex;
+      previewLogger.debug('preview-mounted', {
+        square: dragVisual.square,
+        position: dragVisual.position,
+        pieceSize: piecePixelSize,
+        boundingRect: {
+          left: rect.left,
+          top: rect.top,
+          width: rect.width,
+          height: rect.height,
+        },
+        zIndex: computedZ,
+      });
     });
   }, [dragVisual, piecePixelSize, previewLogger]);
 
@@ -52,6 +65,7 @@ export const DragPreviewLayer = memo(({ dragVisual, piecePixelSize }: DragPrevie
         width: `${piecePixelSize}px`,
         height: `${piecePixelSize}px`,
         transform: `translate3d(${dragVisual.position.x}px, ${dragVisual.position.y}px, 0)`,
+        zIndex: 512,
       }}
       data-preview-layer="true"
     >

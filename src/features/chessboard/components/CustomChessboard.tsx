@@ -25,45 +25,64 @@ export const CustomChessboard = ({ fen, orientation, moveMode, boardSize, onMove
     onMove,
   });
   const renderLogger = useMemo(() => createScopedLogger('chessboard/render'), []);
-
-  useEffect(() => {
-    renderLogger.debug('render-state', {
-      hasDragVisual: Boolean(dragVisual),
-      dragSquare: dragVisual?.square ?? null,
-      dragPosition: dragVisual?.position ?? null,
-    });
-  }, [dragVisual, renderLogger]);
+  const activePreviewRef = useRef<string | null>(null);
+  const previewIssueLoggedRef = useRef(false);
 
   useEffect(() => {
     const boardElement = boardRef.current;
     if (!boardElement) {
-      renderLogger.debug('board-rect-missing-element');
       return;
     }
 
-    const rect = boardElement.getBoundingClientRect();
-    renderLogger.debug('board-rect', {
-      left: rect.left,
-      top: rect.top,
-      width: rect.width,
-      height: rect.height,
-    });
+    if (!dragVisual) {
+      if (activePreviewRef.current) {
+        renderLogger.debug('preview-cleared', { square: activePreviewRef.current });
+      }
+      activePreviewRef.current = null;
+      previewIssueLoggedRef.current = false;
+      return;
+    }
+
+    if (!activePreviewRef.current) {
+      activePreviewRef.current = dragVisual.square;
+      renderLogger.debug('preview-activated', { square: dragVisual.square });
+    }
 
     const previewElement = boardElement.querySelector('[data-preview-layer="true"]') as HTMLDivElement | null;
-    if (previewElement) {
-      const previewRect = previewElement.getBoundingClientRect();
-      renderLogger.debug('board-preview-dom', {
-        left: previewRect.left,
-        top: previewRect.top,
-        width: previewRect.width,
-        height: previewRect.height,
-      });
-    } else {
-      renderLogger.debug('board-preview-dom-missing', {
-        hasDragVisual: Boolean(dragVisual),
-      });
+    if (!previewElement) {
+      if (!previewIssueLoggedRef.current) {
+        previewIssueLoggedRef.current = true;
+        renderLogger.warn('preview-dom-missing', { square: dragVisual.square });
+      }
+      return;
     }
-  }, [boardSize, orientation, dragVisual, renderLogger]);
+
+    requestAnimationFrame(() => {
+      const boardRect = boardElement.getBoundingClientRect();
+      const previewRect = previewElement.getBoundingClientRect();
+      const computedZ = window.getComputedStyle(previewElement).zIndex;
+
+      const outsideBoard =
+        previewRect.left < boardRect.left - 1 ||
+        previewRect.top < boardRect.top - 1 ||
+        previewRect.right > boardRect.right + 1 ||
+        previewRect.bottom > boardRect.bottom + 1;
+
+      const zIndexValue = Number.isNaN(Number(computedZ)) ? null : Number(computedZ);
+      const lowZ = computedZ === 'auto' || (typeof zIndexValue === 'number' && zIndexValue < 100);
+
+      if ((outsideBoard || lowZ) && !previewIssueLoggedRef.current) {
+        previewIssueLoggedRef.current = true;
+        renderLogger.warn('preview-visibility-risk', {
+          square: dragVisual.square,
+          position: dragVisual.position,
+          previewRect,
+          boardRect,
+          computedZ,
+        });
+      }
+    });
+  }, [boardSize, dragVisual, orientation, renderLogger]);
 
   return (
     <div

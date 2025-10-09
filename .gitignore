@@ -61,3 +61,15 @@ build-storybook.log
 *.njsproj
 *.sln
 *.sw?
+
+# Editor/assistant artifacts
+.cursor/
+
+# Local temp files
+temp_*.txt
+*.patch
+*.orig
+*.rej
+
+# Windows thumbnails
+Thumbs.db
