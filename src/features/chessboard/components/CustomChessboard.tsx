@@ -39,6 +39,11 @@ export const CustomChessboard = ({
   const previewIssueLoggedRef = useRef(false);
 
   useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      const overlayCount = squareOverlays ? Object.keys(squareOverlays).length : 0;
+      renderLogger.debug('square-overlays', { count: overlayCount });
+    }
+
     const boardElement = boardRef.current;
     if (!boardElement) {
       return;
@@ -92,7 +97,7 @@ export const CustomChessboard = ({
         });
       }
     });
-  }, [boardSize, dragVisual, orientation, renderLogger]);
+  }, [boardSize, dragVisual, orientation, renderLogger, squareOverlays]);
 
   return (
     <div

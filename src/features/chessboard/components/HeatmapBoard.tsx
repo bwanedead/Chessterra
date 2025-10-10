@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import styles from './BoardWorkspaceLayout.module.css';
 import { CustomChessboard } from '@/features/chessboard/components/CustomChessboard';
 import { HeatmapControlsPanel } from '@/features/chessboard/components/HeatmapControlsPanel';
@@ -22,13 +22,6 @@ export const HeatmapBoard = ({ fen, orientation, moveMode, boardSize, onMove }: 
     scheme: controls.scheme,
     includeBothSides: controls.includeBothSides,
   });
-
-  const overlaySummary = useMemo(
-    () => ({
-      activePieceCount: overlay.activePieceCount,
-    }),
-    [overlay.activePieceCount],
-  );
 
   const layoutRef = useRef<HTMLDivElement | null>(null);
   const boardShellRef = useRef<HTMLDivElement | null>(null);
@@ -111,9 +104,21 @@ export const HeatmapBoard = ({ fen, orientation, moveMode, boardSize, onMove }: 
           toggles={controls.toggles}
           onToggle={controls.togglePiece}
           onClear={controls.clearPieces}
-          activePieceCount={overlaySummary.activePieceCount}
         />
       </div>
     </div>
   );
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'development') {
+      return;
+    }
+
+    const overlaySquareCount = Object.keys(overlay.overlays).length;
+    console.log('heatmap-board/overlay-summary', {
+      toggles: controls.activeToggleIds,
+      overlaySquares: overlaySquareCount,
+      hasOverlay: overlay.hasOverlay,
+    });
+  }, [controls.activeToggleIds, overlay.hasOverlay, overlay.overlays]);
 };
