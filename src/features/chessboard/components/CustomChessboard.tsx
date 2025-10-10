@@ -13,9 +13,19 @@ interface CustomChessboardProps {
   moveMode: boolean;
   boardSize: number;
   onMove: (from: string, to: string) => boolean;
+  squareOverlays?: Record<string, { color: string; opacity: number }>;
+  showPieces?: boolean;
 }
 
-export const CustomChessboard = ({ fen, orientation, moveMode, boardSize, onMove }: CustomChessboardProps) => {
+export const CustomChessboard = ({
+  fen,
+  orientation,
+  moveMode,
+  boardSize,
+  onMove,
+  squareOverlays,
+  showPieces = true,
+}: CustomChessboardProps) => {
   const boardRef = useRef<HTMLDivElement | null>(null);
   const { squares, piecePixelSize } = useBoardSquares({ fen, orientation, boardSize });
   const { dragVisual, beginDrag } = usePieceDrag({
@@ -96,6 +106,8 @@ export const CustomChessboard = ({ fen, orientation, moveMode, boardSize, onMove
         piecePixelSize={piecePixelSize}
         dragSourceSquare={dragVisual?.square}
         onSquarePointerDown={beginDrag}
+        squareOverlays={squareOverlays}
+        showPieces={showPieces}
       />
       <DragPreviewLayer dragVisual={dragVisual} piecePixelSize={piecePixelSize} />
     </div>

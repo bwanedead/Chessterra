@@ -9,6 +9,9 @@ interface ChessboardSquareProps {
   children?: ReactNode;
   highlight?: boolean;
   className?: string;
+  overlayColor?: string | null;
+  overlayOpacity?: number;
+  showContent?: boolean;
 }
 
 const LIGHT_COLOR = '#f5deab';
@@ -23,6 +26,9 @@ export const ChessboardSquare = ({
   children,
   highlight,
   className,
+  overlayColor,
+  overlayOpacity = 0,
+  showContent = true,
 }: ChessboardSquareProps) => {
   const backgroundColor = color === 'light' ? LIGHT_COLOR : DARK_COLOR;
 
@@ -43,8 +49,14 @@ export const ChessboardSquare = ({
       {highlight && (
         <div className="absolute inset-0 rounded-md pointer-events-none" style={{ backgroundColor: HIGHLIGHT_COLOR }} />
       )}
+      {overlayColor ? (
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ backgroundColor: overlayColor, opacity: overlayOpacity }}
+        />
+      ) : null}
       <div className="relative z-10 flex items-center justify-center w-full h-full select-none pointer-events-none">
-        {children}
+        {showContent ? children : null}
       </div>
     </div>
   );

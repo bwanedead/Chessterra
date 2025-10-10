@@ -14,10 +14,19 @@ interface ChessboardSurfaceProps {
     piece: ChessPieceDescriptor,
     event: ReactPointerEvent<HTMLDivElement>,
   ) => void;
+  squareOverlays?: Record<string, { color: string; opacity: number }>;
+  showPieces?: boolean;
 }
 
 export const ChessboardSurface = memo(
-  ({ squares, piecePixelSize, dragSourceSquare, onSquarePointerDown }: ChessboardSurfaceProps) => {
+  ({
+    squares,
+    piecePixelSize,
+    dragSourceSquare,
+    onSquarePointerDown,
+    squareOverlays,
+    showPieces = true,
+  }: ChessboardSurfaceProps) => {
     const surfaceLogger = useMemo(() => createScopedLogger('chessboard/surface'), []);
 
     return (
@@ -30,12 +39,16 @@ export const ChessboardSurface = memo(
       >
         {squares.map((square) => {
           const isDraggingSource = dragSourceSquare === square.id;
+          const overlay = squareOverlays?.[square.id];
           return (
             <ChessboardSquare
               key={square.id}
               square={square.id}
               color={square.color}
               highlight={isDraggingSource}
+              overlayColor={overlay?.color}
+              overlayOpacity={overlay?.opacity}
+              showContent={showPieces}
               onPointerDown={(event) => {
                 surfaceLogger.debug('square-pointer-down', {
                   squareId: square.id,
