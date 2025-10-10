@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react';
-import styles from './HeatmapBoard.module.css';
+import styles from './BoardWorkspaceLayout.module.css';
 import { CustomChessboard } from '@/features/chessboard/components/CustomChessboard';
 import { HeatmapControlsPanel } from '@/features/chessboard/components/HeatmapControlsPanel';
 import { useHeatmapControls } from '@/features/chessboard/hooks/useHeatmapControls';
@@ -82,7 +82,11 @@ export const HeatmapBoard = ({ fen, orientation, moveMode, boardSize, onMove }: 
   }, [boardSize]);
 
   return (
-    <div ref={layoutRef} className={styles.layout}>
+    <div
+      ref={layoutRef}
+      className={styles.layout}
+      style={{ ['--board-shell-width' as const]: `${boardSize + 40}px` }}
+    >
       <div
         ref={boardShellRef}
         className={styles.boardShell}

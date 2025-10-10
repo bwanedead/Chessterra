@@ -63,6 +63,15 @@ const computePreviewPosition = (clientX: number, clientY: number, dragMeta: Acti
   y: clientY - dragMeta.boardRect.top - dragMeta.offset.y,
 });
 
+const dragTraceEnabled = process.env.NEXT_PUBLIC_DEBUG_DRAG === 'true';
+
+const logInteraction = (eventName: string, payload: Record<string, unknown>) => {
+  if (!dragTraceEnabled) {
+    return;
+  }
+  interactionLogger.debug(eventName, payload);
+};
+
 export const usePieceDrag = ({ boardRef, orientation, moveMode, onMove }: UsePieceDragParams) => {
   const pointerIdRef = useRef<number | null>(null);
   const latestPositionRef = useRef<{ x: number; y: number } | null>(null);
@@ -129,7 +138,7 @@ export const usePieceDrag = ({ boardRef, orientation, moveMode, onMove }: UsePie
       pendingPositionRef.current = nextPosition;
       schedulePreviewSync();
 
-      interactionLogger.debug('drag-position', {
+      logInteraction('drag-position', {
         from: dragMeta.from,
         pointerId: event.pointerId,
         x: event.clientX,
@@ -149,7 +158,7 @@ export const usePieceDrag = ({ boardRef, orientation, moveMode, onMove }: UsePie
       pendingPositionRef.current = null;
       setDragVisual(null);
 
-      interactionLogger.debug('drag-visual-cleared', {
+      logInteraction('drag-visual-cleared', {
         pointerId: event.pointerId,
         resetMeta,
       });
@@ -166,7 +175,7 @@ export const usePieceDrag = ({ boardRef, orientation, moveMode, onMove }: UsePie
       finalizeDrag(event, true);
 
       if (!dragMeta) {
-        interactionLogger.debug('drag-end-without-meta', { pointerId: event.pointerId });
+        logInteraction('drag-end-without-meta', { pointerId: event.pointerId });
         return;
       }
 
@@ -178,7 +187,7 @@ export const usePieceDrag = ({ boardRef, orientation, moveMode, onMove }: UsePie
       );
 
       if (!targetSquare) {
-        interactionLogger.debug('drag-drop-ignored', {
+        logInteraction('drag-drop-ignored', {
           reason: 'target-out-of-board',
           from: dragMeta.from,
         });
@@ -188,19 +197,19 @@ export const usePieceDrag = ({ boardRef, orientation, moveMode, onMove }: UsePie
       if (moveModeRef.current && targetSquare && targetSquare !== dragMeta.from) {
         const moved = onMoveRef.current(dragMeta.from, targetSquare);
         if (!moved) {
-          interactionLogger.debug('drop-rejected-by-game', { from: dragMeta.from, targetSquare });
+          logInteraction('drop-rejected-by-game', { from: dragMeta.from, targetSquare });
         } else {
-          interactionLogger.debug('drop-accepted', { from: dragMeta.from, targetSquare });
+          logInteraction('drop-accepted', { from: dragMeta.from, targetSquare });
         }
         return;
       }
 
       if (!moveModeRef.current) {
-        interactionLogger.debug('drop-canceled-move-mode-disabled', { from: dragMeta.from, targetSquare });
+        logInteraction('drop-canceled-move-mode-disabled', { from: dragMeta.from, targetSquare });
         return;
       }
 
-      interactionLogger.debug('drop-canceled-same-square', { from: dragMeta.from });
+      logInteraction('drop-canceled-same-square', { from: dragMeta.from });
     };
 
     const handlePointerCancel = (event: PointerEvent) => {
@@ -225,7 +234,7 @@ export const usePieceDrag = ({ boardRef, orientation, moveMode, onMove }: UsePie
   const beginDrag = useCallback(
     (squareId: string, piece: ChessPieceDescriptor, event: ReactPointerEvent<HTMLDivElement>) => {
       if (event.button !== 0) {
-        interactionLogger.debug('drag-start-blocked', {
+        logInteraction('drag-start-blocked', {
           reason: 'non-primary-button',
           pointerId: event.pointerId,
           squareId,
@@ -257,7 +266,7 @@ export const usePieceDrag = ({ boardRef, orientation, moveMode, onMove }: UsePie
       pendingPositionRef.current = position;
       setDragVisual({ square: squareId, piece, position });
 
-      interactionLogger.debug('drag-begin', {
+      logInteraction('drag-begin', {
         pointerId: event.pointerId,
         square: squareId,
         piece,
@@ -282,7 +291,7 @@ export const usePieceDrag = ({ boardRef, orientation, moveMode, onMove }: UsePie
     pendingPositionRef.current = null;
     clearAnimationFrame();
     setDragVisual(null);
-    interactionLogger.debug('drag-cancelled', {});
+    logInteraction('drag-cancelled', {});
   }, [clearAnimationFrame]);
 
   return {
