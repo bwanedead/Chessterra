@@ -29,21 +29,19 @@ export const HeatmapControlsPanel = ({
   }, [toggles]);
 
   return (
-    <HeatmapTray title="Influence">
-      <div className="flex items-center justify-between text-xs font-medium uppercase tracking-wide text-slate-400">
-        Pieces
+    <HeatmapTray>
+      <div className="flex flex-col items-center gap-3">
+        <div className="flex items-start justify-center gap-2">
+          <HeatmapToggleColumn toggles={ordered.black} onToggle={onToggle} />
+          <HeatmapToggleColumn toggles={ordered.white} onToggle={onToggle} />
+        </div>
         <button
           type="button"
           onClick={onClear}
-          className="text-blue-300 transition hover:text-blue-200"
+          className="rounded-full border border-slate-700 px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-300 transition hover:border-slate-500 hover:text-slate-100"
         >
           Clear
         </button>
-      </div>
-
-      <div className="grid grid-cols-2 items-start gap-x-6">
-        <HeatmapToggleColumn toggles={ordered.black} onToggle={onToggle} />
-        <HeatmapToggleColumn toggles={ordered.white} onToggle={onToggle} />
       </div>
     </HeatmapTray>
   );

@@ -45,14 +45,26 @@ export const HeatmapBoard = ({ fen, orientation, moveMode, boardSize, onMove }: 
       const boardRect = boardShell?.getBoundingClientRect();
       const trayRect = tray?.getBoundingClientRect();
 
+      if (trayRect?.width) {
+        layout.style.setProperty('--tray-width', `${Math.round(trayRect.width)}px`);
+      }
+
+      const trayGap =
+        boardRect && trayRect ? Number((boardRect.left - trayRect.right).toFixed(2)) : null;
+      const layoutStyles = window.getComputedStyle(layout);
+      const trayStyles = tray ? window.getComputedStyle(tray) : null;
+
       console.log('heatmap-board/layout', {
         viewportWidth: window.innerWidth,
         layoutWidth: layoutRect.width,
-        layoutDisplay: window.getComputedStyle(layout).display,
+        layoutDisplay: layoutStyles.display,
         breakpointActive: window.innerWidth >= 768 ? 'md+' : 'base',
         boardShellWidth: boardRect?.width,
         trayWidth: trayRect?.width,
-        layoutFlexDirection: window.getComputedStyle(layout).flexDirection,
+        layoutGap: layoutStyles.gap,
+        gridTemplateColumns: layoutStyles.gridTemplateColumns,
+        trayPosition: trayStyles?.position,
+        trayGapFromBoard: trayGap,
       });
     };
 
@@ -74,16 +86,36 @@ export const HeatmapBoard = ({ fen, orientation, moveMode, boardSize, onMove }: 
     };
   }, [boardSize]);
 
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'development') {
+      return;
+    }
+
+    const overlaySquareCount = Object.keys(overlay.overlays).length;
+    console.log('heatmap-board/overlay-summary', {
+      toggles: controls.activeToggleIds,
+      overlaySquares: overlaySquareCount,
+      hasOverlay: overlay.hasOverlay,
+    });
+  }, [controls.activeToggleIds, overlay.hasOverlay, overlay.overlays]);
+
   return (
     <div
       ref={layoutRef}
       className={styles.layout}
-      style={{ ['--board-shell-width' as const]: `${boardSize + 40}px` }}
+      style={{ ['--board-shell-width' as const]: `${boardSize}px` }}
     >
+      <div ref={trayRef} className={styles.trayZone} data-testid="heatmap-tray-zone">
+        <HeatmapControlsPanel
+          toggles={controls.toggles}
+          onToggle={controls.togglePiece}
+          onClear={controls.clearPieces}
+        />
+      </div>
+
       <div
         ref={boardShellRef}
         className={styles.boardShell}
-        style={{ width: `${boardSize + 40}px` }}
         data-testid="heatmap-board-shell"
       >
         <div style={{ width: `${boardSize}px`, height: `${boardSize}px` }}>
@@ -99,26 +131,7 @@ export const HeatmapBoard = ({ fen, orientation, moveMode, boardSize, onMove }: 
         </div>
       </div>
 
-      <div ref={trayRef} className={styles.trayZone} data-testid="heatmap-tray-zone">
-        <HeatmapControlsPanel
-          toggles={controls.toggles}
-          onToggle={controls.togglePiece}
-          onClear={controls.clearPieces}
-        />
-      </div>
+      <div className={styles.balanceShim} aria-hidden="true" />
     </div>
   );
-
-  useEffect(() => {
-    if (process.env.NODE_ENV !== 'development') {
-      return;
-    }
-
-    const overlaySquareCount = Object.keys(overlay.overlays).length;
-    console.log('heatmap-board/overlay-summary', {
-      toggles: controls.activeToggleIds,
-      overlaySquares: overlaySquareCount,
-      hasOverlay: overlay.hasOverlay,
-    });
-  }, [controls.activeToggleIds, overlay.hasOverlay, overlay.overlays]);
 };

@@ -102,4 +102,3 @@ const pieceName = (type: ChessPieceDescriptor['type']) => {
       return 'Piece';
   }
 };
-

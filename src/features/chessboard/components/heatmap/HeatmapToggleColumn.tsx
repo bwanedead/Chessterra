@@ -7,7 +7,7 @@ interface HeatmapToggleColumnProps {
 }
 
 export const HeatmapToggleColumn = ({ toggles, onToggle }: HeatmapToggleColumnProps) => (
-  <div className="flex flex-col items-center gap-3">
+  <div className="flex flex-shrink-0 flex-col items-center gap-2">
     {toggles.map((toggle) => (
       <HeatmapToggleButton key={toggle.id} toggle={toggle} onToggle={onToggle} />
     ))}

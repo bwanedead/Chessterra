@@ -5,9 +5,11 @@ import { generateHeatmap } from '@/features/chessboard/overlays/heatmapEngine';
 import { buildBoardMatrix } from '@/features/chessboard/overlays/calculators';
 import type { ChessPieceDescriptor } from '@/features/chessboard/types';
 
-const colorWhite = { r: 59, g: 130, b: 246 };
-const colorBlack = { r: 239, g: 68, b: 68 };
-const colorNeutral = { r: 156, g: 163, b: 175 };
+const WHITE_SCALE = ['#3b82f6', '#2563eb', '#1d4ed8', '#1e3a8a', '#1e40af', '#1e293b'] as const;
+const BLACK_SCALE = ['#ef4444', '#dc2626', '#b91c1c', '#991b1b', '#7f1d1d', '#450a0a'] as const;
+const NEUTRAL_SCALE = ['#6366f1', '#4338ca', '#312e81', '#1e1b4b', '#111827', '#0f172a'] as const;
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
 export interface UseHeatmapOverlayOptions {
   fen: string;
@@ -17,8 +19,15 @@ export interface UseHeatmapOverlayOptions {
   includeBothSides: boolean;
 }
 
+export interface HeatmapOverlayEntry {
+  color: string;
+  magnitude: number;
+  maxWeight: number;
+  strength: number;
+}
+
 export interface HeatmapOverlayOutput {
-  overlays: Record<string, { color: string; opacity: number }>;
+  overlays: Record<string, HeatmapOverlayEntry>;
   result: OverlayResult | null;
   activePieceCount: number;
   hasOverlay: boolean;
@@ -64,9 +73,7 @@ export const useHeatmapOverlay = ({
       return {};
     }
 
-    const maxWeight = overlayResult.maxWeight || 1;
-
-    return overlayResult.squares.reduce<Record<string, { color: string; opacity: number }>>((acc, square) => {
+    return overlayResult.squares.reduce<Record<string, HeatmapOverlayEntry>>((acc, square) => {
       const magnitude = includeBothSides
         ? Math.abs(square.combinedWeight)
         : Math.max(square.whiteWeight, square.blackWeight, square.combinedWeight);
@@ -74,17 +81,23 @@ export const useHeatmapOverlay = ({
         return acc;
       }
 
-      const alpha = Math.min(magnitude / maxWeight, 1);
-      let color = colorNeutral;
+      const magnitudeLevel = Math.max(1, Math.round(magnitude));
+
+      let palette = NEUTRAL_SCALE;
       if (square.dominant === 'white') {
-        color = colorWhite;
+        palette = WHITE_SCALE;
       } else if (square.dominant === 'black') {
-        color = colorBlack;
+        palette = BLACK_SCALE;
       }
 
+      const index = Math.min(palette.length - 1, magnitudeLevel - 1);
+      const intensityBase = 0.6 + Math.min(magnitudeLevel - 1, palette.length - 1) * 0.08;
+      const strength = clamp(intensityBase, 0.45, 0.85);
       acc[square.square] = {
-        color: `rgba(${color.r}, ${color.g}, ${color.b}, 1)`,
-        opacity: alpha,
+        color: palette[index],
+        magnitude,
+        maxWeight: magnitudeLevel,
+        strength,
       };
       return acc;
     }, {});
@@ -99,4 +112,3 @@ export const useHeatmapOverlay = ({
 };
 
 const buildToggleId = (piece: ChessPieceDescriptor) => `${piece.color}-${piece.type}`;
-

@@ -14,7 +14,7 @@ interface ChessboardSurfaceProps {
     piece: ChessPieceDescriptor,
     event: ReactPointerEvent<HTMLDivElement>,
   ) => void;
-  squareOverlays?: Record<string, { color: string; opacity: number }>;
+  squareOverlays?: Record<string, { color: string; magnitude: number; maxWeight: number; strength: number }>;
   showPieces?: boolean;
 }
 
@@ -47,7 +47,7 @@ export const ChessboardSurface = memo(
               color={square.color}
               highlight={isDraggingSource}
               overlayColor={overlay?.color}
-              overlayOpacity={overlay?.opacity}
+              overlayStrength={overlay?.strength}
               showContent={showPieces}
               onPointerDown={(event) => {
                 surfaceLogger.debug('square-pointer-down', {

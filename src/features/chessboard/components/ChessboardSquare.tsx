@@ -10,7 +10,7 @@ interface ChessboardSquareProps {
   highlight?: boolean;
   className?: string;
   overlayColor?: string | null;
-  overlayOpacity?: number;
+  overlayStrength?: number;
   showContent?: boolean;
 }
 
@@ -27,14 +27,20 @@ const hexToRgb = (hex: string) => {
   return { r, g, b };
 };
 
-const parseRgba = (value: string | null | undefined) => {
+const parseToRgb = (value: string | null | undefined) => {
   if (!value) {
     return null;
   }
+
+  if (value.startsWith('#')) {
+    return { ...hexToRgb(value), a: 1 };
+  }
+
   const match = value.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([0-9.]+))?\s*\)/i);
   if (!match) {
     return null;
   }
+
   const [, r, g, b, a = '1'] = match;
   return {
     r: Number(r),
@@ -63,19 +69,21 @@ export const ChessboardSquare = ({
   highlight,
   className,
   overlayColor,
-  overlayOpacity = 0,
+  overlayStrength = 0,
   showContent = true,
 }: ChessboardSquareProps) => {
   const backgroundColor = color === 'light' ? LIGHT_COLOR : DARK_COLOR;
   const baseRgb = hexToRgb(backgroundColor);
-  const overlayRgb = parseRgba(overlayColor);
-  const normalizedOpacity = Math.min(1, Math.max(overlayOpacity ?? 0, 0));
-  const blendedRgb =
-    overlayRgb && normalizedOpacity > 0 ? blendColor(baseRgb, overlayRgb, normalizedOpacity) : baseRgb;
-  const tintedBackground = `rgb(${blendedRgb.r}, ${blendedRgb.g}, ${blendedRgb.b})`;
+  const overlayRgb = parseToRgb(overlayColor);
+  const weight = Math.min(1, Math.max(overlayStrength, 0));
+  const blendAmount = overlayRgb ? weight : 0;
+  const blended = overlayRgb
+    ? blendColor(baseRgb, overlayRgb, Math.min(1, blendAmount))
+    : baseRgb;
+  const tintedBackground = `rgb(${blended.r}, ${blended.g}, ${blended.b})`;
   const glow =
-    overlayRgb && normalizedOpacity > 0
-      ? `0 0 0 1px rgba(${overlayRgb.r}, ${overlayRgb.g}, ${overlayRgb.b}, ${0.35 * normalizedOpacity}), 0 0 18px rgba(${overlayRgb.r}, ${overlayRgb.g}, ${overlayRgb.b}, ${0.45 * normalizedOpacity})`
+    overlayRgb && weight > 0
+      ? `0 0 0 2px rgba(${overlayRgb.r}, ${overlayRgb.g}, ${overlayRgb.b}, ${0.45 + weight * 0.4}), 0 0 28px rgba(${overlayRgb.r}, ${overlayRgb.g}, ${overlayRgb.b}, ${0.55 + weight * 0.35})`
       : undefined;
 
   return (

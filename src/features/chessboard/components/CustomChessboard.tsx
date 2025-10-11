@@ -13,7 +13,7 @@ interface CustomChessboardProps {
   moveMode: boolean;
   boardSize: number;
   onMove: (from: string, to: string) => boolean;
-  squareOverlays?: Record<string, { color: string; opacity: number }>;
+  squareOverlays?: Record<string, { color: string; magnitude: number; maxWeight: number; strength: number }>;
   showPieces?: boolean;
 }
 
