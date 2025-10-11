@@ -31,9 +31,31 @@ export const HeatmapControlsPanel = ({
   return (
     <HeatmapTray>
       <div className="flex flex-col items-center gap-3">
-        <div className="flex items-start justify-center gap-2">
-          <HeatmapToggleColumn toggles={ordered.black} onToggle={onToggle} />
-          <HeatmapToggleColumn toggles={ordered.white} onToggle={onToggle} />
+        <div className="flex items-start justify-center gap-[0.6rem]">
+          <HeatmapToggleColumn
+            toggles={ordered.black}
+            onToggle={onToggle}
+            onSelectAll={() => {
+              ordered.black.forEach((toggle) => {
+                if (!toggle.active) {
+                  onToggle(toggle.id);
+                }
+              });
+            }}
+            allSelected={ordered.black.length > 0 && ordered.black.every((toggle) => toggle.active)}
+          />
+          <HeatmapToggleColumn
+            toggles={ordered.white}
+            onToggle={onToggle}
+            onSelectAll={() => {
+              ordered.white.forEach((toggle) => {
+                if (!toggle.active) {
+                  onToggle(toggle.id);
+                }
+              });
+            }}
+            allSelected={ordered.white.length > 0 && ordered.white.every((toggle) => toggle.active)}
+          />
         </div>
         <button
           type="button"
