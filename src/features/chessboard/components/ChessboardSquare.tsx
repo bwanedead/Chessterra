@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import type { BoardAppearance } from '@/features/chessboard/components/ChessboardSurface';
 
 interface ChessboardSquareProps {
   square: string;
@@ -12,10 +13,9 @@ interface ChessboardSquareProps {
   overlayColor?: string | null;
   overlayStrength?: number;
   showContent?: boolean;
+  appearance: BoardAppearance;
 }
 
-const LIGHT_COLOR = '#f5deab';
-const DARK_COLOR = '#8b5a2b';
 const HIGHLIGHT_COLOR = 'rgba(59, 130, 246, 0.25)';
 
 const hexToRgb = (hex: string) => {
@@ -71,8 +71,10 @@ export const ChessboardSquare = ({
   overlayColor,
   overlayStrength = 0,
   showContent = true,
+  appearance,
 }: ChessboardSquareProps) => {
-  const backgroundColor = color === 'light' ? LIGHT_COLOR : DARK_COLOR;
+  const normalized = appearance.mode === 'normalized';
+  const backgroundColor = color === 'light' ? appearance.lightSquare : appearance.darkSquare;
   const baseRgb = hexToRgb(backgroundColor);
   const overlayRgb = parseToRgb(overlayColor);
   const weight = Math.min(1, Math.max(overlayStrength, 0));
@@ -98,10 +100,21 @@ export const ChessboardSquare = ({
       ]
         .filter(Boolean)
         .join(' ')}
-      style={{ backgroundColor: tintedBackground, boxShadow: glow }}
+      style={{
+        backgroundColor: tintedBackground,
+        boxShadow: glow,
+      }}
     >
       {highlight && (
-        <div className="absolute inset-0 rounded-md pointer-events-none" style={{ backgroundColor: HIGHLIGHT_COLOR }} />
+        <div
+          className={[
+            'absolute inset-0 pointer-events-none',
+            normalized ? '' : 'rounded-md',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+          style={{ backgroundColor: HIGHLIGHT_COLOR }}
+        />
       )}
       <div className="relative z-10 flex h-full w-full items-center justify-center select-none pointer-events-none">
         {showContent ? children : null}

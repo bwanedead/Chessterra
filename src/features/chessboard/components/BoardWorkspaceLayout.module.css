@@ -5,7 +5,8 @@
   display: grid;
   grid-template-areas:
     'tray'
-    'board';
+    'board'
+    'aux';
   grid-template-columns: max-content;
   justify-content: center;
   align-items: start;
@@ -33,13 +34,17 @@
   backdrop-filter: blur(16px);
 }
 
-.balanceShim {
-  display: none;
+.boardAuxZone {
+  grid-area: aux;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
 }
 
 @media (min-width: 1024px) {
   .layout {
-    grid-template-areas: 'tray board shim';
+    grid-template-areas: 'tray board aux';
     grid-template-columns: var(--tray-width) var(--board-shell-width) var(--tray-width);
     gap: var(--layout-gap);
   }
@@ -53,10 +58,9 @@
     align-self: start;
   }
 
-  .balanceShim {
-    display: block;
-    grid-area: shim;
+  .boardAuxZone {
+    justify-content: flex-start;
+    align-self: start;
     width: var(--tray-width);
-    height: 1px;
   }
 }

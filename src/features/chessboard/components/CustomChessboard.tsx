@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { ChessboardSurface } from './ChessboardSurface';
 import { DragPreviewLayer } from './DragPreviewLayer';
+import type { BoardAppearance } from '@/features/chessboard/components/ChessboardSurface';
 import { useBoardSquares } from '@/features/chessboard/hooks/useBoardSquares';
 import { usePieceDrag } from '@/features/chessboard/hooks/usePieceDrag';
 import { createScopedLogger } from '@/shared/utils/logger';
@@ -15,7 +16,22 @@ interface CustomChessboardProps {
   onMove: (from: string, to: string) => boolean;
   squareOverlays?: Record<string, { color: string; magnitude: number; maxWeight: number; strength: number }>;
   showPieces?: boolean;
+  normalizedBoard?: boolean;
 }
+
+const CLASSIC_APPEARANCE: BoardAppearance = {
+  mode: 'classic',
+  lightSquare: '#f5deab',
+  darkSquare: '#8b5a2b',
+};
+
+const NORMALIZED_APPEARANCE: BoardAppearance = {
+  mode: 'normalized',
+  lightSquare: '#000000',
+  darkSquare: '#000000',
+  wireframeColor: '#ffffff',
+  backgroundColor: '#000000',
+};
 
 export const CustomChessboard = ({
   fen,
@@ -25,6 +41,7 @@ export const CustomChessboard = ({
   onMove,
   squareOverlays,
   showPieces = true,
+  normalizedBoard = false,
 }: CustomChessboardProps) => {
   const boardRef = useRef<HTMLDivElement | null>(null);
   const { squares, piecePixelSize } = useBoardSquares({ fen, orientation, boardSize });
@@ -37,6 +54,7 @@ export const CustomChessboard = ({
   const renderLogger = useMemo(() => createScopedLogger('chessboard/render'), []);
   const activePreviewRef = useRef<string | null>(null);
   const previewIssueLoggedRef = useRef(false);
+  const appearance = normalizedBoard ? NORMALIZED_APPEARANCE : CLASSIC_APPEARANCE;
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
@@ -113,6 +131,7 @@ export const CustomChessboard = ({
         onSquarePointerDown={beginDrag}
         squareOverlays={squareOverlays}
         showPieces={showPieces}
+        appearance={appearance}
       />
       <DragPreviewLayer dragVisual={dragVisual} piecePixelSize={piecePixelSize} />
     </div>

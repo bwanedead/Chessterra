@@ -23,6 +23,8 @@ export interface HeatmapControls {
   setIncludeBothSides: (value: boolean) => void;
   showPieces: boolean;
   setShowPieces: (value: boolean) => void;
+  normalizedBoard: boolean;
+  setNormalizedBoard: (value: boolean) => void;
 }
 
 const buildToggleId = (color: ChessPieceDescriptor['color'], type: ChessPieceDescriptor['type']) => `${color}-${type}`;
@@ -32,6 +34,7 @@ export const useHeatmapControls = (): HeatmapControls => {
   const [scheme, setScheme] = useState<HeatmapScheme>('line-of-sight');
   const [includeBothSides, setIncludeBothSides] = useState<boolean>(true);
   const [showPieces, setShowPieces] = useState<boolean>(true);
+  const [normalizedBoard, setNormalizedBoard] = useState<boolean>(false);
 
   const allToggles = useMemo(
     () =>
@@ -81,6 +84,8 @@ export const useHeatmapControls = (): HeatmapControls => {
     setIncludeBothSides,
     showPieces,
     setShowPieces,
+    normalizedBoard,
+    setNormalizedBoard,
   };
 };
 

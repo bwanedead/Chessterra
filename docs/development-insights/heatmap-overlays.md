@@ -29,3 +29,6 @@ Last updated: 2025-10-09
 3. **Legend component** – show a small scale legend explaining what the discrete colour steps mean (e.g., "3+ overlapping attacks").
 4. **Unit tests** – cover the palette selection + intensity math to guarantee we never regress the mapping as we introduce new schemes.
 5. **Storybook scenarios** – create visual regression stories of extreme positions (all rooks, all bishops, etc.) to confirm the palette stays readable.
+
+### Related documentation
+- `docs/project-visions/normalized-board-phase-two.md` captures the normalized grid roadmap, including canvas expansion plans that build on these overlay primitives.

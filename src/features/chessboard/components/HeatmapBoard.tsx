@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import styles from './BoardWorkspaceLayout.module.css';
 import { CustomChessboard } from '@/features/chessboard/components/CustomChessboard';
 import { HeatmapControlsPanel } from '@/features/chessboard/components/HeatmapControlsPanel';
+import { NormalizeBoardToggle } from '@/features/chessboard/components/NormalizeBoardToggle';
 import { useHeatmapControls } from '@/features/chessboard/hooks/useHeatmapControls';
 import { useHeatmapOverlay } from '@/features/chessboard/hooks/useHeatmapOverlay';
 
@@ -127,11 +128,17 @@ export const HeatmapBoard = ({ fen, orientation, moveMode, boardSize, onMove }: 
             onMove={onMove}
             squareOverlays={overlay.overlays}
             showPieces={controls.showPieces}
+            normalizedBoard={controls.normalizedBoard}
           />
         </div>
       </div>
 
-      <div className={styles.balanceShim} aria-hidden="true" />
+      <div className={styles.boardAuxZone}>
+        <NormalizeBoardToggle
+          checked={controls.normalizedBoard}
+          onChange={controls.setNormalizedBoard}
+        />
+      </div>
     </div>
   );
 };

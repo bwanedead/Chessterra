@@ -5,6 +5,14 @@ import { ChessPieceSprite } from './ChessPieceSprite';
 import type { BoardSquare, ChessPieceDescriptor } from '@/features/chessboard/types';
 import { createScopedLogger } from '@/shared/utils/logger';
 
+export interface BoardAppearance {
+  mode: 'classic' | 'normalized';
+  lightSquare: string;
+  darkSquare: string;
+  wireframeColor?: string;
+  backgroundColor?: string;
+}
+
 interface ChessboardSurfaceProps {
   squares: BoardSquare[];
   piecePixelSize: number;
@@ -16,6 +24,7 @@ interface ChessboardSurfaceProps {
   ) => void;
   squareOverlays?: Record<string, { color: string; magnitude: number; maxWeight: number; strength: number }>;
   showPieces?: boolean;
+  appearance: BoardAppearance;
 }
 
 export const ChessboardSurface = memo(
@@ -26,15 +35,25 @@ export const ChessboardSurface = memo(
     onSquarePointerDown,
     squareOverlays,
     showPieces = true,
+    appearance,
   }: ChessboardSurfaceProps) => {
     const surfaceLogger = useMemo(() => createScopedLogger('chessboard/surface'), []);
+    const normalized = appearance.mode === 'normalized';
+    const wireframeColor = appearance.wireframeColor ?? '#ffffff';
 
     return (
       <div
-        className="grid h-full w-full"
+        className={[
+          'grid h-full w-full',
+          normalized ? 'box-border gap-px' : null,
+        ]
+          .filter(Boolean)
+          .join(' ')}
         style={{
           gridTemplateColumns: 'repeat(8, minmax(0, 1fr))',
           gridTemplateRows: 'repeat(8, minmax(0, 1fr))',
+          backgroundColor: normalized ? wireframeColor : undefined,
+          boxShadow: normalized ? `0 0 0 1px ${wireframeColor}` : undefined,
         }}
       >
         {squares.map((square) => {
@@ -49,6 +68,7 @@ export const ChessboardSurface = memo(
               overlayColor={overlay?.color}
               overlayStrength={overlay?.strength}
               showContent={showPieces}
+              appearance={appearance}
               onPointerDown={(event) => {
                 surfaceLogger.debug('square-pointer-down', {
                   squareId: square.id,
