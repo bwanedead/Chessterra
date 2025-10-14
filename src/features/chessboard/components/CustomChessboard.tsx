@@ -56,6 +56,26 @@ export const CustomChessboard = ({
   const activePreviewRef = useRef<string | null>(null);
   const previewIssueLoggedRef = useRef(false);
   const appearance = normalizedBoard ? NORMALIZED_APPEARANCE : CLASSIC_APPEARANCE;
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'development') {
+      return;
+    }
+
+    renderLogger.debug('board-size-props', {
+      boardSize,
+      normalizedBoard,
+    });
+  }, [boardSize, normalizedBoard, renderLogger]);
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'development') {
+      return;
+    }
+
+    createScopedLogger('chessboard/custom-board').debug('board-size-props', {
+      boardSize,
+      normalizedBoard,
+    });
+  }, [boardSize, normalizedBoard]);
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {

@@ -23,4 +23,3 @@ export const useBoardSquares = ({
 
   return { squares, piecePixelSize };
 };
-
