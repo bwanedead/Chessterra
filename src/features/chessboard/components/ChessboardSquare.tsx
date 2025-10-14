@@ -61,6 +61,7 @@ const blendColor = (
 });
 
 export const ChessboardSquare = ({
+  square,
   color,
   onPointerDown,
   onPointerEnter,
@@ -94,6 +95,7 @@ export const ChessboardSquare = ({
       onPointerDown={onPointerDown}
       onPointerEnter={onPointerEnter}
       onPointerUp={onPointerUp}
+      data-square={square}
       className={[
         'relative flex items-center justify-center overflow-hidden transition-colors duration-150',
         className,

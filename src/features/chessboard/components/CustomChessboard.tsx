@@ -52,6 +52,7 @@ export const CustomChessboard = ({
     onMove,
   });
   const renderLogger = useMemo(() => createScopedLogger('chessboard/render'), []);
+  const layoutLogger = useMemo(() => createScopedLogger('chessboard/layout'), []);
   const activePreviewRef = useRef<string | null>(null);
   const previewIssueLoggedRef = useRef(false);
   const appearance = normalizedBoard ? NORMALIZED_APPEARANCE : CLASSIC_APPEARANCE;
@@ -117,6 +118,41 @@ export const CustomChessboard = ({
     });
   }, [boardSize, dragVisual, orientation, renderLogger, squareOverlays]);
 
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'development') {
+      return;
+    }
+
+    const boardElement = boardRef.current;
+    if (!boardElement) {
+      layoutLogger.warn('container-missing');
+      return;
+    }
+
+    const rect = boardElement.getBoundingClientRect();
+    const style = window.getComputedStyle(boardElement);
+
+    layoutLogger.debug('container-metrics', {
+      normalizedBoard,
+      boardSize,
+      boundingClientRect: {
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height,
+      },
+      style: {
+        position: style.position,
+        overflow: style.overflow,
+        overflowX: style.overflowX,
+        overflowY: style.overflowY,
+        zIndex: style.zIndex,
+        mixBlendMode: style.mixBlendMode,
+        backgroundColor: style.backgroundColor,
+      },
+    });
+  }, [boardSize, layoutLogger, normalizedBoard]);
+
   return (
     <div
       ref={boardRef}
@@ -132,8 +168,9 @@ export const CustomChessboard = ({
         squareOverlays={squareOverlays}
         showPieces={showPieces}
         appearance={appearance}
+        boardSize={boardSize}
       />
-      <DragPreviewLayer dragVisual={dragVisual} piecePixelSize={piecePixelSize} />
+      <DragPreviewLayer dragVisual={dragVisual} piecePixelSize={piecePixelSize} appearance={appearance} />
     </div>
   );
 };

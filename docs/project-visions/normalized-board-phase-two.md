@@ -14,6 +14,7 @@ The normalized board toggle lets us strip the wood-and-felt styling down to a mi
    - Promote the new `BoardAppearance` model so other components and stories can request specific palettes.
    - Extract grid rendering into a dedicated surface component that understands padding, wireframe thickness, and outer glow variants.
    - Support board scaling factors that can increase the drawable canvas while keeping the legal square coordinates pinned to an 8×8 logical grid.
+   - Maintain a library of “wireframe” piece treatments (outlines, neon glows, motion blur hooks) that match the normalized surface and can be swapped independently from the traditional sprites.
 2. **Heatmap projection**
    - Extend overlay generators so they can return values outside of `a1`–`h8`, using virtual coordinates that the renderer can translate into positions beyond the board.
    - Add falloff functions so influence fades smoothly as it travels away from the legal board.
@@ -37,3 +38,4 @@ The normalized board toggle lets us strip the wood-and-felt styling down to a mi
 1. Design UI sketches for the expanded grid state and color preset selector.
 2. Prototype an overlay renderer that accepts coordinates beyond `h8` and renders them to a 12×12 canvas.
 3. Gather feedback from analysts/coaches to validate whether expanded overlays improve storytelling.
+4. Add a dedicated “Hide pieces” toggle so analysts can focus on influence maps without manually muting sprites.

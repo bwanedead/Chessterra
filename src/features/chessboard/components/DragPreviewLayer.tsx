@@ -1,14 +1,16 @@
 import { memo, useEffect, useMemo, useRef } from 'react';
 import { ChessPieceSprite } from './ChessPieceSprite';
 import type { DragVisual } from '@/features/chessboard/hooks/usePieceDrag';
+import type { BoardAppearance } from '@/features/chessboard/components/ChessboardSurface';
 import { createScopedLogger } from '@/shared/utils/logger';
 
 interface DragPreviewLayerProps {
   dragVisual: DragVisual | null;
   piecePixelSize: number;
+  appearance?: BoardAppearance;
 }
 
-export const DragPreviewLayer = memo(({ dragVisual, piecePixelSize }: DragPreviewLayerProps) => {
+export const DragPreviewLayer = memo(({ dragVisual, piecePixelSize, appearance }: DragPreviewLayerProps) => {
   const previewLogger = useMemo(() => createScopedLogger('chessboard/preview'), []);
   const elementRef = useRef<HTMLDivElement | null>(null);
   const hasLoggedActiveRef = useRef(false);
@@ -69,7 +71,12 @@ export const DragPreviewLayer = memo(({ dragVisual, piecePixelSize }: DragPrevie
       }}
       data-preview-layer="true"
     >
-      <ChessPieceSprite piece={dragVisual.piece} size={piecePixelSize} className="drop-shadow-2xl" />
+      <ChessPieceSprite
+        piece={dragVisual.piece}
+        size={piecePixelSize}
+        className={appearance?.mode === 'normalized' ? undefined : 'drop-shadow-2xl'}
+        appearance={appearance}
+      />
     </div>
   );
 });

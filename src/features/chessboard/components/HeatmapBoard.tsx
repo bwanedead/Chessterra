@@ -135,8 +135,10 @@ export const HeatmapBoard = ({ fen, orientation, moveMode, boardSize, onMove }: 
 
       <div className={styles.boardAuxZone}>
         <NormalizeBoardToggle
-          checked={controls.normalizedBoard}
-          onChange={controls.setNormalizedBoard}
+          normalized={controls.normalizedBoard}
+          onToggleNormalized={controls.setNormalizedBoard}
+          showPieces={controls.showPieces}
+          onToggleShowPieces={controls.setShowPieces}
         />
       </div>
     </div>

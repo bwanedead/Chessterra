@@ -21,7 +21,7 @@ const formatPrefix = (namespace: string, level: LogLevel) => `[Chessterra:${name
 
 const shouldLog = (level: LogLevel) => levelRank[level] <= levelRank[configuredLevel];
 
-interface LoggerApi {
+export interface LoggerApi {
   debug: (...args: unknown[]) => void;
   info: (...args: unknown[]) => void;
   warn: (...args: unknown[]) => void;
