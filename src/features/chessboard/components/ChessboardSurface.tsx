@@ -51,7 +51,7 @@ export const ChessboardSurface = memo(
     const wireframeColor = appearance.wireframeColor ?? '#ffffff';
     const boardBackground = appearance.backgroundColor ?? (normalized ? '#000000' : undefined);
     const estimatedSquareSize = normalized ? Math.max(1, Math.round((piecePixelSize || 1) / 0.9)) : 0;
-    const innerLineThickness = normalized ? Math.max(1, Math.round(estimatedSquareSize * 0.035)) : 0;
+    const innerLineThickness = normalized ? Math.max(1, Math.round(estimatedSquareSize * 0.02)) : 0;
     const edgeThickness = normalized ? Math.max(2, innerLineThickness * 2) : 0;
 
     const toRgba = (color: string, alpha: number) => {
@@ -81,8 +81,8 @@ export const ChessboardSurface = memo(
       return color;
     };
 
-    const gridColor = toRgba(wireframeColor, normalized ? 0.5 : 0.28);
-    const edgeColor = toRgba(wireframeColor, normalized ? 0.85 : 0.6);
+    const gridColor = toRgba(wireframeColor, normalized ? 0.22 : 0.28);
+    const edgeColor = toRgba(wireframeColor, normalized ? 0.4 : 0.6);
     const diagnosticsEnabled = process.env.NODE_ENV === 'development';
 
     useLayerDiagnostics({
