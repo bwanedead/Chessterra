@@ -61,9 +61,12 @@ const HeatmapBoardContent = ({
   const layoutRef = useRef<HTMLDivElement | null>(null);
   const boardShellRef = useRef<HTMLDivElement | null>(null);
   const trayRef = useRef<HTMLDivElement | null>(null);
-  const { isExpanded, viewportSize } = useCanvasMode();
+  const { isExpanded, viewportSize, scrollContainer } = useCanvasMode();
   const expandedOverlayRef = useRef<HTMLDivElement | null>(null);
+  const autoScrollPerformedRef = useRef(false);
+  const lastScrollContainerRef = useRef<HTMLDivElement | null>(null);
   const diagnosticsLogger = useMemo(() => createScopedLogger('chessboard/expanded-stage'), []);
+  const lastViewportSizeRef = useRef<{ width: number; height: number } | null>(null);
 
   useLayerDiagnostics({
     ref: expandedOverlayRef,
@@ -177,6 +180,189 @@ const HeatmapBoardContent = ({
     });
   }, [controls.activeToggleIds, overlay.hasOverlay, overlay.overlays]);
 
+  useEffect(() => {
+    if (!isExpanded) {
+      autoScrollPerformedRef.current = false;
+      lastScrollContainerRef.current = null;
+      lastViewportSizeRef.current = null;
+      return;
+    }
+
+    if (scrollContainer && scrollContainer !== lastScrollContainerRef.current) {
+      lastScrollContainerRef.current = scrollContainer;
+      autoScrollPerformedRef.current = false;
+    }
+
+    const nextSize = {
+      width: viewportSize.width ?? 0,
+      height: viewportSize.height ?? 0,
+    };
+    const lastSize = lastViewportSizeRef.current;
+    if (!lastSize || lastSize.width !== nextSize.width || lastSize.height !== nextSize.height) {
+      lastViewportSizeRef.current = nextSize;
+      autoScrollPerformedRef.current = false;
+    }
+
+    if (!scrollContainer || autoScrollPerformedRef.current) {
+      return;
+    }
+
+    const targetContainer = scrollContainer;
+    const squareSize = boardSize / 8;
+    const coreOffset = squareSize * 3;
+    const extendedSize = squareSize * 14;
+    const viewportPadding = Math.max(squareSize, 48);
+    const viewportHeight = viewportSize.height ?? 0;
+    const viewportWidth = viewportSize.width ?? 0;
+    const needsVerticalScroll = viewportHeight < extendedSize;
+    const needsHorizontalScroll = viewportWidth < extendedSize;
+
+    if (!needsVerticalScroll && !needsHorizontalScroll) {
+      if (process.env.NODE_ENV === 'development') {
+        diagnosticsLogger.debug('auto-scroll-skip', {
+          reason: 'viewport-covers-canvas',
+          viewportHeight,
+          viewportWidth,
+          extendedSize,
+        });
+      }
+      autoScrollPerformedRef.current = true;
+      return;
+    }
+
+    const scrollTarget = needsVerticalScroll ? Math.max(coreOffset - viewportPadding, 0) : 0;
+    const horizontalPadding = Math.max(squareSize, 48);
+    const horizontalTarget = needsHorizontalScroll ? Math.max(coreOffset - horizontalPadding, 0) : 0;
+    const rafId = window.requestAnimationFrame(() => {
+      if (!targetContainer) {
+        return;
+      }
+      if (typeof targetContainer.scrollTo === 'function') {
+        targetContainer.scrollTo({
+          top: scrollTarget,
+          left: horizontalTarget,
+          behavior: 'auto',
+        });
+      } else {
+        targetContainer.scrollTop = scrollTarget;
+        targetContainer.scrollLeft = horizontalTarget;
+      }
+      autoScrollPerformedRef.current = true;
+      if (process.env.NODE_ENV === 'development') {
+        diagnosticsLogger.debug('auto-scroll', {
+          scrollTarget,
+          horizontalTarget,
+          squareSize,
+          coreOffset,
+          viewportPadding,
+          needsVerticalScroll,
+          needsHorizontalScroll,
+        });
+      }
+    });
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+    };
+  }, [boardSize, diagnosticsLogger, isExpanded, scrollContainer, viewportSize.height, viewportSize.width]);
+
+  useEffect(() => {
+    if (!isExpanded) {
+      return;
+    }
+
+    const squareSize = boardSize / 8;
+    const coreOffset = squareSize * 3;
+    const viewportPadding = Math.max(squareSize, 48);
+    const targetContainer = scrollContainer;
+
+    if (!targetContainer) {
+      return;
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+      diagnosticsLogger.debug('scroll-bounds', {
+        containerHeight: targetContainer.clientHeight,
+        containerWidth: targetContainer.clientWidth,
+        scrollHeight: targetContainer.scrollHeight,
+        scrollWidth: targetContainer.scrollWidth,
+        currentScrollTop: targetContainer.scrollTop,
+        currentScrollLeft: targetContainer.scrollLeft,
+        squareSize,
+        coreOffset,
+        viewportPadding,
+      });
+    }
+  }, [boardSize, diagnosticsLogger, isExpanded, scrollContainer]);
+
+  if (isExpanded) {
+    const squareSize = boardSize / 8;
+    const extendedSize = squareSize * 14;
+    const coreOffset = squareSize * 3;
+    const viewportHeight = viewportSize.height ?? 0;
+    const viewportPadding = Math.max(squareSize, 48);
+    const centeredOffset = Math.max((viewportHeight - extendedSize) / 2, 0);
+    const verticalCompensation = Math.max(centeredOffset - viewportPadding, 0);
+    const canvasVars = {
+      ['--canvas-size' as const]: `${extendedSize}px`,
+      ['--canvas-offset' as const]: `${coreOffset}px`,
+      ['--board-size' as const]: `${boardSize}px`,
+      ['--canvas-vertical-compensation' as const]: `${verticalCompensation}px`,
+    };
+    const viewportVars = {
+      ['--canvas-viewport-padding' as const]: `${viewportPadding}px`,
+    };
+    if (process.env.NODE_ENV === 'development') {
+      diagnosticsLogger.debug('expanded-layout-vars', {
+        squareSize,
+        extendedSize,
+        coreOffset,
+        viewportHeight,
+        viewportPadding,
+        centeredOffset,
+        verticalCompensation,
+      });
+    }
+
+    return (
+      <CanvasViewport className={styles.expandedViewport} style={viewportVars}>
+        <div className={styles.expandedRoot} style={canvasVars}>
+          <CanvasChrome className={`${styles.expandedChrome} ${styles.expandedChromeLeft}`}>
+            <HeatmapControlsPanel
+              toggles={controls.toggles}
+              onToggle={controls.togglePiece}
+              onClear={controls.clearPieces}
+            />
+          </CanvasChrome>
+          <div className={styles.expandedBoardArea}>
+            <ExpandedBoardOverlay
+              ref={expandedOverlayRef}
+              boardSize={boardSize}
+              normalized={controls.normalizedBoard}
+              overlays={overlay.overlays}
+              orientation={orientation}
+            />
+            <div
+              className={styles.boardCoreExpanded}
+              style={{ width: `${boardSize}px`, height: `${boardSize}px` }}
+            >
+              {boardElement}
+            </div>
+          </div>
+          <CanvasChrome className={`${styles.expandedChrome} ${styles.expandedChromeRight}`}>
+            <NormalizeBoardToggle
+              normalized={controls.normalizedBoard}
+              onToggleNormalized={controls.setNormalizedBoard}
+              showPieces={controls.showPieces}
+              onToggleShowPieces={controls.setShowPieces}
+            />
+            <ExpandCanvasToggle />
+          </CanvasChrome>
+        </div>
+      </CanvasViewport>
+    );
+  }
+
   return (
     <CanvasViewport>
       <div
@@ -195,18 +381,7 @@ const HeatmapBoardContent = ({
         </div>
 
         <div ref={boardShellRef} className={styles.boardShell} data-testid="heatmap-board-shell">
-          <div className={styles.boardShellInner}>
-            {isExpanded ? (
-              <ExpandedBoardOverlay
-                ref={expandedOverlayRef}
-                boardSize={boardSize}
-                normalized={controls.normalizedBoard}
-                overlays={overlay.overlays}
-                orientation={orientation}
-              />
-            ) : null}
-            <div className={styles.boardCore}>{boardElement}</div>
-          </div>
+          <div className={styles.boardShellInner}>{boardElement}</div>
         </div>
 
         <div className={styles.boardAuxZone}>
@@ -224,7 +399,6 @@ const HeatmapBoardContent = ({
     </CanvasViewport>
   );
 };
-
 interface ExpandedBoardOverlayProps {
   boardSize: number;
   normalized: boolean;
@@ -248,8 +422,6 @@ const ExpandedBoardOverlay = memo(
           style={{
             width: `${extendedSize}px`,
             height: `${extendedSize}px`,
-            top: `-${coreOffset}px`,
-            left: `-${coreOffset}px`,
           }}
         >
           <div className={styles.expandedBackdropLayer} />

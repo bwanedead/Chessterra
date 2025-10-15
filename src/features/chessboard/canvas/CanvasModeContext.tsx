@@ -17,12 +17,14 @@ interface CanvasModeContextValue {
   isChromeVisible: boolean;
   lastInteractionAt: number | null;
   viewportSize: { width: number; height: number };
+  scrollContainer: HTMLDivElement | null;
   enter: () => void;
   exit: () => void;
   toggle: () => void;
   notifyInteraction: () => void;
   setHideDelay: (delay: number) => void;
   updateViewportSize: (size: { width: number; height: number }) => void;
+  registerScrollContainer: (element: HTMLDivElement | null) => void;
 }
 
 const CanvasModeContext = createContext<CanvasModeContextValue | null>(null);
@@ -40,6 +42,7 @@ export const CanvasModeProvider = ({ children, hideDelay = DEFAULT_HIDE_DELAY }:
     width: typeof window !== 'undefined' ? window.innerWidth : 0,
     height: typeof window !== 'undefined' ? window.innerHeight : 0,
   }));
+  const [scrollContainer, setScrollContainer] = useState<HTMLDivElement | null>(null);
   const lastInteractionRef = useRef<number | null>(null);
   const hideTimerRef = useRef<number | null>(null);
   const logger = useMemo(() => createScopedLogger('chessboard/canvas'), []);
@@ -131,6 +134,24 @@ export const CanvasModeProvider = ({ children, hideDelay = DEFAULT_HIDE_DELAY }:
     [logger],
   );
 
+  const registerScrollContainer = useCallback(
+    (element: HTMLDivElement | null) => {
+      setScrollContainer((previous) => {
+        if (previous === element) {
+          return previous;
+        }
+        if (process.env.NODE_ENV === 'development') {
+          logger.debug('scroll-container', {
+            action: element ? 'register' : 'unregister',
+            hasElement: Boolean(element),
+          });
+        }
+        return element;
+      });
+    },
+    [logger],
+  );
+
   useEffect(() => {
     if (!isExpanded) {
       return;
@@ -161,12 +182,14 @@ export const CanvasModeProvider = ({ children, hideDelay = DEFAULT_HIDE_DELAY }:
       isChromeVisible,
       lastInteractionAt: lastInteractionRef.current,
       viewportSize,
+      scrollContainer,
       enter,
       exit,
       toggle,
       notifyInteraction,
       setHideDelay,
       updateViewportSize,
+      registerScrollContainer,
     }),
     [
       enter,
@@ -174,10 +197,12 @@ export const CanvasModeProvider = ({ children, hideDelay = DEFAULT_HIDE_DELAY }:
       isChromeVisible,
       isExpanded,
       notifyInteraction,
+      registerScrollContainer,
       setHideDelay,
       toggle,
       updateViewportSize,
       viewportSize,
+      scrollContainer,
     ],
   );
 

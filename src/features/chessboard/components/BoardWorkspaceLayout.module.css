@@ -60,38 +60,130 @@
   height: 100%;
 }
 
+.expandedViewport {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-inline: clamp(1.5rem, 5vw, 3.5rem);
+  padding-block: var(--canvas-viewport-padding, clamp(1.5rem, 6vh, 2.5rem));
+  overscroll-behavior: contain;
+}
+
+.expandedRoot {
+  position: relative;
+  width: 100%;
+  max-width: 96rem;
+  display: grid;
+  grid-template-columns: max-content var(--canvas-size) max-content;
+  align-items: start;
+  justify-content: center;
+  gap: clamp(0.125rem, 0.6vw, 0.4rem);
+  padding-inline: clamp(0.25rem, 1vw, 0.5rem);
+  padding-block: clamp(1rem, 3vw, 2rem);
+  margin-inline: auto;
+  margin-top: var(--canvas-vertical-compensation, 0px);
+  margin-bottom: max(var(--canvas-viewport-padding, 0px), clamp(1.5rem, 4vw, 2rem));
+}
+
+.expandedBoardArea {
+  position: relative;
+  width: var(--canvas-size);
+  height: var(--canvas-size);
+  margin: 0 auto;
+  grid-column: 2;
+}
+
 .expandedOverlay {
   position: absolute;
+  inset: 0;
   pointer-events: none;
   z-index: 1;
+}
+
+.expandedBackdropLayer {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(15, 23, 42, 0.78), rgba(2, 6, 23, 0.95));
+  opacity: 0.8;
 }
 
 .expandedVirtualGrid {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.8;
-}
-
-.expandedBackdropLayer {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, rgba(15, 23, 42, 0.75), rgba(2, 6, 23, 0.92));
-  opacity: 0.75;
+  opacity: 0.85;
 }
 
 .expandedBoardFrame {
   position: absolute;
   box-sizing: border-box;
   pointer-events: none;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   box-shadow:
-    0 0 25px rgba(15, 23, 42, 0.55),
-    inset 0 0 25px rgba(15, 23, 42, 0.35);
+    0 0 30px rgba(15, 23, 42, 0.55),
+    inset 0 0 35px rgba(15, 23, 42, 0.35);
+  width: var(--board-size);
+  height: var(--board-size);
 }
 
-.expandedBoardCore {
+.boardCoreExpanded {
+  position: absolute;
+  top: var(--canvas-offset);
+  left: var(--canvas-offset);
+  width: var(--board-size);
+  height: var(--board-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.expandedChrome {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: max-content;
   position: relative;
+  margin-top: var(--canvas-offset);
+}
+
+.expandedChromeLeft {
+  align-items: flex-end;
+  grid-column: 1;
+  justify-self: end;
+}
+
+.expandedChromeRight {
+  align-items: flex-start;
+  grid-column: 3;
+  justify-self: start;
+}
+
+@media (max-width: 1023px) {
+  .expandedRoot {
+    grid-template-columns: minmax(0, var(--canvas-size));
+    gap: clamp(1rem, 5vw, 1.75rem);
+  }
+
+  .expandedChrome {
+    width: auto;
+    margin-top: 0;
+  }
+
+  .expandedChromeLeft,
+  .expandedChromeRight {
+    grid-column: 1;
+    justify-self: center;
+    align-items: center;
+  }
+
+  .expandedBoardArea {
+    grid-column: 1;
+  }
 }
 
 @media (min-width: 1024px) {

@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef } from 'react';
-import type { ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import type { CSSProperties, ReactNode } from 'react';
 import { useCanvasMode } from '@/features/chessboard/canvas/CanvasModeContext';
 import { useLayerDiagnostics } from '@/features/chessboard/hooks/useLayerDiagnostics';
 import { createScopedLogger } from '@/shared/utils/logger';
@@ -7,12 +8,29 @@ import { createScopedLogger } from '@/shared/utils/logger';
 interface CanvasViewportProps {
   children: ReactNode;
   className?: string;
+  style?: CSSProperties;
 }
 
-export const CanvasViewport = ({ children, className }: CanvasViewportProps) => {
-  const { isExpanded, notifyInteraction, updateViewportSize } = useCanvasMode();
+export const CanvasViewport = ({ children, className, style }: CanvasViewportProps) => {
+  const { isExpanded, notifyInteraction, updateViewportSize, registerScrollContainer } = useCanvasMode();
   const rafRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [portalHost] = useState<HTMLDivElement | null>(() => {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+    const host = document.createElement('div');
+    host.setAttribute('data-canvas-viewport-host', 'true');
+    host.style.position = 'fixed';
+    host.style.top = '0';
+    host.style.left = '0';
+    host.style.right = '0';
+    host.style.bottom = '0';
+    host.style.zIndex = '1100';
+    host.style.pointerEvents = 'auto';
+    host.style.display = 'block';
+    return host;
+  });
   const diagnosticsEnabled = process.env.NODE_ENV === 'development';
   const logger = useMemo(() => createScopedLogger('chessboard/canvas-viewport'), []);
 
@@ -90,21 +108,75 @@ export const CanvasViewport = ({ children, className }: CanvasViewportProps) => 
     };
   }, [isExpanded, notifyInteraction, updateViewportSize]);
 
-  const containerClass = useMemo(
-    () =>
-      [
-        'relative',
-        isExpanded ? 'z-[1100] transition-colors duration-300 bg-transparent' : '',
-        className,
-      ]
-        .filter(Boolean)
-        .join(' '),
-    [className, isExpanded],
+  useEffect(() => {
+    if (!isExpanded) {
+      return;
+    }
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isExpanded]);
+
+  useEffect(() => {
+    if (!portalHost) {
+      return;
+    }
+    if (!isExpanded) {
+      if (portalHost.parentNode) {
+        portalHost.parentNode.removeChild(portalHost);
+      }
+      return;
+    }
+
+    document.body.appendChild(portalHost);
+    return () => {
+      if (portalHost.parentNode) {
+        portalHost.parentNode.removeChild(portalHost);
+      }
+    };
+  }, [isExpanded, portalHost]);
+
+  useEffect(() => {
+    return () => {
+      if (portalHost?.parentNode) {
+        portalHost.parentNode.removeChild(portalHost);
+      }
+    };
+  }, [portalHost]);
+
+  const setContainerRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      containerRef.current = node;
+      registerScrollContainer(isExpanded ? node : null);
+    },
+    [isExpanded, registerScrollContainer],
   );
 
-  return (
-    <div ref={containerRef} className={containerClass}>
+  const containerClass = useMemo(() => {
+    const baseClass = isExpanded
+      ? 'flex h-full w-full justify-center items-start overflow-auto bg-transparent'
+      : 'relative';
+    return [baseClass, className].filter(Boolean).join(' ');
+  }, [className, isExpanded]);
+
+  const content = (
+    <div
+      ref={setContainerRef}
+      className={containerClass}
+      style={style}
+      data-expanded={isExpanded ? 'true' : 'false'}
+    >
       {children}
     </div>
   );
+
+  if (isExpanded && portalHost) {
+    return createPortal(content, portalHost);
+  }
+
+  return content;
 };
