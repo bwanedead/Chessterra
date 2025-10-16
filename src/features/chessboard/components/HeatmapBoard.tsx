@@ -385,7 +385,7 @@ const HeatmapBoardContent = ({
         </div>
 
         <div className={styles.boardAuxZone}>
-          <CanvasChrome className="items-end">
+          <CanvasChrome className="items-start">
             <NormalizeBoardToggle
               normalized={controls.normalizedBoard}
               onToggleNormalized={controls.setNormalizedBoard}

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import styles from '../ControlStack.module.css';
 import { useCanvasMode } from '@/features/chessboard/canvas/CanvasModeContext';
 
 interface CanvasChromeProps {
@@ -12,7 +13,8 @@ export const CanvasChrome = ({ children, className }: CanvasChromeProps) => {
   return (
     <div
       className={[
-        'relative flex flex-col gap-3 transition-opacity duration-300',
+        'relative flex flex-col transition-opacity duration-300',
+        styles.stackSpacing,
         isExpanded && !isChromeVisible ? 'opacity-0 pointer-events-none' : 'opacity-100',
         className,
       ]
