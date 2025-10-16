@@ -5,6 +5,9 @@ export type BoardMatrix = Record<string, ChessPieceDescriptor>;
 
 const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] as const;
 
+export const CANVAS_BORDER = 3;
+export const CANVAS_SIZE = 8 + CANVAS_BORDER * 2;
+
 export const knightOffsets: Array<{ df: number; dr: number }> = [
   { df: 1, dr: 2 },
   { df: 2, dr: 1 },
@@ -45,6 +48,12 @@ export const queenDirections = [...rookDirections, ...bishopDirections];
 
 export const withinBoard = (fileIndex: number, rankIndex: number) =>
   fileIndex >= 0 && fileIndex < 8 && rankIndex >= 0 && rankIndex < 8;
+
+export const withinCanvas = (fileIndex: number, rankIndex: number) =>
+  fileIndex >= -CANVAS_BORDER &&
+  fileIndex < 8 + CANVAS_BORDER &&
+  rankIndex >= -CANVAS_BORDER &&
+  rankIndex < 8 + CANVAS_BORDER;
 
 export const toSquare = (fileIndex: number, rankIndex: number) => `${FILES[fileIndex]}${rankIndex + 1}`;
 
@@ -93,33 +102,46 @@ export const rayTrace = ({
   scheme: 'absolute' | 'line-of-sight';
   boardMatrix: BoardMatrix;
 }) => {
-  const results: string[] = [];
+  const boardSquares: string[] = [];
+  const canvasSquares: Array<{ fileIndex: number; rankIndex: number }> = [];
 
   directions.forEach(({ df, dr }) => {
     let file = fromFile + df;
     let rank = fromRank + dr;
     let blocked = false;
 
-    while (withinBoard(file, rank)) {
-      const square = toSquare(file, rank);
-      results.push(square);
+    while (withinCanvas(file, rank)) {
+      const isOnBoard = withinBoard(file, rank);
+      if (isOnBoard) {
+        const square = toSquare(file, rank);
+        boardSquares.push(square);
 
-      const occupant = boardMatrix[square];
-      if (occupant) {
-        blocked = true;
-        if (scheme === 'absolute') {
-          file += df;
-          rank += dr;
-          while (withinBoard(file, rank)) {
-            results.push(toSquare(file, rank));
-            file += df;
-            rank += dr;
+        const occupant = boardMatrix[square];
+        if (occupant) {
+          blocked = true;
+          if (scheme === 'absolute') {
+            let nextFile = file + df;
+            let nextRank = rank + dr;
+            while (withinCanvas(nextFile, nextRank)) {
+              if (withinBoard(nextFile, nextRank)) {
+                boardSquares.push(toSquare(nextFile, nextRank));
+              } else {
+                canvasSquares.push({ fileIndex: nextFile, rankIndex: nextRank });
+              }
+              nextFile += df;
+              nextRank += dr;
+            }
           }
         }
-      }
 
-      if (blocked && scheme === 'line-of-sight') {
-        break;
+        if (blocked && scheme === 'line-of-sight') {
+          break;
+        }
+        if (blocked && scheme === 'absolute') {
+          break;
+        }
+      } else {
+        canvasSquares.push({ fileIndex: file, rankIndex: rank });
       }
 
       file += df;
@@ -127,5 +149,5 @@ export const rayTrace = ({
     }
   });
 
-  return results;
+  return { boardSquares, canvasSquares };
 };

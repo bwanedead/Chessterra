@@ -7,10 +7,17 @@ export interface InfluenceSample {
   weight: number;
 }
 
+export interface CanvasInfluenceSample {
+  fileIndex: number;
+  rankIndex: number;
+  weight: number;
+}
+
 export interface InfluenceLayer {
   piece: ChessPieceDescriptor;
   origin: string;
   samples: InfluenceSample[];
+  canvasSamples: CanvasInfluenceSample[];
 }
 
 export interface OverlayRequest {
@@ -31,7 +38,16 @@ export interface SquareInfluence {
 
 export interface OverlayResult {
   squares: SquareInfluence[];
+  canvasSquares: CanvasSquareInfluence[];
   maxWeight: number;
   minWeight: number;
 }
 
+export interface CanvasSquareInfluence {
+  fileIndex: number;
+  rankIndex: number;
+  whiteWeight: number;
+  blackWeight: number;
+  combinedWeight: number;
+  dominant: 'white' | 'black' | 'tie';
+}

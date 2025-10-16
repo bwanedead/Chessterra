@@ -339,7 +339,7 @@ const HeatmapBoardContent = ({
               ref={expandedOverlayRef}
               boardSize={boardSize}
               normalized={controls.normalizedBoard}
-              overlays={overlay.overlays}
+              canvasOverlays={overlay.canvasOverlays}
               orientation={orientation}
             />
             <div
@@ -402,13 +402,13 @@ const HeatmapBoardContent = ({
 interface ExpandedBoardOverlayProps {
   boardSize: number;
   normalized: boolean;
-  overlays: HeatmapOverlayOutput['overlays'];
+  canvasOverlays: HeatmapOverlayOutput['canvasOverlays'];
   orientation: 'white' | 'black';
 }
 
 const ExpandedBoardOverlay = memo(
   forwardRef<HTMLDivElement, ExpandedBoardOverlayProps>(
-    ({ boardSize, normalized, overlays, orientation }, ref) => {
+    ({ boardSize, normalized, canvasOverlays, orientation }, ref) => {
       const squareSize = boardSize / 8;
       const coreOffset = squareSize * 3;
       const extendedSize = squareSize * 14;
@@ -436,7 +436,7 @@ const ExpandedBoardOverlay = memo(
             }}
           />
           <ExpandedHeatmapOverlay
-            overlays={overlays}
+            canvasOverlays={canvasOverlays}
             orientation={orientation}
             squareSize={squareSize}
             coreOffset={coreOffset}

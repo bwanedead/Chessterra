@@ -9,7 +9,7 @@ export const computeRookInfluence = ({
   boardMatrix,
 }: InfluenceParams): InfluenceLayer => {
   const { fileIndex, rankIndex } = fromSquare(origin);
-  const squares = rayTrace({
+  const { boardSquares, canvasSquares } = rayTrace({
     fromFile: fileIndex,
     fromRank: rankIndex,
     directions: rookDirections,
@@ -20,6 +20,7 @@ export const computeRookInfluence = ({
   return {
     piece,
     origin,
-    samples: squares.map((square) => ({ square, weight: 1 })),
+    samples: boardSquares.map((square) => ({ square, weight: 1 })),
+    canvasSamples: canvasSquares.map((sample) => ({ ...sample, weight: 1 })),
   };
 };

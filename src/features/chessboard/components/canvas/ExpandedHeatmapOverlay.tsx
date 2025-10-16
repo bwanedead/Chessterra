@@ -1,7 +1,8 @@
 import { memo, useMemo } from 'react';
+import type { CanvasHeatmapOverlayEntry } from '@/features/chessboard/hooks/useHeatmapOverlay';
 
 interface ExpandedHeatmapOverlayProps {
-  overlays: Record<string, { color: string; strength: number }>;
+  canvasOverlays: CanvasHeatmapOverlayEntry[];
   orientation: 'white' | 'black';
   squareSize: number;
   coreOffset: number;
@@ -34,68 +35,77 @@ const colorWithAlpha = (color: string, alpha: number) => {
   return color;
 };
 
-const getSquarePosition = (square: string, orientation: 'white' | 'black') => {
-  const file = square.charCodeAt(0) - 97; // a -> 0
-  const rank = Number(square[1]) - 1; // 1 -> 0
+const computePosition = (
+  fileIndex: number,
+  rankIndex: number,
+  squareSize: number,
+  orientation: 'white' | 'black',
+  borderSquares: number,
+  totalSquares: number,
+) => {
+  const boardMaxIndex = 7;
+  const whiteCol = borderSquares + fileIndex;
+  const whiteRow = borderSquares + (boardMaxIndex - rankIndex);
 
-  if (orientation === 'white') {
-    return {
-      col: file,
-      row: 7 - rank,
-    };
-  }
+  const col = orientation === 'white' ? whiteCol : totalSquares - 1 - whiteCol;
+  const row = orientation === 'white' ? whiteRow : totalSquares - 1 - whiteRow;
 
   return {
-    col: 7 - file,
-    row: rank,
+    left: col * squareSize,
+    top: row * squareSize,
   };
 };
 
 export const ExpandedHeatmapOverlay = memo(
-  ({ overlays, orientation, squareSize, coreOffset, extendedSize, boardSize }: ExpandedHeatmapOverlayProps) => {
-    const items = useMemo(() => Object.entries(overlays), [overlays]);
+  ({ canvasOverlays, orientation, squareSize, coreOffset, extendedSize, boardSize }: ExpandedHeatmapOverlayProps) => {
+    const items = useMemo(() => canvasOverlays, [canvasOverlays]);
     if (items.length === 0) {
       return null;
     }
 
-    const radiusMultiplier = 3.5;
-    const radius = squareSize * radiusMultiplier;
-    const boardRadius = boardSize / 2;
-    const clampToExtended = (value: number) => Math.max(0, Math.min(extendedSize, value));
+    const maxAlpha = 0.85;
+    const minAlpha = 0.25;
+    const borderSquares = Math.round(coreOffset / squareSize);
+    const totalSquares = borderSquares * 2 + 8;
+    const expectedExtended = squareSize * totalSquares;
+
+    if (process.env.NODE_ENV === 'development' && Math.abs(expectedExtended - extendedSize) > 0.5) {
+      console.warn('expanded-heatmap/geometry-mismatch', {
+        squareSize,
+        coreOffset,
+        expectedExtended,
+        extendedSize,
+        boardSize,
+        borderSquares,
+      });
+    }
 
     return (
-      <div className="pointer-events-none absolute inset-0 mix-blend-screen" style={{ opacity: 0.9 }}>
-        {items.map(([square, overlay]) => {
-          const { col, row } = getSquarePosition(square, orientation);
-          const centerX = coreOffset + col * squareSize + squareSize / 2;
-          const centerY = coreOffset + row * squareSize + squareSize / 2;
-          const left = clampToExtended(centerX - radius);
-          const top = clampToExtended(centerY - radius);
-          const size = radius * 2;
-          const distanceFromBoardCenter = Math.sqrt(
-            Math.pow(centerX - (extendedSize / 2), 2) + Math.pow(centerY - (extendedSize / 2), 2),
+      <div className="pointer-events-none absolute inset-0">
+        {items.map((entry) => {
+          const { left, top } = computePosition(
+            entry.fileIndex,
+            entry.rankIndex,
+            squareSize,
+            orientation,
+            borderSquares,
+            totalSquares,
           );
-          const falloff = Math.max(0, 1 - distanceFromBoardCenter / (boardRadius * 1.65));
-          const baseStrength = Math.max(0, Math.min(overlay.strength ?? 0, 1));
-          const intensity = baseStrength * 0.75 * falloff;
-          const innerAlpha = 0.35 + intensity * 0.5;
-          const outerAlpha = 0.08 + intensity * 0.25;
-          const coreColor = colorWithAlpha(overlay.color, Math.min(innerAlpha, 0.85));
-          const midColor = colorWithAlpha(overlay.color, Math.min(outerAlpha, 0.45));
+          const alpha = Math.min(maxAlpha, minAlpha + entry.strength * 0.6);
+          const backgroundColor = colorWithAlpha(entry.color, alpha);
 
           return (
             <div
-              key={`expanded-heatmap-${square}`}
+              key={`canvas-overlay-${entry.id}`}
               style={{
                 position: 'absolute',
                 left,
                 top,
-                width: size,
-                height: size,
-                pointerEvents: 'none',
-                backgroundImage: `radial-gradient(circle at center, ${coreColor} 0%, ${midColor} 45%, rgba(15, 23, 42, 0) 100%)`,
-                filter: `blur(${squareSize * 0.65}px)`,
-                opacity: Math.min(0.9, 0.45 + intensity * 0.5),
+                width: squareSize,
+                height: squareSize,
+                backgroundColor,
+                borderRadius: squareSize * 0.08,
+                boxShadow: `0 0 0 ${Math.max(1, squareSize * 0.04)} ${colorWithAlpha(entry.color, alpha * 0.6)}`,
               }}
             />
           );

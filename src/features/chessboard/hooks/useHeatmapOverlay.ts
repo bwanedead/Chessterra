@@ -26,8 +26,15 @@ export interface HeatmapOverlayEntry {
   strength: number;
 }
 
+export interface CanvasHeatmapOverlayEntry extends HeatmapOverlayEntry {
+  id: string;
+  fileIndex: number;
+  rankIndex: number;
+}
+
 export interface HeatmapOverlayOutput {
   overlays: Record<string, HeatmapOverlayEntry>;
+  canvasOverlays: CanvasHeatmapOverlayEntry[];
   result: OverlayResult | null;
   activePieceCount: number;
   hasOverlay: boolean;
@@ -103,11 +110,52 @@ export const useHeatmapOverlay = ({
     }, {});
   }, [includeBothSides, overlayResult]);
 
+  const canvasOverlays = useMemo(() => {
+    if (!overlayResult || overlayResult.canvasSquares.length === 0) {
+      return [];
+    }
+
+    return overlayResult.canvasSquares.reduce<CanvasHeatmapOverlayEntry[]>((acc, square) => {
+      const magnitude = includeBothSides
+        ? Math.abs(square.combinedWeight)
+        : Math.max(square.whiteWeight, square.blackWeight, square.combinedWeight);
+      if (magnitude <= 0) {
+        return acc;
+      }
+
+      const magnitudeLevel = Math.max(1, Math.round(magnitude));
+
+      let palette = NEUTRAL_SCALE;
+      if (square.dominant === 'white') {
+        palette = WHITE_SCALE;
+      } else if (square.dominant === 'black') {
+        palette = BLACK_SCALE;
+      }
+
+      const index = Math.min(palette.length - 1, magnitudeLevel - 1);
+      const intensityBase = 0.6 + Math.min(magnitudeLevel - 1, palette.length - 1) * 0.08;
+      const strength = clamp(intensityBase, 0.45, 0.85);
+      acc.push({
+        id: `${square.fileIndex}:${square.rankIndex}`,
+        fileIndex: square.fileIndex,
+        rankIndex: square.rankIndex,
+        color: palette[index],
+        magnitude,
+        maxWeight: magnitudeLevel,
+        strength,
+      });
+      return acc;
+    }, []);
+  }, [includeBothSides, overlayResult]);
+
   return {
     overlays,
+    canvasOverlays,
     result: overlayResult,
     activePieceCount: activePieces.length,
-    hasOverlay: Boolean(overlayResult && overlayResult.squares.length > 0),
+    hasOverlay: Boolean(
+      overlayResult && (overlayResult.squares.length > 0 || overlayResult.canvasSquares.length > 0),
+    ),
   };
 };
 
