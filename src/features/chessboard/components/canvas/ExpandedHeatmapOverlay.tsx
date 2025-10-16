@@ -104,8 +104,8 @@ export const ExpandedHeatmapOverlay = memo(
                 width: squareSize,
                 height: squareSize,
                 backgroundColor,
-                borderRadius: squareSize * 0.08,
-                boxShadow: `0 0 0 ${Math.max(1, squareSize * 0.04)} ${colorWithAlpha(entry.color, alpha * 0.6)}`,
+                borderRadius: 0,
+                boxShadow: 'none',
               }}
             />
           );
