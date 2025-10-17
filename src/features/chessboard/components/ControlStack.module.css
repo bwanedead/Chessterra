@@ -1,3 +1,12 @@
 .stackSpacing > * + * {
   margin-top: 0.75rem;
 }
+
+.controlButton {
+  width: 10.75rem;
+  text-align: center;
+  white-space: normal;
+  letter-spacing: 0.18em;
+  justify-content: center;
+  line-height: 1.35;
+}

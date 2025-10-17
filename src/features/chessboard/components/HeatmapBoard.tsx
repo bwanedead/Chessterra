@@ -2,7 +2,7 @@ import { forwardRef, memo, useEffect, useMemo, useRef } from 'react';
 import styles from './BoardWorkspaceLayout.module.css';
 import { CustomChessboard } from '@/features/chessboard/components/CustomChessboard';
 import { HeatmapControlsPanel } from '@/features/chessboard/components/HeatmapControlsPanel';
-import { NormalizeBoardToggle } from '@/features/chessboard/components/NormalizeBoardToggle';
+import { NormalizeBoardButton, PiecesVisibilityButton } from '@/features/chessboard/components/NormalizeBoardToggle';
 import { ExpandCanvasToggle } from '@/features/chessboard/components/ExpandCanvasToggle';
 import { CanvasChrome, CanvasModeProvider, CanvasViewport, useCanvasMode } from '@/features/chessboard/canvas';
 import { ExpandedHeatmapOverlay } from '@/features/chessboard/components/canvas/ExpandedHeatmapOverlay';
@@ -350,13 +350,12 @@ const HeatmapBoardContent = ({
             </div>
           </div>
           <CanvasChrome className={`${styles.expandedChrome} ${styles.expandedChromeRight}`}>
-            <NormalizeBoardToggle
+            <NormalizeBoardButton
               normalized={controls.normalizedBoard}
               onToggleNormalized={controls.setNormalizedBoard}
-              showPieces={controls.showPieces}
-              onToggleShowPieces={controls.setShowPieces}
             />
             <ExpandCanvasToggle />
+            <PiecesVisibilityButton showPieces={controls.showPieces} onToggleShowPieces={controls.setShowPieces} />
           </CanvasChrome>
         </div>
       </CanvasViewport>
@@ -386,13 +385,12 @@ const HeatmapBoardContent = ({
 
         <div className={styles.boardAuxZone}>
           <CanvasChrome className="items-start">
-            <NormalizeBoardToggle
+            <NormalizeBoardButton
               normalized={controls.normalizedBoard}
               onToggleNormalized={controls.setNormalizedBoard}
-              showPieces={controls.showPieces}
-              onToggleShowPieces={controls.setShowPieces}
             />
             <ExpandCanvasToggle />
+            <PiecesVisibilityButton showPieces={controls.showPieces} onToggleShowPieces={controls.setShowPieces} />
           </CanvasChrome>
         </div>
       </div>
