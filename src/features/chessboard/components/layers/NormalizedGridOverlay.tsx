@@ -1,6 +1,7 @@
 import { memo, useMemo, useRef } from 'react';
 import { BoardLayer } from './BoardLayer';
 import { useLayerDiagnostics } from '@/features/chessboard/hooks/useLayerDiagnostics';
+import { layoutDebugEnabled } from '@/shared/utils/logger';
 import type { LoggerApi } from '@/shared/utils/logger';
 
 interface NormalizedGridOverlayProps {
@@ -22,7 +23,7 @@ export const NormalizedGridOverlay = memo(
     diagnosticsKey = 'normalized-overlay',
   }: NormalizedGridOverlayProps) => {
     const overlayRef = useRef<HTMLDivElement | null>(null);
-    const diagnosticsEnabled = process.env.NODE_ENV === 'development';
+    const diagnosticsEnabled = layoutDebugEnabled;
 
     useLayerDiagnostics({
       ref: overlayRef,

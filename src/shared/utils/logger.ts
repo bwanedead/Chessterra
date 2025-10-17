@@ -1,6 +1,7 @@
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 const isProduction = process.env.NODE_ENV === 'production';
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 const levelRank: Record<LogLevel, number> = {
   error: 0,
@@ -16,6 +17,8 @@ const configuredLevel = ((): LogLevel => {
   }
   return isProduction ? 'info' : 'debug';
 })();
+
+export const layoutDebugEnabled = isDevelopment && process.env.NEXT_PUBLIC_DEBUG_LAYOUT === 'true';
 
 const formatPrefix = (namespace: string, level: LogLevel) => `[Chessterra:${namespace}] ${level.toUpperCase()}`;
 

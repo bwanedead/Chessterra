@@ -7,7 +7,7 @@ import { BoardLayer } from './layers/BoardLayer';
 import { NormalizedGridOverlay } from './layers/NormalizedGridOverlay';
 import type { BoardSquare, ChessPieceDescriptor } from '@/features/chessboard/types';
 import { useLayerDiagnostics } from '@/features/chessboard/hooks/useLayerDiagnostics';
-import { createScopedLogger } from '@/shared/utils/logger';
+import { createScopedLogger, layoutDebugEnabled } from '@/shared/utils/logger';
 
 export interface BoardAppearance {
   mode: 'classic' | 'normalized';
@@ -83,7 +83,7 @@ export const ChessboardSurface = memo(
 
     const gridColor = toRgba(wireframeColor, normalized ? 0.22 : 0.28);
     const edgeColor = toRgba(wireframeColor, normalized ? 0.4 : 0.6);
-    const diagnosticsEnabled = process.env.NODE_ENV === 'development';
+    const diagnosticsEnabled = layoutDebugEnabled;
 
     useLayerDiagnostics({
       ref: stackRef,
@@ -102,7 +102,7 @@ export const ChessboardSurface = memo(
     });
 
     useEffect(() => {
-      if (!normalized) {
+      if (!layoutDebugEnabled || !normalized) {
         return;
       }
 
@@ -115,6 +115,7 @@ export const ChessboardSurface = memo(
         edgeColor,
       });
     }, [
+      layoutDebugEnabled,
       normalized,
       piecePixelSize,
       estimatedSquareSize,
@@ -126,7 +127,7 @@ export const ChessboardSurface = memo(
     ]);
 
     useEffect(() => {
-      if (process.env.NODE_ENV !== 'development') {
+      if (!layoutDebugEnabled) {
         return;
       }
 
@@ -175,7 +176,7 @@ export const ChessboardSurface = memo(
           },
         });
       });
-    }, [appearance.mode, surfaceLogger]);
+    }, [appearance.mode, layoutDebugEnabled, surfaceLogger]);
 
     return (
       <BoardLayerStack
@@ -211,12 +212,14 @@ export const ChessboardSurface = memo(
                   showContent={showPieces}
                   appearance={appearance}
                   onPointerDown={(event) => {
-                    surfaceLogger.debug('square-pointer-down', {
-                      squareId: square.id,
-                      hasPiece: Boolean(square.piece),
-                      pointerId: event.pointerId,
-                      button: event.button,
-                    });
+                    if (layoutDebugEnabled) {
+                      surfaceLogger.debug('square-pointer-down', {
+                        squareId: square.id,
+                        hasPiece: Boolean(square.piece),
+                        pointerId: event.pointerId,
+                        button: event.button,
+                      });
+                    }
                     if (square.piece) {
                       onSquarePointerDown(square.id, square.piece, event);
                     }

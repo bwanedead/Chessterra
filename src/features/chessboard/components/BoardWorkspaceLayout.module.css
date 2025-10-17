@@ -162,6 +162,19 @@
   justify-self: start;
 }
 
+.expandedAttachments {
+  grid-column: 2;
+  width: var(--canvas-size);
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: clamp(1.5rem, 4vw, 3rem);
+  pointer-events: auto;
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+
 @media (max-width: 1023px) {
   .expandedRoot {
     grid-template-columns: minmax(0, var(--canvas-size));
@@ -182,6 +195,11 @@
 
   .expandedBoardArea {
     grid-column: 1;
+  }
+
+  .expandedAttachments {
+    grid-column: 1;
+    width: 100%;
   }
 }
 

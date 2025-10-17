@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import type { CSSProperties, ReactNode } from 'react';
 import { useCanvasMode } from '@/features/chessboard/canvas/CanvasModeContext';
 import { useLayerDiagnostics } from '@/features/chessboard/hooks/useLayerDiagnostics';
-import { createScopedLogger } from '@/shared/utils/logger';
+import { createScopedLogger, layoutDebugEnabled } from '@/shared/utils/logger';
 
 interface CanvasViewportProps {
   children: ReactNode;
@@ -31,7 +31,7 @@ export const CanvasViewport = ({ children, className, style }: CanvasViewportPro
     host.style.display = 'block';
     return host;
   });
-  const diagnosticsEnabled = process.env.NODE_ENV === 'development';
+  const diagnosticsEnabled = layoutDebugEnabled;
   const logger = useMemo(() => createScopedLogger('chessboard/canvas-viewport'), []);
 
   useLayerDiagnostics({
@@ -39,7 +39,7 @@ export const CanvasViewport = ({ children, className, style }: CanvasViewportPro
     logger,
     label: 'viewport',
     enabled: diagnosticsEnabled && isExpanded,
-    dependencies: [isExpanded],
+    dependencies: [isExpanded, diagnosticsEnabled],
     extra: () => {
       const element = containerRef.current;
       if (!element) {

@@ -491,5 +491,6 @@ C:\Projects\chessterra\
     }
   }
   ```
+- **Debugging**: Set the environment variable `NEXT_PUBLIC_DEBUG_LAYOUT=true` locally to enable the verbose chessboard/canvas layout diagnostics when investigating positioning issues. Leave it unset (default) to keep console noise low.
 
 This plan starts **Chessterra** from scratch, delivering a professional, polished, flexible app. Copy this into Cursor AI, save as `PROJECT_PLAN.md`, and execute it to begin development. Let me know if you encounter any issues, and we'll tackle them together!

@@ -30,6 +30,7 @@ export default function Home() {
 
   const initialFenRef = useRef<string>(DEFAULT_FEN);
   const [isCanvasExpanded, setIsCanvasExpanded] = useState(false);
+  const [canvasAttachmentHost, setCanvasAttachmentHost] = useState<HTMLElement | null>(null);
 
   const [fen, setFen] = useState<string>(DEFAULT_FEN);
   const [moveHistory, setMoveHistory] = useState<Move[]>([]);
@@ -533,14 +534,20 @@ export default function Home() {
     }
   }, [appendConsoleLine, isAutoPlaying, pendingPromotion]);
 
-  const terminalMargin = 32 + (isCanvasExpanded ? (BOARD_SIZE * 3) / 8 : 0);
+  const terminalMargin = isCanvasExpanded ? 0 : 32;
+  const workspaceStackClass = [
+    'flex w-full max-w-6xl flex-col items-center',
+    isCanvasExpanded ? 'gap-0' : 'gap-8',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <main
       className="flex min-h-screen flex-col items-center bg-slate-950 px-6 pb-20 pt-24"
       style={{ paddingTop: '120px' }}
     >
-      <div className="flex w-full max-w-6xl flex-col items-center gap-8">
+      <div className={workspaceStackClass}>
         <HeatmapBoard
           fen={fen}
           orientation="white"
@@ -553,6 +560,7 @@ export default function Home() {
           onSelectPromotion={handlePromotionSelect}
           onCancelPromotion={handlePromotionCancel}
           onCanvasModeChange={setIsCanvasExpanded}
+          onExpandedAttachmentTargetChange={setCanvasAttachmentHost}
         />
         <GameTerminal
           moves={moveHistory}
@@ -562,6 +570,8 @@ export default function Home() {
           consoleLines={consoleLines}
           boardWidth={BOARD_SIZE}
           marginTop={terminalMargin}
+          isCanvasExpanded={isCanvasExpanded}
+          portalTarget={canvasAttachmentHost}
           onStepForward={handleStepForward}
           onStepBackward={handleStepBackward}
           onJumpToPly={handleJumpToPly}

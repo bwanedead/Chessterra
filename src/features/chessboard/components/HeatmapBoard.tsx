@@ -9,7 +9,7 @@ import { ExpandedHeatmapOverlay } from '@/features/chessboard/components/canvas/
 import { useHeatmapControls } from '@/features/chessboard/hooks/useHeatmapControls';
 import { useHeatmapOverlay, type HeatmapOverlayOutput } from '@/features/chessboard/hooks/useHeatmapOverlay';
 import { useLayerDiagnostics } from '@/features/chessboard/hooks/useLayerDiagnostics';
-import { createScopedLogger } from '@/shared/utils/logger';
+import { createScopedLogger, layoutDebugEnabled } from '@/shared/utils/logger';
 import type { PieceColor, PromotionPieceType } from '@/features/chessboard/types';
 
 interface HeatmapBoardProps {
@@ -25,6 +25,7 @@ interface HeatmapBoardProps {
   onSelectPromotion?: (piece: PromotionPieceType) => void;
   onCancelPromotion?: () => void;
   onCanvasModeChange?: (expanded: boolean) => void;
+  onExpandedAttachmentTargetChange?: (element: HTMLElement | null) => void;
 }
 
 export const HeatmapBoard = ({
@@ -37,6 +38,7 @@ export const HeatmapBoard = ({
   onSelectPromotion,
   onCancelPromotion,
   onCanvasModeChange,
+  onExpandedAttachmentTargetChange,
 }: HeatmapBoardProps) => {
   const controls = useHeatmapControls();
   const overlay = useHeatmapOverlay({
@@ -58,6 +60,7 @@ export const HeatmapBoard = ({
         controls={controls}
         overlay={overlay}
         onCanvasModeChange={onCanvasModeChange}
+        onExpandedAttachmentTargetChange={onExpandedAttachmentTargetChange}
         promotionRequest={promotionRequest}
         onSelectPromotion={onSelectPromotion}
         onCancelPromotion={onCancelPromotion}
@@ -83,6 +86,7 @@ const HeatmapBoardContent = ({
   onSelectPromotion,
   onCancelPromotion,
   onCanvasModeChange,
+  onExpandedAttachmentTargetChange,
 }: HeatmapBoardContentProps) => {
   const layoutRef = useRef<HTMLDivElement | null>(null);
   const boardShellRef = useRef<HTMLDivElement | null>(null);
@@ -93,17 +97,35 @@ const HeatmapBoardContent = ({
   const lastScrollContainerRef = useRef<HTMLDivElement | null>(null);
   const diagnosticsLogger = useMemo(() => createScopedLogger('chessboard/expanded-stage'), []);
   const lastViewportSizeRef = useRef<{ width: number; height: number } | null>(null);
+  const attachmentZoneRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     onCanvasModeChange?.(isExpanded);
   }, [isExpanded, onCanvasModeChange]);
 
+  useEffect(() => {
+    if (!onExpandedAttachmentTargetChange) {
+      return;
+    }
+
+    if (!isExpanded) {
+      onExpandedAttachmentTargetChange(null);
+      return;
+    }
+
+    onExpandedAttachmentTargetChange(attachmentZoneRef.current ?? null);
+
+    return () => {
+      onExpandedAttachmentTargetChange(null);
+    };
+  }, [isExpanded, onExpandedAttachmentTargetChange]);
+
   useLayerDiagnostics({
     ref: expandedOverlayRef,
     logger: diagnosticsLogger,
     label: 'expanded-board-overlay',
-    enabled: process.env.NODE_ENV === 'development' && isExpanded,
-    dependencies: [boardSize, controls.normalizedBoard, isExpanded],
+    enabled: layoutDebugEnabled && isExpanded,
+    dependencies: [boardSize, controls.normalizedBoard, isExpanded, layoutDebugEnabled],
     extra: () => ({
       requestedBoardSize: boardSize,
       virtualBoardSize: boardSize * (14 / 8),
@@ -112,7 +134,7 @@ const HeatmapBoardContent = ({
     }),
   });
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'development') {
+    if (!layoutDebugEnabled) {
       return;
     }
 
@@ -123,7 +145,7 @@ const HeatmapBoardContent = ({
       baseSquareSize: boardSize / 8,
       viewport: viewportSize,
     });
-  }, [boardSize, diagnosticsLogger, isExpanded, viewportSize]);
+  }, [boardSize, diagnosticsLogger, isExpanded, layoutDebugEnabled, viewportSize]);
 
   const boardElement = (
     <CustomChessboard
@@ -149,7 +171,7 @@ const HeatmapBoardContent = ({
   );
 
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'development' || isExpanded) {
+    if (!layoutDebugEnabled || isExpanded) {
       return;
     }
 
@@ -175,7 +197,7 @@ const HeatmapBoardContent = ({
       const layoutStyles = window.getComputedStyle(layout);
       const trayStyles = tray ? window.getComputedStyle(tray) : null;
 
-      console.log('heatmap-board/layout', {
+      diagnosticsLogger.debug('layout', {
         viewportWidth: window.innerWidth,
         layoutWidth: layoutRect.width,
         layoutDisplay: layoutStyles.display,
@@ -205,20 +227,20 @@ const HeatmapBoardContent = ({
       observer.disconnect();
       window.removeEventListener('resize', logMetrics);
     };
-  }, [boardSize, isExpanded]);
+  }, [boardSize, diagnosticsLogger, isExpanded, layoutDebugEnabled]);
 
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'development') {
+    if (!layoutDebugEnabled) {
       return;
     }
 
     const overlaySquareCount = Object.keys(overlay.overlays).length;
-    console.log('heatmap-board/overlay-summary', {
+    diagnosticsLogger.debug('overlay-summary', {
       toggles: controls.activeToggleIds,
       overlaySquares: overlaySquareCount,
       hasOverlay: overlay.hasOverlay,
     });
-  }, [controls.activeToggleIds, overlay.hasOverlay, overlay.overlays]);
+  }, [controls.activeToggleIds, diagnosticsLogger, layoutDebugEnabled, overlay.hasOverlay, overlay.overlays]);
 
   useEffect(() => {
     if (!isExpanded) {
@@ -258,7 +280,7 @@ const HeatmapBoardContent = ({
     const needsHorizontalScroll = viewportWidth < extendedSize;
 
     if (!needsVerticalScroll && !needsHorizontalScroll) {
-      if (process.env.NODE_ENV === 'development') {
+      if (layoutDebugEnabled) {
         diagnosticsLogger.debug('auto-scroll-skip', {
           reason: 'viewport-covers-canvas',
           viewportHeight,
@@ -288,7 +310,7 @@ const HeatmapBoardContent = ({
         targetContainer.scrollLeft = horizontalTarget;
       }
       autoScrollPerformedRef.current = true;
-      if (process.env.NODE_ENV === 'development') {
+      if (layoutDebugEnabled) {
         diagnosticsLogger.debug('auto-scroll', {
           scrollTarget,
           horizontalTarget,
@@ -304,7 +326,7 @@ const HeatmapBoardContent = ({
     return () => {
       window.cancelAnimationFrame(rafId);
     };
-  }, [boardSize, diagnosticsLogger, isExpanded, scrollContainer, viewportSize.height, viewportSize.width]);
+  }, [boardSize, diagnosticsLogger, isExpanded, layoutDebugEnabled, scrollContainer, viewportSize.height, viewportSize.width]);
 
   useEffect(() => {
     if (!isExpanded) {
@@ -320,7 +342,7 @@ const HeatmapBoardContent = ({
       return;
     }
 
-    if (process.env.NODE_ENV === 'development') {
+    if (layoutDebugEnabled) {
       diagnosticsLogger.debug('scroll-bounds', {
         containerHeight: targetContainer.clientHeight,
         containerWidth: targetContainer.clientWidth,
@@ -333,7 +355,7 @@ const HeatmapBoardContent = ({
         viewportPadding,
       });
     }
-  }, [boardSize, diagnosticsLogger, isExpanded, scrollContainer]);
+  }, [boardSize, diagnosticsLogger, isExpanded, layoutDebugEnabled, scrollContainer]);
 
   if (isExpanded) {
     const squareSize = boardSize / 8;
@@ -352,7 +374,7 @@ const HeatmapBoardContent = ({
     const viewportVars = {
       ['--canvas-viewport-padding' as const]: `${viewportPadding}px`,
     };
-    if (process.env.NODE_ENV === 'development') {
+    if (layoutDebugEnabled) {
       diagnosticsLogger.debug('expanded-layout-vars', {
         squareSize,
         extendedSize,
@@ -397,6 +419,7 @@ const HeatmapBoardContent = ({
             <ExpandCanvasToggle />
             <PiecesVisibilityButton showPieces={controls.showPieces} onToggleShowPieces={controls.setShowPieces} />
           </CanvasChrome>
+          <div ref={attachmentZoneRef} className={styles.expandedAttachments} data-attachment-zone />
         </div>
       </CanvasViewport>
     );

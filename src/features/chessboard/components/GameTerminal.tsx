@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { Move } from 'chess.js';
 import { createScopedLogger } from '@/shared/utils/logger';
 
@@ -13,6 +14,8 @@ interface GameTerminalProps {
   consoleLines: string[];
   boardWidth: number;
   marginTop: number;
+  isCanvasExpanded: boolean;
+  portalTarget?: HTMLElement | null;
   onStepForward: () => void;
   onStepBackward: () => void;
   onJumpToPly: (ply: number) => void;
@@ -56,6 +59,8 @@ export const GameTerminal = ({
   consoleLines,
   boardWidth,
   marginTop,
+  isCanvasExpanded,
+  portalTarget,
   onStepForward,
   onStepBackward,
   onJumpToPly,
@@ -67,11 +72,14 @@ export const GameTerminal = ({
   const consoleRef = useRef<HTMLDivElement | null>(null);
   const activeMoveRef = useRef<HTMLButtonElement | null>(null);
   const terminalRef = useRef<HTMLDivElement | null>(null);
+  const lastSnapshotRef = useRef<{ mode: boolean; boardWidth: number; marginTop: number } | null>(null);
+  const lastScrollParentRef = useRef<HTMLElement | null>(null);
   const layoutLogger = useMemo(() => createScopedLogger('terminal/layout'), []);
 
   const rows = useMemo(() => buildMoveRows(moves), [moves]);
   const activeIndex = currentPly - 1;
   const clampedWidth = useMemo(() => Math.max(240, Math.round(boardWidth)), [boardWidth]);
+  const shouldPortal = Boolean(isCanvasExpanded && portalTarget);
 
   useEffect(() => {
     if (!consoleRef.current) {
@@ -101,35 +109,139 @@ export const GameTerminal = ({
       return;
     }
 
-    const logMetrics = (context: string) => {
+    const describeElement = (target: Element | null) => {
+      if (!target || !(target instanceof HTMLElement)) {
+        return null;
+      }
+
+      const rect = target.getBoundingClientRect();
+      const computed = window.getComputedStyle(target);
+
+      return {
+        tagName: target.tagName.toLowerCase(),
+        id: target.id || undefined,
+        className: target.className || undefined,
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          width: rect.width,
+          height: rect.height,
+        },
+        position: computed.position,
+        overflowX: computed.overflowX,
+        overflowY: computed.overflowY,
+        display: computed.display,
+      };
+    };
+
+    const getScrollParent = (node: HTMLElement | null): HTMLElement | null => {
+      if (!node) {
+        return null;
+      }
+
+      const scrollablePattern = /(auto|scroll|overlay)/i;
+      let current: HTMLElement | null = node.parentElement;
+
+      while (current) {
+        const style = window.getComputedStyle(current);
+        if (
+          scrollablePattern.test(style.overflow) ||
+          scrollablePattern.test(style.overflowY) ||
+          scrollablePattern.test(style.overflowX)
+        ) {
+          return current;
+        }
+        current = current.parentElement;
+      }
+
+      return document.scrollingElement instanceof HTMLElement ? document.scrollingElement : null;
+    };
+
+    const emitMetrics = (context: string) => {
       const rect = element.getBoundingClientRect();
+      const computed = window.getComputedStyle(element);
+      const offsetParent = element.offsetParent instanceof HTMLElement ? element.offsetParent : null;
+      const scrollParent = getScrollParent(element);
+      const offsetParentSummary = describeElement(offsetParent);
+      const scrollParentSummary = describeElement(scrollParent);
+
       layoutLogger.debug('terminal-metrics', {
         context,
+        mode: isCanvasExpanded ? 'canvas' : 'classic',
+        boardWidth,
+        marginTop,
         rect: {
           x: rect.x,
           y: rect.y,
           width: rect.width,
           height: rect.height,
         },
+        viewport: {
+          innerWidth: window.innerWidth,
+          innerHeight: window.innerHeight,
+          scrollX: window.scrollX,
+          scrollY: window.scrollY,
+        },
         clientWidth: element.clientWidth,
         offsetWidth: element.offsetWidth,
         className: element.className,
-        style: element.getAttribute('style'),
+        inlineStyle: element.getAttribute('style') ?? undefined,
+        computedStyle: {
+          position: computed.position,
+          top: computed.top,
+          left: computed.left,
+          right: computed.right,
+          bottom: computed.bottom,
+          marginTop: computed.marginTop,
+          marginBottom: computed.marginBottom,
+          marginLeft: computed.marginLeft,
+          marginRight: computed.marginRight,
+          display: computed.display,
+          transform: computed.transform,
+        },
+        offsetParent: offsetParentSummary,
+        scrollParent: scrollParentSummary,
       });
+
+      if (scrollParent !== lastScrollParentRef.current) {
+        lastScrollParentRef.current = scrollParent;
+        layoutLogger.debug('terminal-scroll-context', {
+          mode: isCanvasExpanded ? 'canvas' : 'classic',
+          scrollParent: scrollParentSummary,
+        });
+      }
     };
 
-    logMetrics('init');
+    const previousSnapshot = lastSnapshotRef.current;
+    if (!previousSnapshot) {
+      emitMetrics('init');
+    } else if (previousSnapshot.mode !== isCanvasExpanded) {
+      emitMetrics('mode-change');
+    } else if (
+      previousSnapshot.boardWidth !== boardWidth ||
+      previousSnapshot.marginTop !== marginTop
+    ) {
+      emitMetrics('dimension-update');
+    } else {
+      emitMetrics('layout-sync');
+    }
+
+    lastSnapshotRef.current = {
+      mode: isCanvasExpanded,
+      boardWidth,
+      marginTop,
+    };
 
     if (typeof ResizeObserver !== 'undefined') {
-      const observer = new ResizeObserver(() => logMetrics('resize'));
+      const observer = new ResizeObserver(() => emitMetrics('resize'));
       observer.observe(element);
       return () => observer.disconnect();
     }
 
-    const handleResize = () => logMetrics('resize');
+    const handleResize = () => emitMetrics('resize');
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [layoutLogger]);
+  }, [boardWidth, isCanvasExpanded, layoutLogger, marginTop, portalTarget]);
 
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
@@ -194,7 +306,7 @@ export const GameTerminal = ({
     [submitCommand],
   );
 
-  return (
+  const terminalNode = (
     <aside
       ref={terminalRef}
       className={[
@@ -204,7 +316,11 @@ export const GameTerminal = ({
       ]
         .filter(Boolean)
         .join(' ')}
-      style={{ width: clampedWidth, marginTop }}
+      style={{
+        width: clampedWidth,
+        marginTop,
+        visibility: isCanvasExpanded && !shouldPortal ? 'hidden' : undefined,
+      }}
     >
       <div className="mb-2 flex items-center justify-between text-[11px] uppercase tracking-[0.18em] text-slate-500">
         <span>Move Feed</span>
@@ -302,7 +418,12 @@ export const GameTerminal = ({
       </div>
     </aside>
   );
+
+  if (shouldPortal && portalTarget) {
+    return createPortal(terminalNode, portalTarget);
+  }
+
+  return terminalNode;
 };
 
 GameTerminal.displayName = 'GameTerminal';
-

@@ -7,7 +7,7 @@ import { ChessPieceSprite } from './ChessPieceSprite';
 import type { BoardAppearance } from '@/features/chessboard/components/ChessboardSurface';
 import { useBoardSquares } from '@/features/chessboard/hooks/useBoardSquares';
 import { usePieceDrag } from '@/features/chessboard/hooks/usePieceDrag';
-import { createScopedLogger } from '@/shared/utils/logger';
+import { createScopedLogger, layoutDebugEnabled } from '@/shared/utils/logger';
 import { FILES } from '@/lib/chessboard/boardState';
 import type { PieceColor, PromotionPieceType } from '@/features/chessboard/types';
 
@@ -172,7 +172,7 @@ export const CustomChessboard = ({
   const previewIssueLoggedRef = useRef(false);
   const appearance = normalizedBoard ? NORMALIZED_APPEARANCE : CLASSIC_APPEARANCE;
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'development') {
+    if (!layoutDebugEnabled) {
       return;
     }
 
@@ -180,20 +180,9 @@ export const CustomChessboard = ({
       boardSize,
       normalizedBoard,
     });
-  }, [boardSize, normalizedBoard, renderLogger]);
+  }, [boardSize, normalizedBoard, renderLogger, layoutDebugEnabled]);
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'development') {
-      return;
-    }
-
-    createScopedLogger('chessboard/custom-board').debug('board-size-props', {
-      boardSize,
-      normalizedBoard,
-    });
-  }, [boardSize, normalizedBoard]);
-
-  useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
+    if (layoutDebugEnabled) {
       const overlayCount = squareOverlays ? Object.keys(squareOverlays).length : 0;
       renderLogger.debug('square-overlays', { count: overlayCount });
     }
@@ -204,7 +193,7 @@ export const CustomChessboard = ({
     }
 
     if (!dragVisual) {
-      if (activePreviewRef.current) {
+      if (activePreviewRef.current && layoutDebugEnabled) {
         renderLogger.debug('preview-cleared', { square: activePreviewRef.current });
       }
       activePreviewRef.current = null;
@@ -214,7 +203,9 @@ export const CustomChessboard = ({
 
     if (!activePreviewRef.current) {
       activePreviewRef.current = dragVisual.square;
-      renderLogger.debug('preview-activated', { square: dragVisual.square });
+      if (layoutDebugEnabled) {
+        renderLogger.debug('preview-activated', { square: dragVisual.square });
+      }
     }
 
     const previewElement = boardElement.querySelector('[data-preview-layer="true"]') as HTMLDivElement | null;
@@ -254,7 +245,7 @@ export const CustomChessboard = ({
   }, [boardSize, dragVisual, orientation, renderLogger, squareOverlays]);
 
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'development') {
+    if (!layoutDebugEnabled) {
       return;
     }
 
@@ -286,7 +277,7 @@ export const CustomChessboard = ({
         backgroundColor: style.backgroundColor,
       },
     });
-  }, [boardSize, layoutLogger, normalizedBoard]);
+  }, [boardSize, layoutDebugEnabled, layoutLogger, normalizedBoard]);
 
   return (
     <div
