@@ -10,6 +10,7 @@ import { useHeatmapControls } from '@/features/chessboard/hooks/useHeatmapContro
 import { useHeatmapOverlay, type HeatmapOverlayOutput } from '@/features/chessboard/hooks/useHeatmapOverlay';
 import { useLayerDiagnostics } from '@/features/chessboard/hooks/useLayerDiagnostics';
 import { createScopedLogger } from '@/shared/utils/logger';
+import type { PieceColor, PromotionPieceType } from '@/features/chessboard/types';
 
 interface HeatmapBoardProps {
   fen: string;
@@ -17,9 +18,26 @@ interface HeatmapBoardProps {
   moveMode: boolean;
   boardSize: number;
   onMove: (from: string, to: string) => boolean;
+  promotionRequest?: {
+    square: string;
+    color: PieceColor;
+  };
+  onSelectPromotion?: (piece: PromotionPieceType) => void;
+  onCancelPromotion?: () => void;
+  onCanvasModeChange?: (expanded: boolean) => void;
 }
 
-export const HeatmapBoard = ({ fen, orientation, moveMode, boardSize, onMove }: HeatmapBoardProps) => {
+export const HeatmapBoard = ({
+  fen,
+  orientation,
+  moveMode,
+  boardSize,
+  onMove,
+  promotionRequest,
+  onSelectPromotion,
+  onCancelPromotion,
+  onCanvasModeChange,
+}: HeatmapBoardProps) => {
   const controls = useHeatmapControls();
   const overlay = useHeatmapOverlay({
     fen,
@@ -39,6 +57,10 @@ export const HeatmapBoard = ({ fen, orientation, moveMode, boardSize, onMove }: 
         onMove={onMove}
         controls={controls}
         overlay={overlay}
+        onCanvasModeChange={onCanvasModeChange}
+        promotionRequest={promotionRequest}
+        onSelectPromotion={onSelectPromotion}
+        onCancelPromotion={onCancelPromotion}
       />
     </CanvasModeProvider>
   );
@@ -57,6 +79,10 @@ const HeatmapBoardContent = ({
   onMove,
   controls,
   overlay,
+  promotionRequest,
+  onSelectPromotion,
+  onCancelPromotion,
+  onCanvasModeChange,
 }: HeatmapBoardContentProps) => {
   const layoutRef = useRef<HTMLDivElement | null>(null);
   const boardShellRef = useRef<HTMLDivElement | null>(null);
@@ -67,6 +93,10 @@ const HeatmapBoardContent = ({
   const lastScrollContainerRef = useRef<HTMLDivElement | null>(null);
   const diagnosticsLogger = useMemo(() => createScopedLogger('chessboard/expanded-stage'), []);
   const lastViewportSizeRef = useRef<{ width: number; height: number } | null>(null);
+
+  useEffect(() => {
+    onCanvasModeChange?.(isExpanded);
+  }, [isExpanded, onCanvasModeChange]);
 
   useLayerDiagnostics({
     ref: expandedOverlayRef,
@@ -99,12 +129,22 @@ const HeatmapBoardContent = ({
     <CustomChessboard
       fen={fen}
       orientation={orientation}
-      moveMode={moveMode}
+      moveMode={moveMode && !promotionRequest}
       boardSize={boardSize}
       onMove={onMove}
       squareOverlays={overlay.overlays}
       showPieces={controls.showPieces}
       normalizedBoard={controls.normalizedBoard}
+      promotionRequest={
+        promotionRequest && onSelectPromotion
+          ? {
+              square: promotionRequest.square,
+              color: promotionRequest.color,
+              onSelect: onSelectPromotion,
+              onCancel: onCancelPromotion,
+            }
+          : undefined
+      }
     />
   );
 
