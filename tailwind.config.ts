@@ -9,6 +9,19 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './stories/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  safelist: [
+    'pb-12',
+    'pb-16',
+    'pb-24',
+    'pb-32',
+    'pb-48',
+    'pb-60',
+    'pb-64',
+    'max-h-[240px]',
+    'max-h-[280px]',
+    'max-h-[360px]',
+    'max-h-[420px]',
+  ],
   theme: {
     extend: {
       colors: {
