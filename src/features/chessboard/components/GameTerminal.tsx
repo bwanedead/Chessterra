@@ -316,7 +316,7 @@ export const GameTerminal = ({
   );
 
   const containerClasses = [
-    'relative z-20 w-full max-w-[540px] rounded-2xl border border-slate-900/70 bg-[#0c111d] px-5 py-5 text-slate-100 shadow-[0_18px_44px_rgba(10,15,35,0.48)] transition-colors',
+    'relative z-20 flex w-full max-w-[560px] flex-col gap-3 rounded-2xl border border-slate-900/70 bg-[#0b0f18] px-5 py-5 text-slate-100 shadow-[0_18px_44px_rgba(10,15,35,0.48)] transition-colors',
     shouldPortal ? '' : 'mx-auto',
     'font-mono text-[13px]',
     className,
@@ -325,13 +325,10 @@ export const GameTerminal = ({
     .join(' ');
 
   const containerStyle: CSSProperties = shouldPortal
-    ? { width: 'min(560px, 100%)' }
-    : { width: clampedWidth + 40, marginTop };
+    ? { width: 'min(580px, 100%)', height: 420 }
+    : { width: Math.max(clampedWidth, 520), marginTop, height: 420 };
 
-  const streamStyle: CSSProperties = {
-    backgroundColor: '#0f172a',
-    color: '#e2e8f0',
-  };
+  const streamStyle: CSSProperties = { backgroundColor: '#0d1726', color: '#e2e8f0' };
 
   const terminalNode = (
     <aside
@@ -412,38 +409,38 @@ export const GameTerminal = ({
         )}
       </div>
 
-      <div
-        ref={consoleRef}
-        className="mt-4 flex max-h-64 flex-col overflow-y-auto rounded-xl border border-slate-800/70 px-3 py-3 text-[12px]"
-        style={streamStyle}
-      >
-        {consoleLines.map((line, index) => (
-          <div key={`${line}-${index}`} className="whitespace-pre-wrap">
-            {line}
+      <div className="flex flex-1 overflow-hidden rounded-xl border border-slate-800/70" style={streamStyle}>
+        <div
+          ref={consoleRef}
+          className="flex flex-1 flex-col gap-2 overflow-y-auto px-3 py-3 text-[12px]"
+        >
+          {consoleLines.map((line, index) => (
+            <div key={`${line}-${index}`} className="whitespace-pre-wrap">
+              {line}
+            </div>
+          ))}
+          <div className="flex items-start gap-3 text-[12px] text-slate-100">
+            <span className="mt-1 select-none text-emerald-400">{'>'}</span>
+            <textarea
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              onKeyDown={handleKeyDown}
+              rows={3}
+              placeholder="Type a command or paste PGN (Enter to run, Shift+Enter for newline)"
+              className="flex-1 resize-none bg-transparent leading-[1.45]"
+              style={{
+                border: 'none',
+                outline: 'none',
+                fontFamily: 'inherit',
+                fontSize: 'inherit',
+                color: '#f8fafc',
+              }}
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
+              autoComplete="off"
+            />
           </div>
-        ))}
-        <div className="mt-3 flex items-start gap-3 text-[12px]" style={{ color: '#e2e8f0' }}>
-          <span className="mt-1 select-none text-emerald-400">{'>'}</span>
-          <textarea
-            value={input}
-            onChange={(event) => setInput(event.target.value)}
-            onKeyDown={handleKeyDown}
-            rows={3}
-            placeholder="Type a command or paste PGN (Enter to run, Shift+Enter for newline)"
-            className="w-full resize-none bg-transparent"
-            style={{
-              color: '#f8fafc',
-              border: 'none',
-              outline: 'none',
-              fontFamily: 'inherit',
-              fontSize: 'inherit',
-              lineHeight: '1.45',
-            }}
-            autoCorrect="off"
-            autoCapitalize="off"
-            spellCheck={false}
-            autoComplete="off"
-          />
         </div>
       </div>
     </aside>

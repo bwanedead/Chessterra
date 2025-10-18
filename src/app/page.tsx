@@ -13,6 +13,7 @@ const DEFAULT_FEN = new Chess().fen();
 const INITIAL_TERMINAL_LINES = [
   '# Ready for playback. Use left/right arrows or A/D to step through moves.',
   '# Type commands below or paste PGN to import.',
+  '# Shortcuts: Space toggles autoplay, +/- adjust speed.',
 ];
 
 type PendingPromotionState = {
@@ -68,6 +69,72 @@ export default function Home() {
       appendConsoleLine(`${prefix} ${move.san}`);
     },
     [appendConsoleLine],
+  );
+
+  const attemptTerminalMove = useCallback(
+    (raw: string) => {
+      const moveToken = raw.trim();
+      if (!moveToken) {
+        appendConsoleLine('?? Missing move.');
+        return true;
+      }
+
+      const baseHistory = moveHistory.slice(0, currentPly);
+      const sandbox = new Chess();
+      const initialFen = initialFenRef.current ?? DEFAULT_FEN;
+      if (initialFen === DEFAULT_FEN) {
+        sandbox.reset();
+      } else {
+        try {
+          sandbox.load(initialFen);
+        } catch {
+          appendConsoleLine('!! Unable to restore game state for move command.');
+          return true;
+        }
+      }
+
+      baseHistory.forEach((move) => {
+        sandbox.move({
+          from: move.from,
+          to: move.to,
+          promotion: move.promotion,
+        });
+      });
+
+      let applied: Move | null = null;
+      const compact = moveToken.replace(/\s+/g, '');
+      const uciMatch = compact.match(/^([a-h][1-8])([a-h][1-8])([qrbn])?$/i);
+
+      try {
+        if (uciMatch) {
+          const [, from, to, promotion] = uciMatch;
+          applied = sandbox.move({
+            from: from as Square,
+            to: to as Square,
+            promotion: promotion as PromotionPieceType | undefined,
+          });
+        } else {
+          applied = sandbox.move(compact);
+        }
+      } catch {
+        applied = null;
+      }
+
+      if (!applied) {
+        appendConsoleLine('?? Illegal or unrecognized move.');
+        return true;
+      }
+
+      const nextHistory = [...baseHistory, applied];
+      setMoveHistory(nextHistory);
+      setCurrentPly(nextHistory.length);
+      setPendingPromotion(null);
+      setIsAutoPlaying(false);
+      setFen(sandbox.fen());
+      logMove(applied, nextHistory.length);
+      return true;
+    },
+    [appendConsoleLine, currentPly, logMove, moveHistory],
   );
 
   const handleIllegalMove = useCallback(
@@ -452,6 +519,16 @@ export default function Home() {
       }
 
       const [command, ...rest] = trimmed.split(/\s+/);
+      if (trimmed.startsWith('/')) {
+        attemptTerminalMove(trimmed.slice(1));
+        return;
+      }
+
+      if (command.toLowerCase() === 'move') {
+        attemptTerminalMove(rest.join(' '));
+        return;
+      }
+
       switch (command.toLowerCase()) {
         case 'play':
           handleToggleAutoplay();
@@ -488,10 +565,25 @@ export default function Home() {
             '   speed <ms>',
             '   reset',
             '   commands | help',
+            '   controls',
             '   clear | cls',
+            '   move <san|uci> or /<san|uci>',
             '   paste PGN to import (respond y/n when prompted)',
           ];
           helpLines.forEach((line) => appendConsoleLine(line));
+          break;
+        }
+        case 'controls': {
+          const controlLines = [
+            '>> Keyboard shortcuts:',
+            '   Left / A: previous move',
+            '   Right / D: next move',
+            '   Up / Down: navigate move history',
+            '   Space: toggle autoplay',
+            '   + or =: faster autoplay',
+            '   - or _: slower autoplay',
+          ];
+          controlLines.forEach((line) => appendConsoleLine(line));
           break;
         }
         case 'clear':
@@ -517,6 +609,7 @@ export default function Home() {
       handleSetSpeed,
       handleToggleAutoplay,
       isAutoPlaying,
+      attemptTerminalMove,
       loadPgn,
       moveHistory.length,
       pendingCommand,
@@ -565,7 +658,7 @@ export default function Home() {
 
   return (
     <main
-      className="flex min-h-screen flex-col items-center bg-slate-950 px-6 pb-20 pt-24"
+      className="flex min-h-screen flex-col items-center bg-slate-950 px-6 pb-32 pt-24"
       style={{ paddingTop: '120px' }}
     >
       <div className={workspaceStackClass}>
