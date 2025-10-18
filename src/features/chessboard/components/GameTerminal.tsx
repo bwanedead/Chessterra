@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import type { Move } from 'chess.js';
 import { createScopedLogger } from '@/shared/utils/logger';
@@ -247,45 +247,54 @@ export const GameTerminal = ({
     const handleKey = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
       const tag = target?.tagName ?? '';
-      const isTyping = tag === 'INPUT' || tag === 'TEXTAREA';
-      switch (event.key) {
-        case 'ArrowUp':
-        case 'ArrowLeft':
-          event.preventDefault();
-          onStepBackward();
-          break;
-        case 'ArrowDown':
-        case 'ArrowRight':
-          event.preventDefault();
-          onStepForward();
-          break;
-        case ' ':
-          if (!isTyping) {
-            event.preventDefault();
-            onToggleAutoplay();
+      const isTyping = tag === 'INPUT' || tag === 'TEXTAREA' || target?.isContentEditable;
+      const normalized = event.key.toLowerCase();
+      const isLeft = normalized === 'arrowleft' || normalized === 'a';
+      const isRight = normalized === 'arrowright' || normalized === 'd';
+      const isUp = normalized === 'arrowup';
+      const isDown = normalized === 'arrowdown';
+      const isSpace = normalized === ' ';
+      const isPlus = normalized === '+' || normalized === '=';
+      const isMinus = normalized === '-' || normalized === '_';
+
+      const preventNavigation = () => {
+        event.preventDefault();
+        event.stopPropagation();
+      };
+
+      if (isLeft || isRight || isUp || isDown) {
+        if (!isTyping) {
+          preventNavigation();
+          if (isLeft || isUp) {
+            onStepBackward();
+          } else if (isRight || isDown) {
+            onStepForward();
           }
-          break;
-        case '+':
-        case '=':
-          if (!isTyping) {
-            event.preventDefault();
-            onAdjustSpeed(-SPEED_STEP_MS);
-          }
-          break;
-        case '-':
-        case '_':
-          if (!isTyping) {
-            event.preventDefault();
-            onAdjustSpeed(SPEED_STEP_MS);
-          }
-          break;
-        default:
-          break;
+        }
+        return;
+      }
+
+      if (isSpace && !isTyping) {
+        preventNavigation();
+        onToggleAutoplay();
+        return;
+      }
+
+      if (isPlus && !isTyping) {
+        preventNavigation();
+        onAdjustSpeed(-SPEED_STEP_MS);
+        return;
+      }
+
+      if (isMinus && !isTyping) {
+        preventNavigation();
+        onAdjustSpeed(SPEED_STEP_MS);
       }
     };
 
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
+    const listenerOptions: AddEventListenerOptions = { capture: true };
+    window.addEventListener('keydown', handleKey, listenerOptions);
+    return () => window.removeEventListener('keydown', handleKey, listenerOptions);
   }, [onAdjustSpeed, onStepBackward, onStepForward, onToggleAutoplay]);
 
   const submitCommand = useCallback(() => {
@@ -306,30 +315,42 @@ export const GameTerminal = ({
     [submitCommand],
   );
 
+  const containerClasses = [
+    'relative z-20 w-full max-w-[540px] rounded-2xl border border-slate-900/70 bg-[#0c111d] px-5 py-5 text-slate-100 shadow-[0_18px_44px_rgba(10,15,35,0.48)] transition-colors',
+    shouldPortal ? '' : 'mx-auto',
+    'font-mono text-[13px]',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const containerStyle: CSSProperties = shouldPortal
+    ? { width: 'min(560px, 100%)' }
+    : { width: clampedWidth + 40, marginTop };
+
+  const streamStyle: CSSProperties = {
+    backgroundColor: '#0f172a',
+    color: '#e2e8f0',
+  };
+
   const terminalNode = (
     <aside
       ref={terminalRef}
-      className={[
-        'relative z-20 mx-auto min-w-[200px] self-center rounded-lg border border-slate-900 bg-[rgb(5,8,18)] p-4 text-slate-200 shadow-[0_14px_28px_rgba(3,8,20,0.55)]',
-        'font-mono text-[12px]',
-        className,
-      ]
-        .filter(Boolean)
-        .join(' ')}
+      className={containerClasses}
       style={{
-        width: clampedWidth,
-        marginTop,
+        ...containerStyle,
         visibility: isCanvasExpanded && !shouldPortal ? 'hidden' : undefined,
+        pointerEvents: isCanvasExpanded && !shouldPortal ? 'none' : undefined,
       }}
     >
-      <div className="mb-2 flex items-center justify-between text-[11px] uppercase tracking-[0.18em] text-slate-500">
+      <div className="mb-3 flex items-center justify-between text-[11px] uppercase tracking-[0.18em] text-slate-500">
         <span>Move Feed</span>
         <span className={isAutoPlaying ? 'text-emerald-300' : 'text-slate-600'}>
           {isAutoPlaying ? `Auto - ${autoDelay}ms` : 'Paused'}
         </span>
       </div>
 
-      <div className="max-h-44 overflow-y-auto rounded-md border border-slate-900/60 bg-slate-950/40 px-3 py-2">
+      <div className="max-h-48 overflow-y-auto rounded-xl border border-slate-800/70 px-3 py-3" style={streamStyle}>
         <button
           type="button"
           onClick={() => onJumpToPly(0)}
@@ -393,28 +414,37 @@ export const GameTerminal = ({
 
       <div
         ref={consoleRef}
-        className="mt-3 max-h-40 overflow-y-auto rounded-md border border-slate-900/60 bg-black/70 px-3 py-2 text-[11px]"
+        className="mt-4 flex max-h-64 flex-col overflow-y-auto rounded-xl border border-slate-800/70 px-3 py-3 text-[12px]"
+        style={streamStyle}
       >
         {consoleLines.map((line, index) => (
-          <div key={`${line}-${index}`} className="whitespace-pre-wrap text-slate-300">
+          <div key={`${line}-${index}`} className="whitespace-pre-wrap">
             {line}
           </div>
         ))}
-      </div>
-
-      <div className="mt-2 flex items-start gap-2 text-[12px] text-emerald-300">
-        <span className="select-none text-emerald-400">{'>'}</span>
-        <textarea
-          value={input}
-          onChange={(event) => setInput(event.target.value)}
-          onKeyDown={handleKeyDown}
-          rows={1}
-          placeholder="Type a command or paste PGN (Enter to run, Shift+Enter for newline)"
-          className="h-8 w-full resize-none bg-transparent text-emerald-200 outline-none placeholder:text-slate-600"
-          autoCorrect="off"
-          autoCapitalize="off"
-          spellCheck={false}
-        />
+        <div className="mt-3 flex items-start gap-3 text-[12px]" style={{ color: '#e2e8f0' }}>
+          <span className="mt-1 select-none text-emerald-400">{'>'}</span>
+          <textarea
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+            onKeyDown={handleKeyDown}
+            rows={3}
+            placeholder="Type a command or paste PGN (Enter to run, Shift+Enter for newline)"
+            className="w-full resize-none bg-transparent"
+            style={{
+              color: '#f8fafc',
+              border: 'none',
+              outline: 'none',
+              fontFamily: 'inherit',
+              fontSize: 'inherit',
+              lineHeight: '1.45',
+            }}
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck={false}
+            autoComplete="off"
+          />
+        </div>
       </div>
     </aside>
   );

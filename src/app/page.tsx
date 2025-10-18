@@ -10,6 +10,10 @@ import { createScopedLogger } from '@/shared/utils/logger';
 
 const BOARD_SIZE = 480;
 const DEFAULT_FEN = new Chess().fen();
+const INITIAL_TERMINAL_LINES = [
+  '# Ready for playback. Use left/right arrows or A/D to step through moves.',
+  '# Type commands below or paste PGN to import.',
+];
 
 type PendingPromotionState = {
   from: string;
@@ -38,10 +42,7 @@ export default function Home() {
   const [pendingPromotion, setPendingPromotion] = useState<PendingPromotionState | null>(null);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [autoDelay, setAutoDelay] = useState(1200);
-  const [consoleLines, setConsoleLines] = useState<string[]>([
-    '# Controls: Arrow keys navigate, space toggles autoplay, +/- adjust speed.',
-    '# Enter PGN or commands (play, pause, speed <ms>, reset).',
-  ]);
+  const [consoleLines, setConsoleLines] = useState<string[]>(INITIAL_TERMINAL_LINES);
   const [pendingCommand, setPendingCommand] = useState<PendingCommand | null>(null);
 
   const gameLogger = useMemo(() => createScopedLogger('app/game'), []);
@@ -478,6 +479,26 @@ export default function Home() {
         case 'reset':
           handleResetGame();
           break;
+        case 'commands':
+        case 'help': {
+          const helpLines = [
+            '>> Available commands:',
+            '   play',
+            '   pause | stop',
+            '   speed <ms>',
+            '   reset',
+            '   commands | help',
+            '   clear | cls',
+            '   paste PGN to import (respond y/n when prompted)',
+          ];
+          helpLines.forEach((line) => appendConsoleLine(line));
+          break;
+        }
+        case 'clear':
+        case 'cls': {
+          setConsoleLines([...INITIAL_TERMINAL_LINES, '>> Terminal cleared.']);
+          break;
+        }
         default:
           if (moveHistory.length > 0 || currentPly > 0) {
             setPendingCommand({ type: 'loadPgn', payload: trimmed });
@@ -583,3 +604,5 @@ export default function Home() {
     </main>
   );
 }
+
+
