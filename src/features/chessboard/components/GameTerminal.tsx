@@ -324,9 +324,10 @@ export const GameTerminal = ({
     .filter(Boolean)
     .join(' ');
 
+  const containerHeight = 280;
   const containerStyle: CSSProperties = shouldPortal
-    ? { width: 'min(580px, 100%)', height: 420 }
-    : { width: Math.max(clampedWidth, 520), marginTop, height: 420 };
+    ? { width: 'min(580px, 100%)', height: containerHeight }
+    : { width: Math.max(clampedWidth, 520), marginTop, height: containerHeight };
 
   const streamStyle: CSSProperties = { backgroundColor: '#0d1726', color: '#e2e8f0' };
 
@@ -427,10 +428,12 @@ export const GameTerminal = ({
               onKeyDown={handleKeyDown}
               rows={3}
               placeholder="Type a command or paste PGN (Enter to run, Shift+Enter for newline)"
-              className="flex-1 resize-none bg-transparent leading-[1.45]"
+              className="flex-1 resize-none bg-transparent leading-[1.45] focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
               style={{
                 border: 'none',
                 outline: 'none',
+                outlineWidth: '0px',
+                outlineColor: 'transparent',
                 fontFamily: 'inherit',
                 fontSize: 'inherit',
                 color: '#f8fafc',

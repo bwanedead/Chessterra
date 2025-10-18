@@ -47,6 +47,7 @@ export default function Home() {
   const [pendingCommand, setPendingCommand] = useState<PendingCommand | null>(null);
 
   const gameLogger = useMemo(() => createScopedLogger('app/game'), []);
+  const layoutLogger = useMemo(() => createScopedLogger('app/layout'), []);
 
   const appendConsoleLine = useCallback(
     (line: string) => {
@@ -656,12 +657,56 @@ export default function Home() {
     .filter(Boolean)
     .join(' ');
 
+  const logLayoutMetrics = useCallback(
+    (element: HTMLElement | null) => {
+      if (!element || process.env.NODE_ENV !== 'development') {
+        return;
+      }
+
+      const rect = element.getBoundingClientRect();
+      layoutLogger.debug('main-layout', {
+        rect: {
+          top: rect.top,
+          left: rect.left,
+          width: rect.width,
+          height: rect.height,
+        },
+        scrollHeight: element.scrollHeight,
+        scrollWidth: element.scrollWidth,
+        paddingBottom: window.getComputedStyle(element).paddingBottom,
+      });
+    },
+    [layoutLogger],
+  );
+
+  const logWorkspaceMetrics = useCallback(
+    (element: HTMLDivElement | null) => {
+      if (!element || process.env.NODE_ENV !== 'development') {
+        return;
+      }
+
+      const rect = element.getBoundingClientRect();
+      layoutLogger.debug('workspace-layout', {
+        rect: {
+          top: rect.top,
+          left: rect.left,
+          width: rect.width,
+          height: rect.height,
+        },
+        marginBottom: window.getComputedStyle(element).marginBottom,
+        paddingBottom: window.getComputedStyle(element).paddingBottom,
+      });
+    },
+    [layoutLogger],
+  );
+
   return (
     <main
-      className="flex min-h-screen flex-col items-center bg-slate-950 px-6 pb-32 pt-24"
-      style={{ paddingTop: '120px' }}
+      ref={logLayoutMetrics}
+      className="flex min-h-screen flex-col items-center bg-slate-950 px-6"
+      style={{ paddingTop: '120px', paddingBottom: '120px' }}
     >
-      <div className={workspaceStackClass}>
+      <div ref={logWorkspaceMetrics} className={workspaceStackClass}>
         <HeatmapBoard
           fen={fen}
           orientation="white"
@@ -697,5 +742,7 @@ export default function Home() {
     </main>
   );
 }
+
+
 
 
