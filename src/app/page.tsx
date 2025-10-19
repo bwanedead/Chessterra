@@ -7,6 +7,15 @@ import { HeatmapBoard } from '@/features/chessboard/components/HeatmapBoard';
 import { GameTerminal } from '@/features/chessboard/components/GameTerminal';
 import type { PromotionPieceType } from '@/features/chessboard/types';
 import { createScopedLogger } from '@/shared/utils/logger';
+import type { HeatmapTraceMode } from '@/features/chessboard/overlays/types';
+import {
+  HeatmapSettingsProvider,
+  useHeatmapSettingsActions,
+  useHeatmapSettingsState,
+} from '@/features/chessboard/state/heatmapSettingsContext';
+import { listHeatmapSchemes } from '@/features/chessboard/overlays/schemes';
+import type { HeatmapColorProfileId } from '@/features/chessboard/overlays/colors';
+import { listColorProfiles } from '@/features/chessboard/overlays/colors';
 
 const BOARD_SIZE = 480;
 const DEFAULT_FEN = new Chess().fen();
@@ -30,7 +39,7 @@ type PendingCommand =
       payload: string;
     };
 
-export default function Home() {
+function HomeContent() {
   const gameRef = useRef<Chess>(new Chess());
 
   const initialFenRef = useRef<string>(DEFAULT_FEN);
@@ -48,6 +57,11 @@ export default function Home() {
 
   const gameLogger = useMemo(() => createScopedLogger('app/game'), []);
   const layoutLogger = useMemo(() => createScopedLogger('app/layout'), []);
+  const heatmapActions = useHeatmapSettingsActions();
+  const heatmapState = useHeatmapSettingsState();
+  const heatmapSchemes = useMemo(() => listHeatmapSchemes(), []);
+  const heatmapColorProfiles = useMemo(() => listColorProfiles(), []);
+  const formatTraceModeLabel = useCallback((mode: string) => (mode === 'absolute' ? 'Absolute' : 'Line of Sight'), []);
 
   const appendConsoleLine = useCallback(
     (line: string) => {
@@ -446,6 +460,270 @@ export default function Home() {
     [appendConsoleLine],
   );
 
+  const handleHeatmapCommand = useCallback(
+    (rawArgs: string[]): boolean => {
+      const tokens = rawArgs.map((token) => token.trim()).filter((token) => token.length > 0);
+      const lowerTokens = tokens.map((token) => token.toLowerCase());
+      const currentScheme = heatmapSchemes.find((scheme) => scheme.id === heatmapState.schemeId) ?? null;
+      const currentProfile =
+        heatmapColorProfiles.find((profile) => profile.id === heatmapState.colorProfileId) ?? null;
+
+      const printStatus = () => {
+        appendConsoleLine('>> Heatmap status:');
+        appendConsoleLine(
+          `   Scheme: ${
+            currentScheme ? `${currentScheme.label} (${currentScheme.id})` : heatmapState.schemeId
+          }`,
+        );
+        appendConsoleLine(`   Trace mode: ${formatTraceModeLabel(heatmapState.subScheme)}`);
+        appendConsoleLine(`   Include both sides: ${heatmapState.includeBothSides ? 'yes' : 'no'}`);
+        appendConsoleLine(
+          `   Color profile: ${
+            currentProfile ? `${currentProfile.label} (${currentProfile.id})` : heatmapState.colorProfileId
+          }`,
+        );
+        appendConsoleLine(`   Check highlights: ${heatmapState.checkHighlightsEnabled ? 'on' : 'off'}`);
+        appendConsoleLine(`   Active toggles: ${heatmapState.activeToggleIds.size}`);
+      };
+
+      if (lowerTokens.length === 0 || lowerTokens[0] === 'status') {
+        printStatus();
+        return true;
+      }
+
+      const subject = lowerTokens[0];
+      switch (subject) {
+        case 'scheme': {
+          const action = lowerTokens[1];
+          if (!action || action === 'list') {
+            appendConsoleLine('>> Heatmap schemes:');
+            heatmapSchemes.forEach((scheme) => {
+              const marker = scheme.id === heatmapState.schemeId ? '*' : '-';
+              const description = scheme.description ? ` - ${scheme.description}` : '';
+              appendConsoleLine(`   ${marker} ${scheme.id} (${scheme.label})${description}`);
+            });
+            appendConsoleLine('   * denotes the active scheme.');
+            return true;
+          }
+
+          if (action === 'set') {
+            const targetToken = lowerTokens[2];
+            if (!targetToken) {
+              appendConsoleLine('?? Usage: heatmap scheme set <scheme-id>');
+              return true;
+            }
+
+            const target = heatmapSchemes.find((scheme) => scheme.id === targetToken);
+            if (!target) {
+              appendConsoleLine(
+                `?? Unknown heatmap scheme "${tokens[2]}". Type "heatmap scheme list" to inspect options.`,
+              );
+              return true;
+            }
+
+            if (target.id === heatmapState.schemeId) {
+              appendConsoleLine(`>> Heatmap scheme already set to ${target.label}.`);
+              return true;
+            }
+
+            const supportedModes = target.supportedSubSchemes ?? ['line-of-sight'];
+            const previousSubScheme = heatmapState.subScheme;
+            heatmapActions.setSchemeId(target.id);
+            appendConsoleLine(`>> Heatmap scheme set to ${target.label} (${target.id}).`);
+            if (!supportedModes.includes(previousSubScheme) && supportedModes.length > 0) {
+              const nextSub = supportedModes[0] as HeatmapTraceMode;
+              appendConsoleLine(`   Trace mode switched to ${formatTraceModeLabel(nextSub)}.`);
+            }
+            return true;
+          }
+
+          appendConsoleLine('?? Usage: heatmap scheme <list|set>');
+          return true;
+        }
+        case 'sub-scheme':
+        case 'subscheme': {
+          const action = lowerTokens[1];
+          if (action !== 'set') {
+            appendConsoleLine('?? Usage: heatmap sub-scheme set <line-of-sight|absolute>');
+            return true;
+          }
+
+          const targetToken = lowerTokens[2];
+          if (!targetToken) {
+            appendConsoleLine('?? Usage: heatmap sub-scheme set <line-of-sight|absolute>');
+            return true;
+          }
+
+          const targetMode = targetToken === 'absolute' ? 'absolute' : 'line-of-sight';
+          if (targetMode === heatmapState.subScheme) {
+            appendConsoleLine(`>> Trace mode already set to ${formatTraceModeLabel(targetMode)}.`);
+            return true;
+          }
+
+          const activeScheme =
+            heatmapSchemes.find((scheme) => scheme.id === heatmapState.schemeId) ?? null;
+          const supported = activeScheme?.supportedSubSchemes ?? ['line-of-sight'];
+          if (!supported.includes(targetMode)) {
+            appendConsoleLine(
+              `?? Trace mode "${tokens[2] ?? targetToken}" is not supported by the ${
+                activeScheme?.label ?? 'current'
+              } scheme.`,
+            );
+            return true;
+          }
+
+          heatmapActions.setSubScheme(targetMode as HeatmapTraceMode);
+          appendConsoleLine(`>> Trace mode set to ${formatTraceModeLabel(targetMode)}.`);
+          return true;
+        }
+        case 'color':
+        case 'colors':
+        case 'color-profile':
+        case 'profile': {
+          const action = lowerTokens[1];
+          if (!action || action === 'list') {
+            appendConsoleLine('>> Heatmap color profiles:');
+            heatmapColorProfiles.forEach((profile) => {
+              const marker = profile.id === heatmapState.colorProfileId ? '*' : '-';
+              const description = profile.description ? ` - ${profile.description}` : '';
+              appendConsoleLine(`   ${marker} ${profile.id} (${profile.label})${description}`);
+            });
+            appendConsoleLine('   * denotes the active profile.');
+            return true;
+          }
+
+          if (action === 'set') {
+            const targetToken = lowerTokens[2];
+            if (!targetToken) {
+              appendConsoleLine('?? Usage: heatmap colors set <profile-id>');
+              return true;
+            }
+
+            const target = heatmapColorProfiles.find((profile) => profile.id === targetToken);
+            if (!target) {
+              appendConsoleLine(
+                `?? Unknown color profile "${tokens[2]}". Type "heatmap colors list" to inspect options.`,
+              );
+              return true;
+            }
+
+            if (target.id === heatmapState.colorProfileId) {
+              appendConsoleLine(`>> Color profile already set to ${target.label}.`);
+              return true;
+            }
+
+            heatmapActions.setColorProfileId(target.id as HeatmapColorProfileId);
+            appendConsoleLine(`>> Color profile set to ${target.label} (${target.id}).`);
+            return true;
+          }
+
+          appendConsoleLine('?? Usage: heatmap colors <list|set>');
+          return true;
+        }
+        case 'check':
+        case 'check-highlights': {
+          const action = lowerTokens[1];
+          if (!action) {
+            appendConsoleLine(
+              `>> Check highlights are ${heatmapState.checkHighlightsEnabled ? 'ON' : 'OFF'}.`,
+            );
+            return true;
+          }
+
+          if (['on', 'enable', 'enabled'].includes(action)) {
+            if (heatmapState.checkHighlightsEnabled) {
+              appendConsoleLine('>> Check highlights already enabled.');
+            } else {
+              heatmapActions.setCheckHighlightsEnabled(true);
+              appendConsoleLine('>> Check highlights enabled.');
+            }
+            return true;
+          }
+
+          if (['off', 'disable', 'disabled'].includes(action)) {
+            if (!heatmapState.checkHighlightsEnabled) {
+              appendConsoleLine('>> Check highlights already disabled.');
+            } else {
+              heatmapActions.setCheckHighlightsEnabled(false);
+              appendConsoleLine('>> Check highlights disabled.');
+            }
+            return true;
+          }
+
+          if (action === 'toggle') {
+            heatmapActions.setCheckHighlightsEnabled(!heatmapState.checkHighlightsEnabled);
+            appendConsoleLine(
+              `>> Check highlights ${heatmapState.checkHighlightsEnabled ? 'disabled' : 'enabled'}.`,
+            );
+            return true;
+          }
+
+          appendConsoleLine('?? Usage: heatmap check <on|off|toggle>');
+          return true;
+        }
+        case 'include':
+        case 'sides': {
+          const action = lowerTokens[1];
+          if (!action) {
+            appendConsoleLine(
+              `>> Including both sides: ${heatmapState.includeBothSides ? 'YES' : 'NO'}.`,
+            );
+            return true;
+          }
+
+          if (['both', 'both-sides', 'on', 'true', 'yes'].includes(action)) {
+            if (heatmapState.includeBothSides) {
+              appendConsoleLine('>> Already including both sides.');
+            } else {
+              heatmapActions.setIncludeBothSides(true);
+              appendConsoleLine('>> Heatmap will include both sides.');
+            }
+            return true;
+          }
+
+          if (['single', 'one', 'self', 'off', 'false', 'no'].includes(action)) {
+            if (!heatmapState.includeBothSides) {
+              appendConsoleLine('>> Already showing single-side influence.');
+            } else {
+              heatmapActions.setIncludeBothSides(false);
+              appendConsoleLine('>> Heatmap will show single-side influence totals.');
+            }
+            return true;
+          }
+
+          appendConsoleLine('?? Usage: heatmap include <both|single>');
+          return true;
+        }
+        case 'help': {
+          const helpLines = [
+            '>> Heatmap command help:',
+            '   heatmap status',
+            '   heatmap scheme list',
+            '   heatmap scheme set <scheme-id>',
+            '   heatmap sub-scheme set <line-of-sight|absolute>',
+            '   heatmap colors list',
+            '   heatmap colors set <profile-id>',
+            '   heatmap include <both|single>',
+            '   heatmap check <on|off|toggle>',
+          ];
+          helpLines.forEach((line) => appendConsoleLine(line));
+          return true;
+        }
+        default:
+          appendConsoleLine('?? Unknown heatmap command. Type "heatmap help" for available subcommands.');
+          return false;
+      }
+    },
+    [
+      appendConsoleLine,
+      formatTraceModeLabel,
+      heatmapActions,
+      heatmapColorProfiles,
+      heatmapSchemes,
+      heatmapState,
+    ],
+  );
+
   const handleStepForward = useCallback(() => {
     setIsAutoPlaying(false);
     setCurrentPly((previous) => Math.min(previous + 1, moveHistory.length));
@@ -557,6 +835,9 @@ export default function Home() {
         case 'reset':
           handleResetGame();
           break;
+        case 'heatmap':
+          handleHeatmapCommand(rest);
+          break;
         case 'commands':
         case 'help': {
           const helpLines = [
@@ -565,6 +846,7 @@ export default function Home() {
             '   pause | stop',
             '   speed <ms>',
             '   reset',
+            '   heatmap <status|scheme|sub-scheme|colors|include|check>',
             '   commands | help',
             '   controls',
             '   clear | cls',
@@ -609,6 +891,7 @@ export default function Home() {
       handleResetGame,
       handleSetSpeed,
       handleToggleAutoplay,
+      handleHeatmapCommand,
       isAutoPlaying,
       attemptTerminalMove,
       loadPgn,
@@ -745,4 +1028,11 @@ export default function Home() {
 
 
 
+export default function Home() {
+  return (
+    <HeatmapSettingsProvider>
+      <HomeContent />
+    </HeatmapSettingsProvider>
+  );
+}
 

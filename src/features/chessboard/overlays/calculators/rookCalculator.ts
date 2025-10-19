@@ -5,15 +5,17 @@ import { fromSquare, rayTrace, rookDirections } from './calculationUtils';
 export const computeRookInfluence = ({
   origin,
   piece,
+  traceMode,
   scheme,
   boardMatrix,
 }: InfluenceParams): InfluenceLayer => {
+  const resolvedTraceMode = traceMode ?? scheme ?? 'line-of-sight';
   const { fileIndex, rankIndex } = fromSquare(origin);
   const { boardSquares, canvasSquares } = rayTrace({
     fromFile: fileIndex,
     fromRank: rankIndex,
     directions: rookDirections,
-    scheme,
+    traceMode: resolvedTraceMode,
     boardMatrix,
   });
 

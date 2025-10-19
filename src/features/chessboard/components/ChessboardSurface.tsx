@@ -8,6 +8,7 @@ import { NormalizedGridOverlay } from './layers/NormalizedGridOverlay';
 import type { BoardSquare, ChessPieceDescriptor } from '@/features/chessboard/types';
 import { useLayerDiagnostics } from '@/features/chessboard/hooks/useLayerDiagnostics';
 import { createScopedLogger, layoutDebugEnabled } from '@/shared/utils/logger';
+import type { SquareOverlayDescriptor } from '@/features/chessboard/overlays/schemes';
 
 export interface BoardAppearance {
   mode: 'classic' | 'normalized';
@@ -27,7 +28,7 @@ interface ChessboardSurfaceProps {
     piece: ChessPieceDescriptor,
     event: ReactPointerEvent<HTMLDivElement>,
   ) => void;
-  squareOverlays?: Record<string, { color: string; magnitude: number; maxWeight: number; strength: number }>;
+  squareOverlays?: Record<string, SquareOverlayDescriptor>;
   showPieces?: boolean;
   appearance: BoardAppearance;
 }
@@ -207,8 +208,7 @@ export const ChessboardSurface = memo(
                   square={square.id}
                   color={square.color}
                   highlight={isDraggingSource}
-                  overlayColor={overlay?.color}
-                  overlayStrength={overlay?.strength}
+                  overlay={overlay}
                   showContent={showPieces}
                   appearance={appearance}
                   onPointerDown={(event) => {

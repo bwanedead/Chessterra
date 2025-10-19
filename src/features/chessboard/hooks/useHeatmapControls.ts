@@ -1,6 +1,13 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import type { ChessPieceDescriptor } from '@/features/chessboard/types';
-import type { HeatmapScheme } from '@/features/chessboard/overlays/types';
+import type { HeatmapTraceMode } from '@/features/chessboard/overlays/types';
+import type { HeatmapSchemeId } from '@/features/chessboard/overlays/schemes';
+import type { HeatmapColorOverrides, HeatmapColorProfileId } from '@/features/chessboard/overlays/colors';
+import {
+  useHeatmapSettingsActions,
+  useHeatmapSettingsState,
+  buildToggleId,
+} from '@/features/chessboard/state/heatmapSettingsContext';
 
 const pieceTypes: ChessPieceDescriptor['type'][] = ['p', 'n', 'b', 'r', 'q', 'k'];
 const pieceColors: Array<ChessPieceDescriptor['color']> = ['w', 'b'];
@@ -17,30 +24,40 @@ export interface HeatmapControls {
   activeToggleIds: string[];
   togglePiece: (id: string) => void;
   clearPieces: () => void;
-  scheme: HeatmapScheme;
-  setScheme: (scheme: HeatmapScheme) => void;
+  schemeId: HeatmapSchemeId;
+  setSchemeId: (schemeId: HeatmapSchemeId) => void;
+  subScheme: HeatmapTraceMode;
+  setSubScheme: (mode: HeatmapTraceMode) => void;
   includeBothSides: boolean;
   setIncludeBothSides: (value: boolean) => void;
   showPieces: boolean;
   setShowPieces: (value: boolean) => void;
   normalizedBoard: boolean;
   setNormalizedBoard: (value: boolean) => void;
+  colorProfileId: HeatmapColorProfileId;
+  setColorProfileId: (id: HeatmapColorProfileId) => void;
+  colorOverrides: HeatmapColorOverrides | null;
+  setColorOverrides: (overrides: HeatmapColorOverrides | null) => void;
+  checkHighlightsEnabled: boolean;
+  setCheckHighlightsEnabled: (value: boolean) => void;
 }
 
-const buildToggleId = (color: ChessPieceDescriptor['color'], type: ChessPieceDescriptor['type']) => `${color}-${type}`;
-
 export const useHeatmapControls = (): HeatmapControls => {
-  const [activeIds, setActiveIds] = useState<Set<string>>(new Set());
-  const [scheme, setScheme] = useState<HeatmapScheme>('line-of-sight');
-  const [includeBothSides, setIncludeBothSides] = useState<boolean>(true);
-  const [showPieces, setShowPieces] = useState<boolean>(true);
-  const [normalizedBoard, setNormalizedBoard] = useState<boolean>(false);
+  const state = useHeatmapSettingsState();
+  const actions = useHeatmapSettingsActions();
+
+  if (process.env.NODE_ENV === 'development') {
+
+    console.log(
+      `heatmap-controls active=${state.activeToggleIds.size} scheme=${state.schemeId} sub=${state.subScheme} includeBoth=${state.includeBothSides}`,
+    );
+  }
 
   const allToggles = useMemo(
     () =>
       pieceColors.flatMap((color) =>
         pieceTypes.map((type) => {
-          const id = buildToggleId(color, type);
+          const id = buildToggleId({ color, type } as ChessPieceDescriptor);
           const label = `${color === 'w' ? 'White' : 'Black'} ${pieceName(type)}`;
           return { id, label, piece: { color, type } as ChessPieceDescriptor };
         }),
@@ -48,44 +65,36 @@ export const useHeatmapControls = (): HeatmapControls => {
     [],
   );
 
-  const togglePiece = useCallback((id: string) => {
-    setActiveIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  }, []);
-
-  const clearPieces = useCallback(() => {
-    setActiveIds(new Set());
-  }, []);
-
   const toggles = useMemo<HeatmapToggle[]>(
     () =>
       allToggles.map((toggle) => ({
         ...toggle,
-        active: activeIds.has(toggle.id),
+        active: state.activeToggleIds.has(toggle.id),
       })),
-    [allToggles, activeIds],
+    [allToggles, state.activeToggleIds],
   );
 
   return {
     toggles,
-    activeToggleIds: Array.from(activeIds),
-    togglePiece,
-    clearPieces,
-    scheme,
-    setScheme,
-    includeBothSides,
-    setIncludeBothSides,
-    showPieces,
-    setShowPieces,
-    normalizedBoard,
-    setNormalizedBoard,
+    activeToggleIds: Array.from(state.activeToggleIds),
+    togglePiece: actions.togglePiece,
+    clearPieces: actions.clearPieces,
+    schemeId: state.schemeId,
+    setSchemeId: actions.setSchemeId,
+    subScheme: state.subScheme,
+    setSubScheme: actions.setSubScheme,
+    includeBothSides: state.includeBothSides,
+    setIncludeBothSides: actions.setIncludeBothSides,
+    showPieces: state.showPieces,
+    setShowPieces: actions.setShowPieces,
+    normalizedBoard: state.normalizedBoard,
+    setNormalizedBoard: actions.setNormalizedBoard,
+    colorProfileId: state.colorProfileId,
+    setColorProfileId: actions.setColorProfileId,
+    colorOverrides: state.colorOverrides,
+    setColorOverrides: actions.setColorOverrides,
+    checkHighlightsEnabled: state.checkHighlightsEnabled,
+    setCheckHighlightsEnabled: actions.setCheckHighlightsEnabled,
   };
 };
 

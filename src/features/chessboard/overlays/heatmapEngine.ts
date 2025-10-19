@@ -1,22 +1,60 @@
 import { Chess } from 'chess.js';
 import type {
+  CanvasSquareInfluence,
+  InfluenceLayer,
+  InfluenceRequest,
+  InfluenceSummary,
   OverlayRequest,
   OverlayResult,
-  InfluenceLayer,
-  CanvasSquareInfluence,
+  SquareInfluence,
+  HeatmapTraceMode,
 } from '@/features/chessboard/overlays/types';
 import { computeInfluenceLayer, buildBoardMatrix } from '@/features/chessboard/overlays/calculators';
 
-export const generateHeatmap = (request: OverlayRequest): OverlayResult => {
+type MutableAggregate = {
+  totalWeight: number;
+  contributions: Array<{ origin: string; piece: InfluenceLayer['piece']; weight: number }>;
+};
+
+interface MutableAccumulator {
+  white: MutableAggregate;
+  black: MutableAggregate;
+}
+
+const createAggregate = (): MutableAggregate => ({
+  totalWeight: 0,
+  contributions: [],
+});
+
+const createAccumulator = (): MutableAccumulator => ({
+  white: createAggregate(),
+  black: createAggregate(),
+});
+
+const cloneAggregate = (aggregate: MutableAggregate) => ({
+  totalWeight: aggregate.totalWeight,
+  contributions: aggregate.contributions.map((sample) => ({
+    origin: sample.origin,
+    piece: sample.piece,
+    weight: sample.weight,
+  })),
+});
+
+const resolveTraceMode = (input: { traceMode?: HeatmapTraceMode; scheme?: HeatmapTraceMode }): HeatmapTraceMode =>
+  input.traceMode ?? input.scheme ?? 'line-of-sight';
+
+export const generateInfluenceSummary = (request: InfluenceRequest): InfluenceSummary => {
   if (request.activePieces.length === 0) {
     return {
       squares: [],
       canvasSquares: [],
-      maxWeight: 0,
-      minWeight: 0,
+      maxSquareWeight: 0,
+      maxCanvasWeight: 0,
+      overallMaxWeight: 0,
     };
   }
 
+  const traceMode = resolveTraceMode(request);
   const game = new Chess(request.fen);
   const boardMatrix = buildBoardMatrix(game);
 
@@ -24,105 +62,141 @@ export const generateHeatmap = (request: OverlayRequest): OverlayResult => {
     computeInfluenceLayer({
       origin: square,
       piece,
-      scheme: request.scheme,
+      traceMode,
       boardMatrix,
     }),
   );
 
-  const boardAccumulator: Record<
-    string,
-    {
-      white: number;
-      black: number;
-    }
-  > = {};
+  const boardAccumulator: Record<string, MutableAccumulator> = {};
+  const canvasAccumulator: Record<string, MutableAccumulator> = {};
 
-  const canvasAccumulator: Record<
-    string,
-    {
-      white: number;
-      black: number;
-    }
-  > = {};
+  const addContribution = (
+    accumulator: MutableAccumulator,
+    color: InfluenceLayer['piece']['color'],
+    origin: string,
+    weight: number,
+    piece: InfluenceLayer['piece'],
+  ) => {
+    const aggregate = color === 'w' ? accumulator.white : accumulator.black;
+    aggregate.totalWeight += weight;
+    aggregate.contributions.push({ origin, piece, weight });
+  };
 
   layers.forEach((layer) => {
     layer.samples.forEach(({ square, weight }) => {
-      const bucket = boardAccumulator[square] ?? { white: 0, black: 0 };
-      if (layer.piece.color === 'w') {
-        bucket.white += weight;
-      } else {
-        bucket.black += weight;
-      }
+      const bucket = boardAccumulator[square] ?? createAccumulator();
+      addContribution(bucket, layer.piece.color, layer.origin, weight, layer.piece);
       boardAccumulator[square] = bucket;
     });
 
     layer.canvasSamples.forEach(({ fileIndex, rankIndex, weight }) => {
       const key = `${fileIndex}:${rankIndex}`;
-      const bucket = canvasAccumulator[key] ?? { white: 0, black: 0 };
-      if (layer.piece.color === 'w') {
-        bucket.white += weight;
-      } else {
-        bucket.black += weight;
-      }
+      const bucket = canvasAccumulator[key] ?? createAccumulator();
+      addContribution(bucket, layer.piece.color, layer.origin, weight, layer.piece);
       canvasAccumulator[key] = bucket;
     });
   });
 
-  const squares = Object.entries(boardAccumulator).map(([square, weights]) => {
-    const combinedWeight = request.includeBothSides
-      ? weights.white - weights.black
-      : weights.white + weights.black;
+  let maxSquareWeight = 0;
+  let maxCanvasWeight = 0;
 
-    let dominant: 'white' | 'black' | 'tie' = 'tie';
-    if (request.includeBothSides) {
-      dominant = combinedWeight > 0 ? 'white' : combinedWeight < 0 ? 'black' : 'tie';
-    } else if (weights.white !== weights.black) {
-      dominant = weights.white > weights.black ? 'white' : 'black';
-    }
-
+  const squares = Object.entries(boardAccumulator).map(([square, aggregates]) => {
+    const white = cloneAggregate(aggregates.white);
+    const black = cloneAggregate(aggregates.black);
+    const combined = white.totalWeight + black.totalWeight;
+    maxSquareWeight = Math.max(maxSquareWeight, white.totalWeight, black.totalWeight, combined);
     return {
       square,
-      whiteWeight: weights.white,
-      blackWeight: weights.black,
-      combinedWeight,
-      dominant,
+      white,
+      black,
     };
   });
 
-  const canvasSquares: CanvasSquareInfluence[] = Object.entries(canvasAccumulator).map(([key, weights]) => {
+  const canvasSquares = Object.entries(canvasAccumulator).map(([key, aggregates]) => {
     const [fileIndexRaw, rankIndexRaw] = key.split(':');
     const fileIndex = Number(fileIndexRaw);
     const rankIndex = Number(rankIndexRaw);
+    const white = cloneAggregate(aggregates.white);
+    const black = cloneAggregate(aggregates.black);
+    const combined = white.totalWeight + black.totalWeight;
+    maxCanvasWeight = Math.max(maxCanvasWeight, white.totalWeight, black.totalWeight, combined);
+    return {
+      fileIndex,
+      rankIndex,
+      white,
+      black,
+    };
+  });
 
-    const combinedWeight = request.includeBothSides
-      ? weights.white - weights.black
-      : weights.white + weights.black;
+  const overallMaxWeight = Math.max(maxSquareWeight, maxCanvasWeight);
+
+  return {
+    squares,
+    canvasSquares,
+    maxSquareWeight,
+    maxCanvasWeight,
+    overallMaxWeight,
+  };
+};
+
+/**
+ * @deprecated Prefer `generateInfluenceSummary` plus scheme renderers.
+ */
+export const generateHeatmap = (request: OverlayRequest): OverlayResult => {
+  const traceMode = resolveTraceMode(request);
+
+  const summary = generateInfluenceSummary({
+    fen: request.fen,
+    orientation: request.orientation,
+    activePieces: request.activePieces,
+    traceMode,
+  });
+
+  const toLegacySquare = (entry: InfluenceSummary['squares'][number]): SquareInfluence => {
+    const whiteWeight = entry.white.totalWeight;
+    const blackWeight = entry.black.totalWeight;
+    const combinedWeight = request.includeBothSides ? whiteWeight - blackWeight : whiteWeight + blackWeight;
 
     let dominant: 'white' | 'black' | 'tie' = 'tie';
     if (request.includeBothSides) {
       dominant = combinedWeight > 0 ? 'white' : combinedWeight < 0 ? 'black' : 'tie';
-    } else if (weights.white !== weights.black) {
-      dominant = weights.white > weights.black ? 'white' : 'black';
+    } else if (whiteWeight !== blackWeight) {
+      dominant = whiteWeight > blackWeight ? 'white' : 'black';
     }
 
     return {
-      fileIndex,
-      rankIndex,
-      whiteWeight: weights.white,
-      blackWeight: weights.black,
+      square: entry.square,
+      whiteWeight,
+      blackWeight,
       combinedWeight,
       dominant,
     };
-  });
+  };
 
-  if (squares.length === 0 && canvasSquares.length === 0) {
+  const toLegacyCanvas = (entry: InfluenceSummary['canvasSquares'][number]): CanvasSquareInfluence => {
+    const whiteWeight = entry.white.totalWeight;
+    const blackWeight = entry.black.totalWeight;
+    const combinedWeight = request.includeBothSides ? whiteWeight - blackWeight : whiteWeight + blackWeight;
+
+    let dominant: 'white' | 'black' | 'tie' = 'tie';
+    if (request.includeBothSides) {
+      dominant = combinedWeight > 0 ? 'white' : combinedWeight < 0 ? 'black' : 'tie';
+    } else if (whiteWeight !== blackWeight) {
+      dominant = whiteWeight > blackWeight ? 'white' : 'black';
+    }
+
     return {
-      squares: [],
-      canvasSquares: [],
-      maxWeight: 0,
-      minWeight: 0,
+      fileIndex: entry.fileIndex,
+      rankIndex: entry.rankIndex,
+      whiteWeight,
+      blackWeight,
+      combinedWeight,
+      dominant,
     };
-  }
+  };
+
+  const squaresLegacy = summary.squares.map(toLegacySquare);
+  const canvasLegacy = summary.canvasSquares.map(toLegacyCanvas);
 
   let maxWeight = Number.NEGATIVE_INFINITY;
   let minWeight = Number.POSITIVE_INFINITY;
@@ -141,13 +215,20 @@ export const generateHeatmap = (request: OverlayRequest): OverlayResult => {
     }
   };
 
-  squares.forEach(evaluateWeights);
-  canvasSquares.forEach(evaluateWeights);
+  squaresLegacy.forEach(evaluateWeights);
+  canvasLegacy.forEach(evaluateWeights);
+
+  if (!Number.isFinite(maxWeight)) {
+    maxWeight = 0;
+  }
+  if (!Number.isFinite(minWeight)) {
+    minWeight = 0;
+  }
 
   return {
-    squares,
-    canvasSquares,
-    maxWeight: Number.isFinite(maxWeight) ? maxWeight : 0,
-    minWeight: Number.isFinite(minWeight) ? minWeight : 0,
+    squares: squaresLegacy,
+    canvasSquares: canvasLegacy,
+    maxWeight,
+    minWeight,
   };
 };

@@ -5,15 +5,17 @@ import { fromSquare, bishopDirections, rayTrace } from './calculationUtils';
 export const computeBishopInfluence = ({
   origin,
   piece,
+  traceMode,
   scheme,
   boardMatrix,
 }: InfluenceParams): InfluenceLayer => {
+  const resolvedTraceMode = traceMode ?? scheme ?? 'line-of-sight';
   const { fileIndex, rankIndex } = fromSquare(origin);
   const { boardSquares, canvasSquares } = rayTrace({
     fromFile: fileIndex,
     fromRank: rankIndex,
     directions: bishopDirections,
-    scheme,
+    traceMode: resolvedTraceMode,
     boardMatrix,
   });
 

@@ -1,34 +1,59 @@
 ## Heatmap Overlay Rendering Notes
 
-Last updated: 2025-10-09
+Last updated: 2025-10-18
 
-### What changed
-- Heatmap weights are normalised against the strongest square returned by `generateHeatmap`. Each square is painted with a bold, discrete colour selected from saturated palettes (deep blues for white influence, crimson for black, indigo for neutral).
-- The tint no longer relies on opacity blending. Instead, `ChessboardSquare` swaps the tile background for the computed colour and adds a subtle glow so pieces remain legible even with bold fills.
-- Overlay strength currently uses a fixed scale that grows with the influence magnitude, keeping colours punchy without tipping into full opacity.
+### Architecture overview
+- `generateInfluenceSummary` (src/features/chessboard/overlays/heatmapEngine.ts) produces a canonical board snapshot. Every square now carries white and black contributor lists, total weights, and canvas samples so renderers do not need to re-run ray tracing.
+- Scheme renderers live in `src/features/chessboard/overlays/schemes/`. Each implementation receives the summary plus trace mode (`line-of-sight` or `absolute`), colour profile data, and user preferences, and returns square/canvas overlay descriptors.
+- Colour handling is centralised in `src/features/chessboard/overlays/colors/`. Profiles define per-piece primaries, contested accents, and check/mate highlight tones. Future per-piece overrides will merge through the same resolver.
+- `HeatmapSettingsProvider` (src/features/chessboard/state/heatmapSettingsContext.tsx) stores scheme selection, sub-scheme, include-both-sides flag, colour profile, overrides, and check highlight state. Board UI, the control tray, and terminal commands all subscribe to this store.
 
-### Key conditions for overlays to appear
+### Default schemes
+| Scheme ID        | Label           | Behaviour                                                                    |
+|------------------|-----------------|-------------------------------------------------------------------------------|
+| `neutral-cancel` | Neutral Cancel  | Mirrors the legacy behaviour: contested squares clear out, dominant side fills. |
+| `contested-mixed`| Contested Mix   | Contested squares render segmented bars sized by the number of contributors. |
+| `contested-flag` | Contested Flag  | Any contested square receives a dedicated flag colour while clear squares tint normally. |
 
-- Heatmap data still flows `useHeatmapOverlay` ➝ `HeatmapBoard` ➝ `CustomChessboard` ➝ `ChessboardSurface`.  
-  If the console log `square-overlays` stays at zero after toggling, the active toggle IDs are not matching the board state.
+Additions follow a simple recipe: implement `HeatmapSchemeDefinition`, register the scheme in `schemes/registry.ts`, and Storybook/terminal/UI immediately pick it up.
 
-- `useHeatmapOverlay` maps integer influence counts to fixed palette steps. A square influenced by one piece always uses palette slot 1, two pieces slot 2, etc. Intensity merely adjusts the blending strength, not the colour tier:
+### Colour profiles
+- Profiles are defined in `overlays/colors/defaultProfiles.ts` and registered via `colors/registry.ts`.
+- `resolveColorProfile` merges profile defaults with optional overrides, supplying solid, segmented, and flag overlays with consistent hues.
+- Check and checkmate highlights are part of the profile so they match the active palette (and can be disabled via settings).
 
-  ```ts
-  const magnitudeLevel = Math.max(1, Math.round(magnitude));
-  const index = Math.min(palette.length - 1, magnitudeLevel - 1);
-  const strength = clamp(0.6 + (magnitudeLevel - 1) * 0.08, 0.45, 0.85);
-  ```
+### Terminal controls
+The in-app terminal now exposes the entire overlay configuration surface:
 
-- `ChessboardSquare` expects the overlay data to provide both `color` and `strength`. It mixes the square's base tone with the overlay colour using `0.45 – 0.95` alpha, then adds a glow with the same hue. Missing data causes a graceful fallback to the base tile colour.
+```
+heatmap status
+heatmap scheme list
+heatmap scheme set <scheme-id>
+heatmap sub-scheme set <line-of-sight|absolute>
+heatmap colors list
+heatmap colors set <profile-id>
+heatmap include <both|single>
+heatmap check <on|off|toggle>
+heatmap help
+```
 
-### Recommended enhancements / hardening
+Each command validates input and echoes the resulting state (including automatic trace-mode shifts when a new scheme does not support the previous mode).
 
-1. **Intensity presets & reset** – pair the slider with quick presets (Subtle / Balanced / Bold) plus a reset button.
-2. **Piece colour pickers** – allow the user to choose the max-intensity colour per piece family (white vs black) and seed the palettes from that choice.
-3. **Legend component** – show a small scale legend explaining what the discrete colour steps mean (e.g., "3+ overlapping attacks").
-4. **Unit tests** – cover the palette selection + intensity math to guarantee we never regress the mapping as we introduce new schemes.
-5. **Storybook scenarios** – create visual regression stories of extreme positions (all rooks, all bishops, etc.) to confirm the palette stays readable.
+### Control tray
+- `HeatmapControlsPanel` now renders scheme buttons, trace mode toggles, a colour profile select, and switches for “include both sides” plus “check highlights”.
+- Button and select options come straight from the registries, so adding schemes or profiles automatically updates the UI and terminal help.
+
+### Rendering behaviour
+- `ChessboardSquare` consumes `SquareOverlayDescriptor` objects and supports solid, segmented, and flag overlays without manipulating the base tile colour directly.
+- `ExpandedHeatmapOverlay` reuses the same descriptors for the canvas, keeping expanded views visually aligned with the board core.
+- Check and checkmate states hook into the overlay pipeline and use the profile-defined colours; they can be toggled with `heatmap check off`.
+
+### Follow-up ideas
+1. Surface a legend component that reads `render.legend` from the active scheme to explain gradients/segments.
+2. Add Storybook stories that cover each scheme/trace-mode/profile combination for visual regression confidence.
+3. Implement per-piece colour overrides (UI pickers + persistence) and feed them through the profile resolver.
+4. Add unit tests for `generateInfluenceSummary` and the scheme renderers to guard against double-counting or ratio regressions.
 
 ### Related documentation
-- `docs/project-visions/normalized-board-phase-two.md` captures the normalized grid roadmap, including canvas expansion plans that build on these overlay primitives.
+- `docs/project-visions/normalized-board-phase-two.md` for the expanded canvas roadmap.
+- `docs/development-insights/normalized-grid-overlay.md` for board rendering considerations when overlays and the normalized grid interact.

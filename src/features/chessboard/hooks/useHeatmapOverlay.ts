@@ -1,162 +1,218 @@
 import { useMemo } from 'react';
 import { Chess } from 'chess.js';
-import type { HeatmapScheme, OverlayResult } from '@/features/chessboard/overlays/types';
-import { generateHeatmap } from '@/features/chessboard/overlays/heatmapEngine';
 import { buildBoardMatrix } from '@/features/chessboard/overlays/calculators';
+import { generateInfluenceSummary } from '@/features/chessboard/overlays/heatmapEngine';
+import {
+  getHeatmapScheme,
+  type HeatmapSchemeDefinition,
+  type HeatmapSchemeId,
+  type HeatmapSchemeRenderResult,
+  type SquareOverlayDescriptor,
+  type CanvasOverlayDescriptor,
+} from '@/features/chessboard/overlays/schemes';
+import { resolveColorProfile, type HeatmapColorOverrides, type HeatmapColorProfileId } from '@/features/chessboard/overlays/colors';
+import type { HeatmapTraceMode } from '@/features/chessboard/overlays/types';
 import type { ChessPieceDescriptor } from '@/features/chessboard/types';
-
-const WHITE_SCALE = ['#3b82f6', '#2563eb', '#1d4ed8', '#1e3a8a', '#1e40af', '#1e293b'] as const;
-const BLACK_SCALE = ['#ef4444', '#dc2626', '#b91c1c', '#991b1b', '#7f1d1d', '#450a0a'] as const;
-const NEUTRAL_SCALE = ['#6366f1', '#4338ca', '#312e81', '#1e1b4b', '#111827', '#0f172a'] as const;
-
-const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+import { buildToggleId } from '@/features/chessboard/state/heatmapSettingsContext';
 
 export interface UseHeatmapOverlayOptions {
   fen: string;
   orientation: 'white' | 'black';
   activeToggleIds: string[];
-  scheme: HeatmapScheme;
+  schemeId: HeatmapSchemeId;
+  subScheme: HeatmapTraceMode;
   includeBothSides: boolean;
-}
-
-export interface HeatmapOverlayEntry {
-  color: string;
-  magnitude: number;
-  maxWeight: number;
-  strength: number;
-}
-
-export interface CanvasHeatmapOverlayEntry extends HeatmapOverlayEntry {
-  id: string;
-  fileIndex: number;
-  rankIndex: number;
+  colorProfileId: HeatmapColorProfileId;
+  colorOverrides?: HeatmapColorOverrides | null;
+  highlightChecks: boolean;
 }
 
 export interface HeatmapOverlayOutput {
-  overlays: Record<string, HeatmapOverlayEntry>;
-  canvasOverlays: CanvasHeatmapOverlayEntry[];
-  result: OverlayResult | null;
+  squares: Record<string, SquareOverlayDescriptor>;
+  canvas: CanvasOverlayDescriptor[];
+  scheme: HeatmapSchemeDefinition | null;
+  render: HeatmapSchemeRenderResult | null;
   activePieceCount: number;
   hasOverlay: boolean;
+  colorProfileId: HeatmapColorProfileId;
 }
 
 export const useHeatmapOverlay = ({
   fen,
   orientation,
   activeToggleIds,
-  scheme,
+  schemeId,
+  subScheme,
   includeBothSides,
+  colorProfileId,
+  colorOverrides,
+  highlightChecks,
 }: UseHeatmapOverlayOptions): HeatmapOverlayOutput => {
   const toggleSet = useMemo(() => new Set(activeToggleIds), [activeToggleIds]);
 
-  const activePieces = useMemo(() => {
-    if (toggleSet.size === 0) {
-      return [];
-    }
-
+  const gameState = useMemo(() => {
     const game = new Chess(fen);
     const matrix = buildBoardMatrix(game);
-    return Object.entries(matrix)
+    if (toggleSet.size === 0) {
+      return {
+        game,
+        matrix,
+        activePieces: [] as Array<{ square: string; piece: ChessPieceDescriptor }>,
+      };
+    }
+
+    const activePieces = Object.entries(matrix)
       .filter(([, descriptor]) => toggleSet.has(buildToggleId(descriptor)))
       .map(([square, piece]) => ({ square, piece }));
+
+    return { game, matrix, activePieces };
   }, [fen, toggleSet]);
 
-  const overlayResult = useMemo(() => {
-    if (activePieces.length === 0) {
+  if (process.env.NODE_ENV === 'development') {
+
+    console.log(
+      `heatmap-active-pieces toggles=${toggleSet.size} active=${gameState.activePieces.length} sample=${gameState.activePieces
+        .slice(0, 3)
+        .map((entry) => entry.square)
+        .join(',')}`,
+    );
+  }
+
+  const scheme = useMemo(() => getHeatmapScheme(schemeId), [schemeId]);
+
+  const colorProfile = useMemo(
+    () => resolveColorProfile(colorProfileId, colorOverrides ?? undefined),
+    [colorOverrides, colorProfileId],
+  );
+
+  const renderResult = useMemo(() => {
+    const summary =
+      gameState.activePieces.length === 0
+        ? null
+        : generateInfluenceSummary({
+            fen,
+            orientation,
+            activePieces: gameState.activePieces,
+            traceMode: subScheme,
+          });
+
+    if (!summary) {
+      if (process.env.NODE_ENV === 'development') {
+
+        console.log(`heatmap-summary empty active=${gameState.activePieces.length}`);
+      }
       return null;
     }
 
-    return generateHeatmap({
-      fen,
-      orientation,
-      activePieces,
-      scheme,
+    if (process.env.NODE_ENV === 'development') {
+
+      console.log(
+        `heatmap-summary squares=${summary.squares.length} canvas=${summary.canvasSquares.length} maxWeight=${summary.overallMaxWeight}`,
+      );
+    }
+
+    return scheme.render({
+      summary,
+      subScheme,
       includeBothSides,
+      colorProfile,
     });
-  }, [activePieces, fen, includeBothSides, orientation, scheme]);
+  }, [colorProfile, fen, gameState.activePieces, includeBothSides, orientation, scheme, subScheme]);
 
-  const overlays = useMemo(() => {
-    if (!overlayResult || overlayResult.squares.length === 0) {
-      return {};
-    }
+  const highlightedResult = useMemo(() => {
+    const baseSquares = renderResult ? { ...renderResult.squares } : {};
+    const baseCanvas = renderResult ? renderResult.canvas.slice() : [];
 
-    return overlayResult.squares.reduce<Record<string, HeatmapOverlayEntry>>((acc, square) => {
-      const magnitude = includeBothSides
-        ? Math.abs(square.combinedWeight)
-        : Math.max(square.whiteWeight, square.blackWeight, square.combinedWeight);
-      if (magnitude <= 0) {
-        return acc;
-      }
-
-      const magnitudeLevel = Math.max(1, Math.round(magnitude));
-
-      let palette = NEUTRAL_SCALE;
-      if (square.dominant === 'white') {
-        palette = WHITE_SCALE;
-      } else if (square.dominant === 'black') {
-        palette = BLACK_SCALE;
-      }
-
-      const index = Math.min(palette.length - 1, magnitudeLevel - 1);
-      const intensityBase = 0.6 + Math.min(magnitudeLevel - 1, palette.length - 1) * 0.08;
-      const strength = clamp(intensityBase, 0.45, 0.85);
-      acc[square.square] = {
-        color: palette[index],
-        magnitude,
-        maxWeight: magnitudeLevel,
-        strength,
+    if (highlightChecks) {
+      const highlights: Array<{ square: string; type: 'check' | 'mate'; color: 'w' | 'b' }> = [];
+      const { game } = gameState;
+      const turn = game.turn() as 'w' | 'b';
+      const chessApi = game as unknown as {
+        isCheckmate?: () => boolean;
+        in_checkmate?: () => boolean;
+        inCheck?: () => boolean;
+        in_check?: () => boolean;
       };
-      return acc;
-    }, {});
-  }, [includeBothSides, overlayResult]);
+      const isCheckmate = chessApi.isCheckmate
+        ? chessApi.isCheckmate()
+        : chessApi.in_checkmate
+          ? chessApi.in_checkmate()
+          : false;
+      const isInCheck = chessApi.inCheck
+        ? chessApi.inCheck()
+        : chessApi.in_check
+          ? chessApi.in_check()
+          : false;
+      const findKingSquare = (color: 'w' | 'b') => {
+        const entry = Object.entries(gameState.matrix).find(
+          ([, descriptor]) => descriptor.type === 'k' && descriptor.color === color,
+        );
+        return entry ? entry[0] : null;
+      };
 
-  const canvasOverlays = useMemo(() => {
-    if (!overlayResult || overlayResult.canvasSquares.length === 0) {
-      return [];
+      if (isCheckmate) {
+        const square = findKingSquare(turn);
+        if (square) {
+          highlights.push({ square, type: 'mate', color: turn });
+        }
+      } else if (isInCheck) {
+        const square = findKingSquare(turn);
+        if (square) {
+          highlights.push({ square, type: 'check', color: turn });
+        }
+      }
+
+      if (highlights.length > 0) {
+        highlights.forEach(({ square, type, color }) => {
+          const colorToken = type === 'mate' ? colorProfile.check.checkmate : colorProfile.check.inCheck;
+          baseSquares[square] = {
+            style: {
+              kind: 'flag',
+              color: colorToken,
+              intensity: type === 'mate' ? 1 : 0.9,
+              glow: {
+                color: colorToken,
+                strength: type === 'mate' ? 0.8 : 0.6,
+              },
+              label: type === 'mate' ? 'Mate' : 'Check',
+            },
+            meta: {
+              dominantColor: color === 'w' ? 'white' : 'black',
+            },
+          };
+        });
+      }
     }
 
-    return overlayResult.canvasSquares.reduce<CanvasHeatmapOverlayEntry[]>((acc, square) => {
-      const magnitude = includeBothSides
-        ? Math.abs(square.combinedWeight)
-        : Math.max(square.whiteWeight, square.blackWeight, square.combinedWeight);
-      if (magnitude <= 0) {
-        return acc;
-      }
+    if (renderResult || Object.keys(baseSquares).length > 0 || baseCanvas.length > 0) {
+      return {
+        squares: baseSquares,
+        canvas: baseCanvas,
+        legend: renderResult?.legend,
+      };
+    }
 
-      const magnitudeLevel = Math.max(1, Math.round(magnitude));
+    return null;
+  }, [colorProfile, gameState, highlightChecks, renderResult]);
 
-      let palette = NEUTRAL_SCALE;
-      if (square.dominant === 'white') {
-        palette = WHITE_SCALE;
-      } else if (square.dominant === 'black') {
-        palette = BLACK_SCALE;
-      }
+  if (process.env.NODE_ENV === 'development') {
+    const squareCount = Object.keys(highlightedResult?.squares ?? {}).length;
+    const canvasCount = highlightedResult?.canvas.length ?? 0;
 
-      const index = Math.min(palette.length - 1, magnitudeLevel - 1);
-      const intensityBase = 0.6 + Math.min(magnitudeLevel - 1, palette.length - 1) * 0.08;
-      const strength = clamp(intensityBase, 0.45, 0.85);
-      acc.push({
-        id: `${square.fileIndex}:${square.rankIndex}`,
-        fileIndex: square.fileIndex,
-        rankIndex: square.rankIndex,
-        color: palette[index],
-        magnitude,
-        maxWeight: magnitudeLevel,
-        strength,
-      });
-      return acc;
-    }, []);
-  }, [includeBothSides, overlayResult]);
+    console.log(
+      `heatmap-overlay activePieces=${gameState.activePieces.length} squares=${squareCount} canvas=${canvasCount} scheme=${scheme.id} sub=${subScheme} includeBoth=${includeBothSides}`,
+    );
+  }
 
   return {
-    overlays,
-    canvasOverlays,
-    result: overlayResult,
-    activePieceCount: activePieces.length,
+    squares: highlightedResult?.squares ?? {},
+    canvas: highlightedResult?.canvas ?? [],
+    scheme,
+    render: highlightedResult,
+    activePieceCount: gameState.activePieces.length,
     hasOverlay: Boolean(
-      overlayResult && (overlayResult.squares.length > 0 || overlayResult.canvasSquares.length > 0),
+      highlightedResult && (Object.keys(highlightedResult.squares).length > 0 || highlightedResult.canvas.length > 0),
     ),
+    colorProfileId,
   };
 };
-
-const buildToggleId = (piece: ChessPieceDescriptor) => `${piece.color}-${piece.type}`;

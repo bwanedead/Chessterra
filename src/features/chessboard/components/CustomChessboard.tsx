@@ -10,6 +10,7 @@ import { usePieceDrag } from '@/features/chessboard/hooks/usePieceDrag';
 import { createScopedLogger, layoutDebugEnabled } from '@/shared/utils/logger';
 import { FILES } from '@/lib/chessboard/boardState';
 import type { PieceColor, PromotionPieceType } from '@/features/chessboard/types';
+import type { SquareOverlayDescriptor } from '@/features/chessboard/overlays/schemes';
 
 interface PromotionOverlayConfig {
   square: string;
@@ -24,7 +25,7 @@ interface CustomChessboardProps {
   moveMode: boolean;
   boardSize: number;
   onMove: (from: string, to: string) => boolean;
-  squareOverlays?: Record<string, { color: string; magnitude: number; maxWeight: number; strength: number }>;
+  squareOverlays?: Record<string, SquareOverlayDescriptor>;
   showPieces?: boolean;
   normalizedBoard?: boolean;
   promotionRequest?: PromotionOverlayConfig;
@@ -243,6 +244,23 @@ export const CustomChessboard = ({
       }
     });
   }, [boardSize, dragVisual, orientation, renderLogger, squareOverlays]);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'development') {
+      return;
+    }
+    const overlayEntries = squareOverlays ? Object.entries(squareOverlays) : [];
+    const overlayCount = overlayEntries.length;
+    const sample = overlayEntries
+      .slice(0, 5)
+      .map(([square, descriptor]) => {
+        const { style } = descriptor;
+        const intensity = style.kind === 'segmented' ? style.intensity : style.intensity;
+        return `${square}:${style.kind}:${intensity?.toFixed?.(2) ?? 'n/a'}`;
+      })
+      .join(', ');
+    console.log(`custom-chessboard-overlays count=${overlayCount} sample=${sample}`);
+  }, [squareOverlays]);
 
   useEffect(() => {
     if (!layoutDebugEnabled) {

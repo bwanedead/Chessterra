@@ -1,19 +1,19 @@
-# Repository Guidelines
+ï»¿# Repository Guidelines
 
 ## Project Structure & Module Organization
 Chessterra is a Next.js (app router) workspace. UI routes, layouts, and server actions live in `src/app`, shared UI elements in `src/components`, and chess utilities in `src/lib`. Storybook-ready UI examples live beside components under `src/stories`, while exploratory scenarios sit in the top-level `stories/`. Static assets and icons belong in `public/`, and `.storybook/` hosts Storybook configuration. Review `PROJECT_PLAN.md` for roadmap context before planning sizeable changes.
 
 ## Build, Test, and Development Commands
-- `npm install` – install dependencies; rerun after pulling new packages.
-- `npm run dev` – launch the local app at `http://localhost:3001` with hot reloading.
-- `npm run build` – production build verification; fix build warnings before deployment.
-- `npm start` – serve the built app locally.
-- `npm run lint` – run the Next.js ESLint suite; must be clean before shipping.
-- `npm run storybook` – open component sandbox on port 6006 for visual QA.
-- `npm run build-storybook` – generate the static Storybook bundle for previews.
+- `npm install` - install dependencies; rerun after pulling new packages.
+- `npm run dev` - launch the local app at `http://localhost:3001` with hot reloading.
+- `npm run build` - production build verification; fix build warnings before deployment.
+- `npm start` - serve the built app locally.
+- `npm run lint` - run the Next.js ESLint suite; must be clean before shipping.
+- `npm run storybook` - open component sandbox on port 6006 for visual QA.
+- `npm run build-storybook` - generate the static Storybook bundle for previews.
 
 ## Coding Style & Naming Conventions
-Use TypeScript with strict, explicit typing for shared utilities. Follow ESLint’s `next/core-web-vitals` guidance and keep indentation at two spaces. Favor React function components, hooks over classes, and descriptive prop names (`selectedSquare`, `heatmapMode`). Prefer Tailwind utility classes; limit module CSS to layout edge cases. Name files in kebab-case for routes (`move-history`), PascalCase for components, and camelCase for helpers.
+Use TypeScript with strict, explicit typing for shared utilities. Follow ESLint's `next/core-web-vitals` guidance and keep indentation at two spaces. Favor React function components, hooks over classes, and descriptive prop names (`selectedSquare`, `heatmapMode`). Prefer Tailwind utility classes; limit module CSS to layout edge cases. Name files in kebab-case for routes (`move-history`), PascalCase for components, and camelCase for helpers.
 
 ### Tailwind specifics
 - Write utilities as literal strings (e.g. `className="pb-24"`). When a value is conditional, map it to a finite list of literal classes instead of synthesising `pb-${value}` strings.
@@ -32,3 +32,8 @@ Store Supabase keys and other secrets in `.env.local`; never commit them. Mirror
 
 ## Architecture Expectations
 All development must follow modular, scalable architecture with strict separation of concerns. Code should not be placed into large, catch-all files or allowed to deteriorate into spaghetti structures. Each module or component should have a clearly defined responsibility, and coupling between unrelated parts of the system should be avoided. Maintainability, clarity, extensibility, and long-term soundness take priority over any fast workaround or short-term patch. When there is a choice between a quick implementation and a structurally correct solution, the more robust and reliable option should always be taken. Shortcuts that compromise future stability, readability, or adaptability should not be used.
+
+## Heatmap Controls
+- Centralise overlay state changes through `src/features/chessboard/state/heatmapSettingsContext.tsx` so the board, tray, and terminal stay aligned.
+- Register new schemes or colour profiles via the respective registry files under `src/features/chessboard/overlays/` to make them available in the UI and terminal automatically.
+- The in-app terminal supports `heatmap` commands (status, scheme set/list, sub-scheme set, colors set/list, include, check). Update the help output when behaviour changes.

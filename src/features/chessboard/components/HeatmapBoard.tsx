@@ -45,8 +45,12 @@ export const HeatmapBoard = ({
     fen,
     orientation,
     activeToggleIds: controls.activeToggleIds,
-    scheme: controls.scheme,
+    schemeId: controls.schemeId,
+    subScheme: controls.subScheme,
     includeBothSides: controls.includeBothSides,
+    colorProfileId: controls.colorProfileId,
+    colorOverrides: controls.colorOverrides,
+    highlightChecks: controls.checkHighlightsEnabled,
   });
 
   return (
@@ -154,7 +158,7 @@ const HeatmapBoardContent = ({
       moveMode={moveMode && !promotionRequest}
       boardSize={boardSize}
       onMove={onMove}
-      squareOverlays={overlay.overlays}
+      squareOverlays={overlay.squares}
       showPieces={controls.showPieces}
       normalizedBoard={controls.normalizedBoard}
       promotionRequest={
@@ -234,13 +238,13 @@ const HeatmapBoardContent = ({
       return;
     }
 
-    const overlaySquareCount = Object.keys(overlay.overlays).length;
+    const overlaySquareCount = Object.keys(overlay.squares).length;
     diagnosticsLogger.debug('overlay-summary', {
       toggles: controls.activeToggleIds,
       overlaySquares: overlaySquareCount,
       hasOverlay: overlay.hasOverlay,
     });
-  }, [controls.activeToggleIds, diagnosticsLogger, layoutDebugEnabled, overlay.hasOverlay, overlay.overlays]);
+  }, [controls.activeToggleIds, diagnosticsLogger, layoutDebugEnabled, overlay.hasOverlay, overlay.squares]);
 
   useEffect(() => {
     if (!isExpanded) {
@@ -394,6 +398,16 @@ const HeatmapBoardContent = ({
               toggles={controls.toggles}
               onToggle={controls.togglePiece}
               onClear={controls.clearPieces}
+              schemeId={controls.schemeId}
+              onSchemeChange={controls.setSchemeId}
+              subScheme={controls.subScheme}
+              onSubSchemeChange={controls.setSubScheme}
+              includeBothSides={controls.includeBothSides}
+              onIncludeBothSidesChange={controls.setIncludeBothSides}
+              colorProfileId={controls.colorProfileId}
+              onColorProfileChange={controls.setColorProfileId}
+              checkHighlightsEnabled={controls.checkHighlightsEnabled}
+              onCheckHighlightsChange={controls.setCheckHighlightsEnabled}
             />
           </CanvasChrome>
           <div className={styles.expandedBoardArea}>
@@ -401,7 +415,7 @@ const HeatmapBoardContent = ({
               ref={expandedOverlayRef}
               boardSize={boardSize}
               normalized={controls.normalizedBoard}
-              canvasOverlays={overlay.canvasOverlays}
+              canvasOverlays={overlay.canvas}
               orientation={orientation}
             />
             <div
@@ -438,6 +452,16 @@ const HeatmapBoardContent = ({
               toggles={controls.toggles}
               onToggle={controls.togglePiece}
               onClear={controls.clearPieces}
+              schemeId={controls.schemeId}
+              onSchemeChange={controls.setSchemeId}
+              subScheme={controls.subScheme}
+              onSubSchemeChange={controls.setSubScheme}
+              includeBothSides={controls.includeBothSides}
+              onIncludeBothSidesChange={controls.setIncludeBothSides}
+              colorProfileId={controls.colorProfileId}
+              onColorProfileChange={controls.setColorProfileId}
+              checkHighlightsEnabled={controls.checkHighlightsEnabled}
+              onCheckHighlightsChange={controls.setCheckHighlightsEnabled}
             />
           </CanvasChrome>
         </div>
@@ -463,7 +487,7 @@ const HeatmapBoardContent = ({
 interface ExpandedBoardOverlayProps {
   boardSize: number;
   normalized: boolean;
-  canvasOverlays: HeatmapOverlayOutput['canvasOverlays'];
+  canvasOverlays: HeatmapOverlayOutput['canvas'];
   orientation: 'white' | 'black';
 }
 

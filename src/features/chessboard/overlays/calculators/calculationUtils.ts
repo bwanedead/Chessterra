@@ -1,5 +1,6 @@
 import type { Chess } from 'chess.js';
 import type { ChessPieceDescriptor } from '@/features/chessboard/types';
+import type { HeatmapTraceMode } from '@/features/chessboard/overlays/types';
 
 export type BoardMatrix = Record<string, ChessPieceDescriptor>;
 
@@ -68,7 +69,8 @@ export const fromSquare = (square: string) => {
 export interface InfluenceParams {
   origin: string;
   piece: ChessPieceDescriptor;
-  scheme: 'absolute' | 'line-of-sight';
+  traceMode?: HeatmapTraceMode;
+  scheme?: HeatmapTraceMode;
   boardMatrix: BoardMatrix;
 }
 
@@ -93,15 +95,16 @@ export const rayTrace = ({
   fromFile,
   fromRank,
   directions,
-  scheme,
+  traceMode,
   boardMatrix,
 }: {
   fromFile: number;
   fromRank: number;
   directions: Array<{ df: number; dr: number }>;
-  scheme: 'absolute' | 'line-of-sight';
+  traceMode?: HeatmapTraceMode;
   boardMatrix: BoardMatrix;
 }) => {
+  const resolvedTraceMode = traceMode ?? 'line-of-sight';
   const boardSquares: string[] = [];
   const canvasSquares: Array<{ fileIndex: number; rankIndex: number }> = [];
 
@@ -119,7 +122,7 @@ export const rayTrace = ({
         const occupant = boardMatrix[square];
         if (occupant) {
           blocked = true;
-          if (scheme === 'absolute') {
+          if (resolvedTraceMode === 'absolute') {
             let nextFile = file + df;
             let nextRank = rank + dr;
             while (withinCanvas(nextFile, nextRank)) {
@@ -134,10 +137,7 @@ export const rayTrace = ({
           }
         }
 
-        if (blocked && scheme === 'line-of-sight') {
-          break;
-        }
-        if (blocked && scheme === 'absolute') {
+        if (blocked) {
           break;
         }
       } else {

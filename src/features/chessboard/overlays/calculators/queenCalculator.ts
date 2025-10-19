@@ -5,15 +5,17 @@ import { fromSquare, queenDirections, rayTrace } from './calculationUtils';
 export const computeQueenInfluence = ({
   origin,
   piece,
+  traceMode,
   scheme,
   boardMatrix,
 }: InfluenceParams): InfluenceLayer => {
+  const resolvedTraceMode = traceMode ?? scheme ?? 'line-of-sight';
   const { fileIndex, rankIndex } = fromSquare(origin);
   const { boardSquares, canvasSquares } = rayTrace({
     fromFile: fileIndex,
     fromRank: rankIndex,
     directions: queenDirections,
-    scheme,
+    traceMode: resolvedTraceMode,
     boardMatrix,
   });
 
