@@ -71,6 +71,7 @@ export const GameTerminal = ({
   const [input, setInput] = useState('');
   const consoleRef = useRef<HTMLDivElement | null>(null);
   const activeMoveRef = useRef<HTMLButtonElement | null>(null);
+  const moveListRef = useRef<HTMLDivElement | null>(null);
   const terminalRef = useRef<HTMLDivElement | null>(null);
   const lastSnapshotRef = useRef<{ mode: boolean; boardWidth: number; marginTop: number } | null>(null);
   const lastScrollParentRef = useRef<HTMLElement | null>(null);
@@ -89,10 +90,22 @@ export const GameTerminal = ({
   }, [consoleLines]);
 
   useEffect(() => {
-    activeMoveRef.current?.scrollIntoView({
-      block: 'nearest',
-      inline: 'nearest',
-    });
+    const container = moveListRef.current;
+    const element = activeMoveRef.current;
+    if (!container || !element) {
+      return;
+    }
+
+    const containerTop = container.scrollTop;
+    const containerBottom = containerTop + container.clientHeight;
+    const elementTop = element.offsetTop - container.offsetTop;
+    const elementBottom = elementTop + element.offsetHeight;
+
+    if (elementTop < containerTop) {
+      container.scrollTop = elementTop;
+    } else if (elementBottom > containerBottom) {
+      container.scrollTop = elementBottom - container.clientHeight;
+    }
   }, [activeIndex]);
 
   useEffect(() => {
@@ -258,8 +271,14 @@ export const GameTerminal = ({
       const isMinus = normalized === '-' || normalized === '_';
 
       const preventNavigation = () => {
+        const { scrollX, scrollY } = window;
         event.preventDefault();
         event.stopPropagation();
+        if (window.scrollX !== scrollX || window.scrollY !== scrollY) {
+          requestAnimationFrame(() => {
+            window.scrollTo(scrollX, scrollY);
+          });
+        }
       };
 
       if (isLeft || isRight || isUp || isDown) {
@@ -348,7 +367,11 @@ export const GameTerminal = ({
         </span>
       </div>
 
-      <div className="max-h-48 overflow-y-auto rounded-xl border border-slate-800/70 px-3 py-3" style={streamStyle}>
+      <div
+        ref={moveListRef}
+        className="max-h-48 overflow-y-auto rounded-xl border border-slate-800/70 px-3 py-3"
+        style={streamStyle}
+      >
         <button
           type="button"
           onClick={() => onJumpToPly(0)}
