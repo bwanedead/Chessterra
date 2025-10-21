@@ -23,6 +23,7 @@ export interface HeatmapSettingsState {
   colorProfileId: HeatmapColorProfileId;
   colorOverrides: HeatmapColorOverrides | null;
   checkHighlightsEnabled: boolean;
+  showIntensityLabels: boolean;
 }
 
 export interface HeatmapSettingsActions {
@@ -36,6 +37,7 @@ export interface HeatmapSettingsActions {
   setColorProfileId(id: HeatmapColorProfileId): void;
   setColorOverrides(overrides: HeatmapColorOverrides | null): void;
   setCheckHighlightsEnabled(value: boolean): void;
+  setShowIntensityLabels(value: boolean): void;
 }
 
 const HeatmapSettingsStateContext = createContext<HeatmapSettingsState | null>(null);
@@ -58,6 +60,7 @@ const createInitialState = (): HeatmapSettingsState => ({
   colorProfileId: defaultColorProfile,
   colorOverrides: null,
   checkHighlightsEnabled: true,
+  showIntensityLabels: false,
 });
 
 export const HeatmapSettingsProvider = memo(({ children }: { children: ReactNode }) => {
@@ -118,6 +121,9 @@ export const HeatmapSettingsProvider = memo(({ children }: { children: ReactNode
       },
       setCheckHighlightsEnabled: (value) => {
         setState((prev) => ({ ...prev, checkHighlightsEnabled: value }));
+      },
+      setShowIntensityLabels: (value) => {
+        setState((prev) => ({ ...prev, showIntensityLabels: value }));
       },
     }),
     [],

@@ -14,6 +14,7 @@ interface ChessboardSquareProps {
   overlay?: SquareOverlayDescriptor | null;
   showContent?: boolean;
   appearance: BoardAppearance;
+  showIntensityLabel?: boolean;
 }
 
 const HIGHLIGHT_COLOR = 'rgba(59, 130, 246, 0.25)';
@@ -159,6 +160,7 @@ export const ChessboardSquare = ({
   overlay,
   showContent = true,
   appearance,
+  showIntensityLabel = false,
 }: ChessboardSquareProps) => {
   const squareRef = useRef<HTMLDivElement | null>(null);
   const normalized = appearance.mode === 'normalized';
@@ -173,6 +175,18 @@ export const ChessboardSquare = ({
       overlayNode = renderOverlay(overlay);
     } else {
       overlayNode = renderOverlay(overlay);
+    }
+  }
+
+  let intensityLabel: string | null = null;
+  if (showIntensityLabel && overlay) {
+    const meta = overlay.meta;
+    const total =
+      meta?.count ??
+      meta?.contested?.totalContributors ??
+      null;
+    if (total !== null && total !== undefined && total > 0) {
+      intensityLabel = String(total);
     }
   }
 
@@ -282,6 +296,14 @@ export const ChessboardSquare = ({
         backgroundColor,
       }}
     >
+      {intensityLabel ? (
+        <span
+          className="pointer-events-none absolute z-30 rounded-sm bg-slate-900/80 px-1.5 text-[10px] font-semibold leading-none text-slate-50 shadow-[0_1px_4px_rgba(15,23,42,0.55)]"
+          style={{ top: 4, right: 4 }}
+        >
+          {intensityLabel}
+        </span>
+      ) : null}
       {overlayNode}
       {highlight && (
         <div

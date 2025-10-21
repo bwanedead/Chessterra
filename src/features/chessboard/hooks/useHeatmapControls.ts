@@ -40,6 +40,8 @@ export interface HeatmapControls {
   setColorOverrides: (overrides: HeatmapColorOverrides | null) => void;
   checkHighlightsEnabled: boolean;
   setCheckHighlightsEnabled: (value: boolean) => void;
+  showIntensityLabels: boolean;
+  setShowIntensityLabels: (value: boolean) => void;
 }
 
 export const useHeatmapControls = (): HeatmapControls => {
@@ -95,6 +97,8 @@ export const useHeatmapControls = (): HeatmapControls => {
     setColorOverrides: actions.setColorOverrides,
     checkHighlightsEnabled: state.checkHighlightsEnabled,
     setCheckHighlightsEnabled: actions.setCheckHighlightsEnabled,
+    showIntensityLabels: state.showIntensityLabels,
+    setShowIntensityLabels: actions.setShowIntensityLabels,
   };
 };
 

@@ -28,6 +28,7 @@ interface CustomChessboardProps {
   squareOverlays?: Record<string, SquareOverlayDescriptor>;
   showPieces?: boolean;
   normalizedBoard?: boolean;
+  showIntensityLabels?: boolean;
   promotionRequest?: PromotionOverlayConfig;
 }
 
@@ -157,6 +158,7 @@ export const CustomChessboard = ({
   squareOverlays,
   showPieces = true,
   normalizedBoard = false,
+  showIntensityLabels = false,
   promotionRequest,
 }: CustomChessboardProps) => {
   const boardRef = useRef<HTMLDivElement | null>(null);
@@ -327,6 +329,7 @@ export const CustomChessboard = ({
           showPieces={showPieces}
           appearance={appearance}
           boardSize={boardSize}
+          showIntensityLabels={showIntensityLabels}
         />
         <DragPreviewLayer dragVisual={dragVisual} piecePixelSize={piecePixelSize} appearance={appearance} />
       </div>

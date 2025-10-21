@@ -23,6 +23,8 @@ interface HeatmapControlsPanelProps {
   onColorProfileChange: (id: HeatmapColorProfileId) => void;
   checkHighlightsEnabled: boolean;
   onCheckHighlightsChange: (value: boolean) => void;
+  showIntensityLabels: boolean;
+  onShowIntensityLabelsChange: (value: boolean) => void;
 }
 
 export const HeatmapControlsPanel = ({
@@ -39,6 +41,8 @@ export const HeatmapControlsPanel = ({
   onColorProfileChange,
   checkHighlightsEnabled,
   onCheckHighlightsChange,
+  showIntensityLabels,
+  onShowIntensityLabelsChange,
 }: HeatmapControlsPanelProps) => {
   const ordered = useMemo(() => {
     const order: ChessPieceDescriptor['type'][] = ['p', 'b', 'n', 'r', 'q', 'k'];
@@ -180,6 +184,11 @@ export const HeatmapControlsPanel = ({
               label="Check highlights"
               checked={checkHighlightsEnabled}
               onChange={onCheckHighlightsChange}
+            />
+            <HeatmapOptionSwitch
+              label="Show intensity numbers"
+              checked={showIntensityLabels}
+              onChange={onShowIntensityLabelsChange}
             />
           </div>
         </div>

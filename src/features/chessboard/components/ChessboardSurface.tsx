@@ -31,6 +31,7 @@ interface ChessboardSurfaceProps {
   squareOverlays?: Record<string, SquareOverlayDescriptor>;
   showPieces?: boolean;
   appearance: BoardAppearance;
+  showIntensityLabels?: boolean;
 }
 
 export const ChessboardSurface = memo(
@@ -43,6 +44,7 @@ export const ChessboardSurface = memo(
     showPieces = true,
     appearance,
     boardSize,
+    showIntensityLabels = false,
   }: ChessboardSurfaceProps) => {
     const surfaceLogger = useMemo(() => createScopedLogger('chessboard/surface'), []);
     const stackRef = useRef<HTMLDivElement | null>(null);
@@ -211,6 +213,7 @@ export const ChessboardSurface = memo(
                   overlay={overlay}
                   showContent={showPieces}
                   appearance={appearance}
+                  showIntensityLabel={showIntensityLabels}
                   onPointerDown={(event) => {
                     if (layoutDebugEnabled) {
                       surfaceLogger.debug('square-pointer-down', {

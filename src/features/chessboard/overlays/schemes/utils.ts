@@ -14,8 +14,8 @@ const colorKey = (color: InfluenceContribution['piece']['color']): 'white' | 'bl
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
-const WHITE_SCALE = ['#dbeafe', '#bfdbfe', '#93c5fd', '#60a5fa', '#2563eb'];
-const BLACK_SCALE = ['#fee2e2', '#fecaca', '#f87171', '#ef4444', '#b91c1c'];
+const WHITE_SCALE = ['#5dd3f6', '#20b0f0', '#008be6', '#0063d1', '#003fa7'];
+const BLACK_SCALE = ['#ffb3c1', '#ff708a', '#ff2e56', '#d9003a', '#a8002a'];
 
 const levelIndex = (count: number) => {
   if (count <= 1) return 0;
@@ -51,7 +51,7 @@ export const lightenHex = (hex: string, amount: number) => {
   return rgbToHex(mix(base.r), mix(base.g), mix(base.b));
 };
 
-const INTENSITY_STEPS = [0, 0.62, 0.74, 0.86, 0.94, 1];
+const INTENSITY_STEPS = [0, 0.65, 0.8, 0.9, 0.96, 1];
 
 export const intensityFromCount = (count: number): number => {
   if (count <= 0) {

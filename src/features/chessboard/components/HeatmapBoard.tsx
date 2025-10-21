@@ -161,6 +161,7 @@ const HeatmapBoardContent = ({
       squareOverlays={overlay.squares}
       showPieces={controls.showPieces}
       normalizedBoard={controls.normalizedBoard}
+      showIntensityLabels={controls.showIntensityLabels}
       promotionRequest={
         promotionRequest && onSelectPromotion
           ? {
@@ -457,14 +458,16 @@ const HeatmapBoardContent = ({
               subScheme={controls.subScheme}
               onSubSchemeChange={controls.setSubScheme}
               includeBothSides={controls.includeBothSides}
-              onIncludeBothSidesChange={controls.setIncludeBothSides}
-              colorProfileId={controls.colorProfileId}
-              onColorProfileChange={controls.setColorProfileId}
-              checkHighlightsEnabled={controls.checkHighlightsEnabled}
-              onCheckHighlightsChange={controls.setCheckHighlightsEnabled}
-            />
-          </CanvasChrome>
-        </div>
+            onIncludeBothSidesChange={controls.setIncludeBothSides}
+            colorProfileId={controls.colorProfileId}
+            onColorProfileChange={controls.setColorProfileId}
+            checkHighlightsEnabled={controls.checkHighlightsEnabled}
+            onCheckHighlightsChange={controls.setCheckHighlightsEnabled}
+            showIntensityLabels={controls.showIntensityLabels}
+            onShowIntensityLabelsChange={controls.setShowIntensityLabels}
+          />
+        </CanvasChrome>
+      </div>
 
         <div ref={boardShellRef} className={styles.boardShell} data-testid="heatmap-board-shell">
           <div className={styles.boardShellInner}>{boardElement}</div>
