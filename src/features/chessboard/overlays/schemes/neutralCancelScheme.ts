@@ -2,8 +2,9 @@ import type { HeatmapSchemeDefinition } from '@/features/chessboard/overlays/sch
 import {
   analyzeSquareInfluence,
   analyzeCanvasInfluence,
-  normalizeIntensity,
+  intensityFromCount,
   resolvePieceColor,
+  colorForCount,
 } from '@/features/chessboard/overlays/schemes/utils';
 
 export const neutralCancelScheme: HeatmapSchemeDefinition = {
@@ -11,9 +12,11 @@ export const neutralCancelScheme: HeatmapSchemeDefinition = {
   label: 'Neutral Cancel',
   description: 'Classic overlay: contested squares clear out, leaving only dominant influences visible.',
   supportedSubSchemes: ['line-of-sight', 'absolute'],
-  render: ({ summary, includeBothSides, colorProfile }) => {
+  render: ({ summary, colorProfile }) => {
+    const analysisMap = new Map<string, ReturnType<typeof analyzeSquareInfluence>>();
     const squares = summary.squares.reduce<Record<string, ReturnType<typeof buildSolidOverlay>>>((acc, square) => {
       const analysis = analyzeSquareInfluence(square);
+      analysisMap.set(square.square, analysis);
       const hasWhite = analysis.whiteCount > 0;
       const hasBlack = analysis.blackCount > 0;
       if (hasWhite && hasBlack) {
@@ -31,21 +34,23 @@ export const neutralCancelScheme: HeatmapSchemeDefinition = {
         activeColor,
       );
 
+      const pieceCount = hasWhite ? analysis.whiteCount : analysis.blackCount;
       const weight = hasWhite ? analysis.whiteWeight : analysis.blackWeight;
-      const intensity = includeBothSides
-        ? normalizeIntensity(Math.abs(analysis.whiteWeight - analysis.blackWeight), summary.overallMaxWeight, 0.4)
-        : normalizeIntensity(weight, summary.overallMaxWeight, 0.4);
+      const intensity = intensityFromCount(pieceCount);
 
       if (intensity <= 0) {
         return acc;
       }
 
+      const overlayColor = colorForCount(hasWhite ? 'white' : 'black', pieceCount);
+
       acc[square.square] = buildSolidOverlay({
-        color: palette.primary,
-        intensity,
+        color: overlayColor,
         glowColor: palette.accent,
+        intensity,
         dominant: hasWhite ? 'white' : 'black',
         weight,
+        count: pieceCount,
       });
       return acc;
     }, {});
@@ -68,29 +73,48 @@ export const neutralCancelScheme: HeatmapSchemeDefinition = {
         colorProfile,
         activeColor,
       );
+      const pieceCount = hasWhite ? analysis.whiteCount : analysis.blackCount;
       const weight = hasWhite ? analysis.whiteWeight : analysis.blackWeight;
-      const intensity = includeBothSides
-        ? normalizeIntensity(Math.abs(analysis.whiteWeight - analysis.blackWeight), summary.overallMaxWeight, 0.35)
-        : normalizeIntensity(weight, summary.overallMaxWeight, 0.35);
+      const intensity = intensityFromCount(pieceCount);
 
       if (intensity <= 0) {
         return acc;
       }
+
+      const overlayColor = colorForCount(hasWhite ? 'white' : 'black', pieceCount);
 
       acc.push(
         buildCanvasOverlay({
           id: `${entry.fileIndex}:${entry.rankIndex}`,
           fileIndex: entry.fileIndex,
           rankIndex: entry.rankIndex,
-          color: palette.primary,
-          intensity,
+          color: overlayColor,
           glowColor: palette.accent,
+          intensity,
           dominant: hasWhite ? 'white' : 'black',
           weight,
+          count: pieceCount,
         }),
       );
       return acc;
     }, []);
+
+    if (process.env.NODE_ENV === 'development') {
+      const contestedSkipped = Array.from(analysisMap.values()).filter(
+        (analysis) => analysis.whiteCount > 0 && analysis.blackCount > 0,
+      ).length;
+      const renderedSquares = Object.entries(squares);
+      const sample = renderedSquares.slice(0, 5).map(([id, overlay]) => {
+        const analysis = analysisMap.get(id);
+        const count = analysis ? analysis.whiteCount + analysis.blackCount : overlay.meta?.count ?? 0;
+        return `${id}:${count}@${overlay.style.intensity.toFixed(2)}`;
+      });
+      console.log('[scheme neutral-cancel]', {
+        rendered: renderedSquares.length,
+        contestedSkipped,
+        sample: sample.join(', '),
+      });
+    }
 
     return {
       squares,
@@ -109,16 +133,18 @@ export const neutralCancelScheme: HeatmapSchemeDefinition = {
 
 const buildSolidOverlay = ({
   color,
-  intensity,
   glowColor,
+  intensity,
   dominant,
   weight,
+  count,
 }: {
   color: string;
-  intensity: number;
   glowColor?: string;
+  intensity: number;
   dominant: 'white' | 'black';
   weight: number;
+  count: number;
 }) => ({
   style: {
     kind: 'solid' as const,
@@ -134,6 +160,7 @@ const buildSolidOverlay = ({
   meta: {
     dominantColor: dominant,
     weight,
+    count,
   },
 });
 
@@ -142,19 +169,21 @@ const buildCanvasOverlay = ({
   fileIndex,
   rankIndex,
   color,
-  intensity,
   glowColor,
+  intensity,
   dominant,
   weight,
+  count,
 }: {
   id: string;
   fileIndex: number;
   rankIndex: number;
   color: string;
-  intensity: number;
   glowColor?: string;
+  intensity: number;
   dominant: 'white' | 'black';
   weight: number;
+  count: number;
 }) => ({
   id,
   fileIndex,
@@ -173,5 +202,6 @@ const buildCanvasOverlay = ({
   meta: {
     dominantColor: dominant,
     weight,
+    count,
   },
 });

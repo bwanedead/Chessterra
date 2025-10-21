@@ -111,8 +111,10 @@ export const HeatmapControlsPanel = ({
                     type="button"
                     onClick={() => onSchemeChange(scheme.id)}
                     className={[
-                      'rounded-full px-3 py-1 text-xs font-semibold transition-colors',
-                      active ? 'bg-slate-100 text-slate-900 shadow-sm' : 'bg-slate-800/60 text-slate-200 hover:bg-slate-700/70',
+                      'rounded-full px-3 py-1 text-xs font-semibold transition-colors transition-shadow border',
+                      active
+                        ? 'bg-blue-500 text-white border-blue-300 shadow-[0_8px_18px_rgba(59,130,246,0.35)] ring-2 ring-blue-200/70'
+                        : 'bg-slate-800/60 text-slate-200 border-transparent hover:bg-slate-700/70 hover:border-slate-600/60',
                     ]
                       .filter(Boolean)
                       .join(' ')}

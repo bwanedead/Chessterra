@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from 'react';
+import { Fragment, type ReactNode, useEffect, useRef } from 'react';
 import type { BoardAppearance } from '@/features/chessboard/components/ChessboardSurface';
 import type { SquareOverlayDescriptor } from '@/features/chessboard/overlays/schemes';
 
@@ -82,6 +82,7 @@ const renderOverlay = (overlay: SquareOverlayDescriptor | null | undefined) => {
   if (style.kind === 'solid' || style.kind === 'flag') {
     return (
       <div
+        data-overlay-kind={style.kind}
         className="absolute inset-0 pointer-events-none rounded-md transition-all duration-150"
         style={{
           opacity: intensity,
@@ -99,8 +100,11 @@ const renderOverlay = (overlay: SquareOverlayDescriptor | null | undefined) => {
 
     return (
       <div
+        data-overlay-kind="segmented"
         className="absolute inset-0 pointer-events-none transition-all duration-150"
         style={{
+          width: '100%',
+          height: '100%',
           opacity: intensity,
           display: 'flex',
           flexDirection: orientation === 'horizontal' ? 'row' : 'column',
@@ -110,14 +114,22 @@ const renderOverlay = (overlay: SquareOverlayDescriptor | null | undefined) => {
         {segments.map((segment, index) => (
           <Fragment key={`${segment.color}-${index}`}>
             <div
-              className="h-full w-full"
-              style={{
-                flexGrow: Math.max(segment.proportion, 0.01),
-                backgroundColor: segment.color,
-              }}
-            />
+              data-overlay-segment="true"
+              data-overlay-segment-index={index}
+              data-overlay-segment-label={segment.label ?? ''}
+              data-overlay-segment-color={segment.color}
+            style={{
+              flexGrow: Math.max(segment.proportion, 0.01),
+              flexShrink: 0,
+              flexBasis: 0,
+              width: orientation === 'horizontal' ? undefined : '100%',
+              height: orientation === 'horizontal' ? '100%' : undefined,
+              backgroundColor: segment.color,
+            }}
+          />
             {dividerColor && index < segments.length - 1 ? (
               <div
+                data-overlay-divider="true"
                 style={{
                   width: orientation === 'horizontal' ? '2px' : '100%',
                   height: orientation === 'horizontal' ? '100%' : '2px',
@@ -148,6 +160,7 @@ export const ChessboardSquare = ({
   showContent = true,
   appearance,
 }: ChessboardSquareProps) => {
+  const squareRef = useRef<HTMLDivElement | null>(null);
   const normalized = appearance.mode === 'normalized';
   let backgroundColor = color === 'light' ? appearance.lightSquare : appearance.darkSquare;
   let overlayNode: ReactNode = null;
@@ -163,6 +176,93 @@ export const ChessboardSquare = ({
     }
   }
 
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'development') {
+      return;
+    }
+    if (!overlay || overlay.style.kind !== 'segmented') {
+      return;
+    }
+    const { style } = overlay;
+    console.log('[overlay descriptor]', {
+      square,
+      kind: style.kind,
+      segments: style.segments.map((segment) => ({
+        color: segment.color,
+        proportion: segment.proportion,
+        label: segment.label,
+      })),
+      orientation: style.orientation ?? 'horizontal',
+      dividerColor: style.dividerColor ?? '(none)',
+      intensity: style.intensity,
+      glow: style.glow,
+    });
+  }, [overlay, square]);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'development') {
+      return;
+    }
+    if (!overlay || overlay.style.kind !== 'segmented') {
+      return;
+    }
+    const root = squareRef.current;
+    if (!root) {
+      return;
+    }
+
+    const logComputedStyles = () => {
+      const overlayContainer = root.querySelector('[data-overlay-kind="segmented"]') as HTMLDivElement | null;
+      if (!overlayContainer) {
+        console.warn('[overlay descriptor] segmented container missing', { square });
+        return;
+      }
+      const computed = window.getComputedStyle(overlayContainer);
+      const parentComputed = window.getComputedStyle(root);
+      const segmentNodes = Array.from(
+        overlayContainer.querySelectorAll<HTMLElement>('[data-overlay-segment="true"]'),
+      );
+      const segmentComputed = segmentNodes.map((node, index) => {
+        const styles = window.getComputedStyle(node);
+        const rect = node.getBoundingClientRect();
+        return {
+          index: node.dataset.overlaySegmentIndex ?? index.toString(),
+          label: node.dataset.overlaySegmentLabel ?? null,
+          expectedColor: node.dataset.overlaySegmentColor ?? null,
+          backgroundColor: styles.backgroundColor,
+          flexGrow: styles.flexGrow,
+          flexBasis: styles.flexBasis,
+          width: Number.isFinite(rect.width) ? Number(rect.width.toFixed(2)) : rect.width,
+          height: Number.isFinite(rect.height) ? Number(rect.height.toFixed(2)) : rect.height,
+          opacity: styles.opacity,
+        };
+      });
+      console.log('[overlay computed styles]', {
+        square,
+        containerClass: overlayContainer.className,
+        containerStyle: {
+          display: computed.display,
+          flexDirection: computed.flexDirection,
+          opacity: computed.opacity,
+          backgroundColor: computed.backgroundColor,
+          boxShadow: computed.boxShadow,
+        },
+        parentClass: root.className,
+        parentInlineStyle: root.getAttribute('style') ?? '(none)',
+        parentComputed: {
+          position: parentComputed.position,
+          display: parentComputed.display,
+          backgroundColor: parentComputed.backgroundColor,
+        },
+        dividerCount: overlayContainer.querySelectorAll('[data-overlay-divider="true"]').length,
+        segments: segmentComputed,
+      });
+    };
+
+    const raf = requestAnimationFrame(logComputedStyles);
+    return () => cancelAnimationFrame(raf);
+  }, [overlay, square]);
+
   return (
     <div
       role="presentation"
@@ -170,6 +270,7 @@ export const ChessboardSquare = ({
       onPointerEnter={onPointerEnter}
       onPointerUp={onPointerUp}
       data-square={square}
+      ref={squareRef}
       className={[
         'relative flex items-center justify-center overflow-hidden transition-colors duration-150',
         normalized ? '' : 'rounded-md',

@@ -73,6 +73,7 @@ export interface SquareOverlayDescriptor {
     };
     dominantColor?: 'white' | 'black' | 'tie';
     weight?: number;
+    count?: number;
   };
 }
 

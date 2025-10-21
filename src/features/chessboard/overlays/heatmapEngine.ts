@@ -130,6 +130,23 @@ export const generateInfluenceSummary = (request: InfluenceRequest): InfluenceSu
 
   const overallMaxWeight = Math.max(maxSquareWeight, maxCanvasWeight);
 
+  if (process.env.NODE_ENV === 'development') {
+    const contestedSquares = squares.filter(
+      (entry) => entry.white.contributions.length > 0 && entry.black.contributions.length > 0,
+    );
+    const contestedSample = contestedSquares
+      .slice(0, 5)
+      .map((entry) => {
+        const whiteCount = entry.white.contributions.length;
+        const blackCount = entry.black.contributions.length;
+        return `${entry.square}:${whiteCount}/${blackCount}`;
+      })
+      .join(', ');
+    console.log(
+      `[heatmap summary breakdown] squares=${squares.length} contested=${contestedSquares.length} canvas=${canvasSquares.length} contestedSample=${contestedSample}`,
+    );
+  }
+
   return {
     squares,
     canvasSquares,

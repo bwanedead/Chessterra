@@ -2,8 +2,10 @@ import type { HeatmapSchemeDefinition } from '@/features/chessboard/overlays/sch
 import {
   analyzeSquareInfluence,
   analyzeCanvasInfluence,
-  normalizeIntensity,
+  intensityFromCount,
   resolvePieceColor,
+  colorForCount,
+  lightenHex,
 } from '@/features/chessboard/overlays/schemes/utils';
 
 export const contestedFlagScheme: HeatmapSchemeDefinition = {
@@ -11,7 +13,7 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
   label: 'Contested Flag',
   description: 'Marks every contested square with a dedicated highlight so ambiguity disappears.',
   supportedSubSchemes: ['line-of-sight', 'absolute'],
-  render: ({ summary, colorProfile, includeBothSides }) => {
+  render: ({ summary, colorProfile }) => {
     const squares = summary.squares.reduce<Record<string, ReturnType<typeof buildSquareOverlay>>>((acc, square) => {
       const analysis = analyzeSquareInfluence(square);
       const contested = analysis.whiteCount > 0 && analysis.blackCount > 0;
@@ -23,20 +25,20 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
             ? 'black'
             : 'tie';
 
-      const weightValue = includeBothSides
-        ? Math.abs(analysis.whiteWeight - analysis.blackWeight)
-        : analysis.totalWeight;
-      const intensity = normalizeIntensity(weightValue, summary.overallMaxWeight, 0.4, 0.9);
+      const intensity = contested
+        ? intensityFromCount(analysis.totalCount)
+        : intensityFromCount(analysis.whiteCount > 0 ? analysis.whiteCount : analysis.blackCount);
 
-      if (analysis.totalWeight === 0 || intensity <= 0) {
+      if (analysis.totalCount === 0 || intensity <= 0) {
         return acc;
       }
 
       if (contested) {
+        const flagColor = lightenHex(colorProfile.contested.flag, Math.min(0.6, 0.25 + intensity * 0.4));
         acc[square.square] = {
           style: {
             kind: 'flag',
-            color: colorProfile.contested.flag,
+            color: flagColor,
             intensity,
             glow: colorProfile.contested.glow
               ? {
@@ -49,6 +51,7 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
           meta: {
             dominantColor: 'tie',
             weight: analysis.totalWeight,
+            count: analysis.totalCount,
             contested: {
               totalContributors: analysis.totalCount,
               whiteContributors: analysis.whiteCount,
@@ -62,11 +65,12 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
       const contributions =
         analysis.whiteCount > 0 ? square.white.contributions : square.black.contributions;
       const palette = resolvePieceColor(contributions, colorProfile, analysis.whiteCount > 0 ? 'w' : 'b');
+      const overlayColor = colorForCount(analysis.whiteCount > 0 ? 'white' : 'black', analysis.whiteCount > 0 ? analysis.whiteCount : analysis.blackCount);
 
       acc[square.square] = {
         style: {
           kind: 'solid',
-          color: palette.primary,
+          color: overlayColor,
           intensity,
           glow: palette.accent
             ? {
@@ -78,6 +82,7 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
         meta: {
           dominantColor,
           weight: analysis.totalWeight,
+          count: analysis.totalCount,
           contested: {
             totalContributors: analysis.totalCount,
             whiteContributors: analysis.whiteCount,
@@ -100,16 +105,16 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
             ? 'black'
             : 'tie';
 
-      const weightValue = includeBothSides
-        ? Math.abs(analysis.whiteWeight - analysis.blackWeight)
-        : analysis.totalWeight;
-      const intensity = normalizeIntensity(weightValue, summary.overallMaxWeight, 0.35, 0.85);
+      const intensity = contested
+        ? intensityFromCount(analysis.totalCount)
+        : intensityFromCount(analysis.whiteCount > 0 ? analysis.whiteCount : analysis.blackCount);
 
-      if (analysis.totalWeight === 0 || intensity <= 0) {
+      if (analysis.totalCount === 0 || intensity <= 0) {
         return acc;
       }
 
       if (contested) {
+        const flagColor = lightenHex(colorProfile.contested.flag, Math.min(0.6, 0.25 + intensity * 0.4));
         acc.push(
           buildCanvasOverlay({
             id: `${entry.fileIndex}:${entry.rankIndex}`,
@@ -117,7 +122,7 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
             rankIndex: entry.rankIndex,
             style: {
               kind: 'flag',
-              color: colorProfile.contested.flag,
+              color: flagColor,
               intensity,
               glow: colorProfile.contested.glow
                 ? {
@@ -129,6 +134,7 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
             },
             dominant: 'tie',
             totalWeight: analysis.totalWeight,
+            totalCount: analysis.totalCount,
             contestedMeta: {
               totalContributors: analysis.totalCount,
               whiteContributors: analysis.whiteCount,
@@ -142,6 +148,7 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
       const contributions =
         analysis.whiteCount > 0 ? entry.white.contributions : entry.black.contributions;
       const palette = resolvePieceColor(contributions, colorProfile, analysis.whiteCount > 0 ? 'w' : 'b');
+      const overlayColor = colorForCount(analysis.whiteCount > 0 ? 'white' : 'black', analysis.whiteCount > 0 ? analysis.whiteCount : analysis.blackCount);
 
       acc.push(
         buildCanvasOverlay({
@@ -150,7 +157,7 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
           rankIndex: entry.rankIndex,
           style: {
             kind: 'solid',
-            color: palette.primary,
+            color: overlayColor,
             intensity,
             glow: palette.accent
               ? {
@@ -161,6 +168,7 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
           },
           dominant: dominantColor,
           totalWeight: analysis.totalWeight,
+          totalCount: analysis.totalCount,
           contestedMeta: {
             totalContributors: analysis.totalCount,
             whiteContributors: analysis.whiteCount,
@@ -171,6 +179,20 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
 
       return acc;
     }, []);
+
+    if (process.env.NODE_ENV === 'development') {
+      const flaggedSquares = Object.values(squares).filter((overlay) => overlay.style.kind === 'flag').length;
+      const renderedSquares = Object.keys(squares).length;
+      const sampleFlags = Object.entries(squares)
+        .filter(([, overlay]) => overlay.style.kind === 'flag')
+        .slice(0, 5)
+        .map(([id, overlay]) => `${id}:${overlay.style.label ?? ''}@${overlay.style.intensity.toFixed(2)}`);
+      console.log('[scheme contested-flag]', {
+        rendered: renderedSquares,
+        flagged: flaggedSquares,
+        sampleFlags: sampleFlags.join(', '),
+      });
+    }
 
     return {
       squares,
@@ -195,6 +217,7 @@ const buildCanvasOverlay = ({
   style,
   dominant,
   totalWeight,
+  totalCount,
   contestedMeta,
 }: {
   id: string;
@@ -212,6 +235,7 @@ const buildCanvasOverlay = ({
   };
   dominant: 'white' | 'black' | 'tie';
   totalWeight: number;
+  totalCount: number;
   contestedMeta: {
     totalContributors: number;
     whiteContributors: number;
@@ -225,6 +249,7 @@ const buildCanvasOverlay = ({
   meta: {
     dominantColor: dominant,
     weight: totalWeight,
+    count: totalCount,
     contested: contestedMeta,
   },
 });

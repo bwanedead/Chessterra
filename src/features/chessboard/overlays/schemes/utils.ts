@@ -12,6 +12,55 @@ import type { ResolvedHeatmapColorProfile } from '@/features/chessboard/overlays
 const colorKey = (color: InfluenceContribution['piece']['color']): 'white' | 'black' =>
   color === 'w' ? 'white' : 'black';
 
+const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+
+const WHITE_SCALE = ['#dbeafe', '#bfdbfe', '#93c5fd', '#60a5fa', '#2563eb'];
+const BLACK_SCALE = ['#fee2e2', '#fecaca', '#f87171', '#ef4444', '#b91c1c'];
+
+const levelIndex = (count: number) => {
+  if (count <= 1) return 0;
+  if (count === 2) return 1;
+  if (count === 3) return 2;
+  if (count === 4) return 3;
+  return 4;
+};
+
+export const colorForCount = (color: 'white' | 'black', count: number) =>
+  color === 'white' ? WHITE_SCALE[levelIndex(count)] : BLACK_SCALE[levelIndex(count)];
+
+const hexToRgb = (hex: string) => {
+  const sanitized = hex.replace('#', '');
+  const normalized = sanitized.length === 3 ? sanitized.split('').map((c) => `${c}${c}`).join('') : sanitized;
+  const bigint = Number.parseInt(normalized, 16);
+  return {
+    r: (bigint >> 16) & 255,
+    g: (bigint >> 8) & 255,
+    b: bigint & 255,
+  };
+};
+
+const rgbToHex = (r: number, g: number, b: number) =>
+  `#${[r, g, b]
+    .map((channel) => clamp(Math.round(channel), 0, 255).toString(16).padStart(2, '0'))
+    .join('')}`;
+
+export const lightenHex = (hex: string, amount: number) => {
+  const base = hexToRgb(hex);
+  const ratio = clamp(amount, 0, 1);
+  const mix = (channel: number) => channel * (1 - ratio) + 255 * ratio;
+  return rgbToHex(mix(base.r), mix(base.g), mix(base.b));
+};
+
+const INTENSITY_STEPS = [0, 0.62, 0.74, 0.86, 0.94, 1];
+
+export const intensityFromCount = (count: number): number => {
+  if (count <= 0) {
+    return 0;
+  }
+  const index = Math.min(INTENSITY_STEPS.length - 1, count);
+  return INTENSITY_STEPS[index];
+};
+
 export const analyzeSquareInfluence = (square: SquareInfluenceSummary): InfluenceAnalysis => {
   const whiteWeight = square.white.totalWeight;
   const blackWeight = square.black.totalWeight;

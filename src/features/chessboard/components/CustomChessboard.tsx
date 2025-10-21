@@ -251,15 +251,29 @@ export const CustomChessboard = ({
     }
     const overlayEntries = squareOverlays ? Object.entries(squareOverlays) : [];
     const overlayCount = overlayEntries.length;
+    const segmentedEntries = overlayEntries.filter(([, descriptor]) => descriptor.style.kind === 'segmented');
+    const segmentedSample = segmentedEntries
+      .slice(0, 3)
+      .map(([square, descriptor]) => {
+        if (descriptor.style.kind !== 'segmented') {
+          return square;
+        }
+        const [whiteSegment, blackSegment] = descriptor.style.segments;
+        return `${square}:${whiteSegment.label}/${blackSegment.label}:${descriptor.style.label ?? ''}`;
+      })
+      .join(', ');
     const sample = overlayEntries
       .slice(0, 5)
       .map(([square, descriptor]) => {
         const { style } = descriptor;
         const intensity = style.kind === 'segmented' ? style.intensity : style.intensity;
-        return `${square}:${style.kind}:${intensity?.toFixed?.(2) ?? 'n/a'}`;
+        const contributors = descriptor.meta?.count ?? descriptor.meta?.contested?.totalContributors ?? 'n/a';
+        return `${square}:${style.kind}:${contributors}@${intensity?.toFixed?.(2) ?? 'n/a'}`;
       })
       .join(', ');
-    console.log(`custom-chessboard-overlays count=${overlayCount} sample=${sample}`);
+    console.log(
+      `custom-chessboard-overlays count=${overlayCount} segmented=${segmentedEntries.length} segSample=${segmentedSample || '(none)'} sample=${sample}`,
+    );
   }, [squareOverlays]);
 
   useEffect(() => {
