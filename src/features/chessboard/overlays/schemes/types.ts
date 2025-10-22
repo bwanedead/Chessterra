@@ -96,6 +96,8 @@ export interface HeatmapSchemeRenderContext {
   subScheme: HeatmapTraceMode;
   includeBothSides: boolean;
   colorProfile: ResolvedHeatmapColorProfile;
+  influenceIntensityMode: 'gradient' | 'flat';
+  friendlyColor: 'white' | 'black';
 }
 
 export interface HeatmapSchemeDefinition extends HeatmapSchemeMetadata {

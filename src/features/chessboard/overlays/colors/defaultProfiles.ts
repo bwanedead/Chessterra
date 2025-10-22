@@ -22,6 +22,10 @@ export const classicProfile: HeatmapColorProfileDefinition = {
       k: { primary: '#450a0a', accent: '#7f1d1d' },
     },
   },
+  heatmap: {
+    white: { base: '#5dd3f6', target: '#003fa7' },
+    black: { base: '#ffb1c4', target: '#a8002a' },
+  },
   contested: {
     divider: '#94a3b8',
     flag: '#facc15',
@@ -56,6 +60,10 @@ export const mutedProfile: HeatmapColorProfileDefinition = {
       k: { primary: '#581c87', accent: '#6b21a8' },
     },
   },
+  heatmap: {
+    white: { base: '#5fe9d0', target: '#0f766e' },
+    black: { base: '#dcb4ff', target: '#6b21a8' },
+  },
   contested: {
     divider: '#a1a1aa',
     flag: '#f59e0b',
@@ -89,6 +97,10 @@ export const contrastProfile: HeatmapColorProfileDefinition = {
       q: { primary: '#9d174d', accent: '#be185d' },
       k: { primary: '#831843', accent: '#9d174d' },
     },
+  },
+  heatmap: {
+    white: { base: '#38d0f5', target: '#0369a1' },
+    black: { base: '#f99ac9', target: '#be185d' },
   },
   contested: {
     divider: '#e2e8f0',

@@ -14,9 +14,6 @@ const colorKey = (color: InfluenceContribution['piece']['color']): 'white' | 'bl
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
-const WHITE_SCALE = ['#5dd3f6', '#20b0f0', '#008be6', '#0063d1', '#003fa7'];
-const BLACK_SCALE = ['#ffb3c1', '#ff708a', '#ff2e56', '#d9003a', '#a8002a'];
-
 const levelIndex = (count: number) => {
   if (count <= 1) return 0;
   if (count === 2) return 1;
@@ -24,9 +21,6 @@ const levelIndex = (count: number) => {
   if (count === 4) return 3;
   return 4;
 };
-
-export const colorForCount = (color: 'white' | 'black', count: number) =>
-  color === 'white' ? WHITE_SCALE[levelIndex(count)] : BLACK_SCALE[levelIndex(count)];
 
 const hexToRgb = (hex: string) => {
   const sanitized = hex.replace('#', '');
@@ -44,6 +38,14 @@ const rgbToHex = (r: number, g: number, b: number) =>
     .map((channel) => clamp(Math.round(channel), 0, 255).toString(16).padStart(2, '0'))
     .join('')}`;
 
+const mixHex = (source: string, target: string, amount: number) => {
+  const src = hexToRgb(source);
+  const tgt = hexToRgb(target);
+  const ratio = clamp(amount, 0, 1);
+  const mix = (s: number, t: number) => s * (1 - ratio) + t * ratio;
+  return rgbToHex(mix(src.r, tgt.r), mix(src.g, tgt.g), mix(src.b, tgt.b));
+};
+
 export const lightenHex = (hex: string, amount: number) => {
   const base = hexToRgb(hex);
   const ratio = clamp(amount, 0, 1);
@@ -52,6 +54,7 @@ export const lightenHex = (hex: string, amount: number) => {
 };
 
 const INTENSITY_STEPS = [0, 0.65, 0.8, 0.9, 0.96, 1];
+const GRADIENT_PROGRESS = [0, 0.35, 0.6, 0.8, 1];
 
 export const intensityFromCount = (count: number): number => {
   if (count <= 0) {
@@ -59,6 +62,35 @@ export const intensityFromCount = (count: number): number => {
   }
   const index = Math.min(INTENSITY_STEPS.length - 1, count);
   return INTENSITY_STEPS[index];
+};
+
+export const intensityForMode = (count: number, mode: 'gradient' | 'flat'): number => {
+  const base = intensityFromCount(count);
+  if (mode === 'flat') {
+    return base > 0 ? 0.85 : 0;
+  }
+  return base;
+};
+
+export const colorForInfluence = (
+  profile: ResolvedHeatmapColorProfile,
+  color: 'white' | 'black',
+  count: number,
+  mode: 'gradient' | 'flat',
+  friendlyColor: 'white' | 'black',
+) => {
+  if (count <= 0) {
+    return 'transparent';
+  }
+  const paletteKey = color === friendlyColor ? 'white' : 'black';
+  const spectrum = profile.heatmap[paletteKey];
+
+  if (mode === 'flat') {
+    return spectrum.base;
+  }
+
+  const progress = GRADIENT_PROGRESS[levelIndex(count)];
+  return mixHex(spectrum.base, spectrum.target, progress);
 };
 
 export const analyzeSquareInfluence = (square: SquareInfluenceSummary): InfluenceAnalysis => {

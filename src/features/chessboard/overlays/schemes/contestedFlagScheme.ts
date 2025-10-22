@@ -2,9 +2,9 @@ import type { HeatmapSchemeDefinition } from '@/features/chessboard/overlays/sch
 import {
   analyzeSquareInfluence,
   analyzeCanvasInfluence,
-  intensityFromCount,
+  intensityForMode,
   resolvePieceColor,
-  colorForCount,
+  colorForInfluence,
   lightenHex,
 } from '@/features/chessboard/overlays/schemes/utils';
 
@@ -13,7 +13,7 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
   label: 'Contested Flag',
   description: 'Marks every contested square with a dedicated highlight so ambiguity disappears.',
   supportedSubSchemes: ['line-of-sight', 'absolute'],
-  render: ({ summary, colorProfile }) => {
+  render: ({ summary, colorProfile, influenceIntensityMode, friendlyColor }) => {
     const squares = summary.squares.reduce<Record<string, ReturnType<typeof buildSquareOverlay>>>((acc, square) => {
       const analysis = analyzeSquareInfluence(square);
       const contested = analysis.whiteCount > 0 && analysis.blackCount > 0;
@@ -26,8 +26,8 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
             : 'tie';
 
       const intensity = contested
-        ? intensityFromCount(analysis.totalCount)
-        : intensityFromCount(analysis.whiteCount > 0 ? analysis.whiteCount : analysis.blackCount);
+        ? intensityForMode(analysis.totalCount, influenceIntensityMode)
+        : intensityForMode(analysis.whiteCount > 0 ? analysis.whiteCount : analysis.blackCount, influenceIntensityMode);
 
       if (analysis.totalCount === 0 || intensity <= 0) {
         return acc;
@@ -65,7 +65,13 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
       const contributions =
         analysis.whiteCount > 0 ? square.white.contributions : square.black.contributions;
       const palette = resolvePieceColor(contributions, colorProfile, analysis.whiteCount > 0 ? 'w' : 'b');
-      const overlayColor = colorForCount(analysis.whiteCount > 0 ? 'white' : 'black', analysis.whiteCount > 0 ? analysis.whiteCount : analysis.blackCount);
+      const overlayColor = colorForInfluence(
+        colorProfile,
+        analysis.whiteCount > 0 ? 'white' : 'black',
+        analysis.whiteCount > 0 ? analysis.whiteCount : analysis.blackCount,
+        influenceIntensityMode,
+        friendlyColor,
+      );
 
       acc[square.square] = {
         style: {
@@ -106,8 +112,8 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
             : 'tie';
 
       const intensity = contested
-        ? intensityFromCount(analysis.totalCount)
-        : intensityFromCount(analysis.whiteCount > 0 ? analysis.whiteCount : analysis.blackCount);
+        ? intensityForMode(analysis.totalCount, influenceIntensityMode)
+        : intensityForMode(analysis.whiteCount > 0 ? analysis.whiteCount : analysis.blackCount, influenceIntensityMode);
 
       if (analysis.totalCount === 0 || intensity <= 0) {
         return acc;
@@ -148,7 +154,13 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
       const contributions =
         analysis.whiteCount > 0 ? entry.white.contributions : entry.black.contributions;
       const palette = resolvePieceColor(contributions, colorProfile, analysis.whiteCount > 0 ? 'w' : 'b');
-      const overlayColor = colorForCount(analysis.whiteCount > 0 ? 'white' : 'black', analysis.whiteCount > 0 ? analysis.whiteCount : analysis.blackCount);
+      const overlayColor = colorForInfluence(
+        colorProfile,
+        analysis.whiteCount > 0 ? 'white' : 'black',
+        analysis.whiteCount > 0 ? analysis.whiteCount : analysis.blackCount,
+        influenceIntensityMode,
+        friendlyColor,
+      );
 
       acc.push(
         buildCanvasOverlay({
@@ -253,3 +265,4 @@ const buildCanvasOverlay = ({
     contested: contestedMeta,
   },
 });
+

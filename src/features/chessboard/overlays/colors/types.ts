@@ -44,6 +44,10 @@ export interface HeatmapColorProfileDefinition {
     white: Record<PieceType, PieceColorConfig>;
     black: Record<PieceType, PieceColorConfig>;
   };
+  heatmap: {
+    white: { base: string; target: string };
+    black: { base: string; target: string };
+  };
   contested: ContestedColorConfig;
   check: CheckHighlightConfig;
 }

@@ -7,7 +7,6 @@ import type { ChessPieceDescriptor } from '@/features/chessboard/types';
 import type { HeatmapSchemeId } from '@/features/chessboard/overlays/schemes';
 import { listHeatmapSchemes } from '@/features/chessboard/overlays/schemes';
 import type { HeatmapTraceMode } from '@/features/chessboard/overlays/types';
-import { listColorProfiles, type HeatmapColorProfileId } from '@/features/chessboard/overlays/colors';
 
 interface HeatmapControlsPanelProps {
   toggles: HeatmapToggle[];
@@ -17,14 +16,12 @@ interface HeatmapControlsPanelProps {
   onSchemeChange: (id: HeatmapSchemeId) => void;
   subScheme: HeatmapTraceMode;
   onSubSchemeChange: (mode: HeatmapTraceMode) => void;
-  includeBothSides: boolean;
-  onIncludeBothSidesChange: (value: boolean) => void;
-  colorProfileId: HeatmapColorProfileId;
-  onColorProfileChange: (id: HeatmapColorProfileId) => void;
   checkHighlightsEnabled: boolean;
   onCheckHighlightsChange: (value: boolean) => void;
   showIntensityLabels: boolean;
   onShowIntensityLabelsChange: (value: boolean) => void;
+  influenceIntensityMode: 'gradient' | 'flat';
+  onInfluenceIntensityModeChange: (mode: 'gradient' | 'flat') => void;
 }
 
 export const HeatmapControlsPanel = ({
@@ -35,14 +32,12 @@ export const HeatmapControlsPanel = ({
   onSchemeChange,
   subScheme,
   onSubSchemeChange,
-  includeBothSides,
-  onIncludeBothSidesChange,
-  colorProfileId,
-  onColorProfileChange,
   checkHighlightsEnabled,
   onCheckHighlightsChange,
   showIntensityLabels,
   onShowIntensityLabelsChange,
+  influenceIntensityMode,
+  onInfluenceIntensityModeChange,
 }: HeatmapControlsPanelProps) => {
   const ordered = useMemo(() => {
     const order: ChessPieceDescriptor['type'][] = ['p', 'b', 'n', 'r', 'q', 'k'];
@@ -62,7 +57,6 @@ export const HeatmapControlsPanel = ({
   const selectedScheme = schemeMap.get(schemeId) ?? schemes[0];
   const supportedSubSchemes = selectedScheme?.supportedSubSchemes ?? ['line-of-sight'];
 
-  const colorProfiles = useMemo(() => listColorProfiles(), []);
 
   return (
     <HeatmapTray>
@@ -105,7 +99,9 @@ export const HeatmapControlsPanel = ({
 
         <div className="space-y-3">
           <div>
-            <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Scheme</p>
+            <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+              Contested Scheme
+            </p>
             <div className="flex flex-wrap gap-2">
               {schemes.map((scheme) => {
                 const active = scheme.id === schemeId;
@@ -125,6 +121,35 @@ export const HeatmapControlsPanel = ({
                     title={scheme.description}
                   >
                     {scheme.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+              Influence Fill
+            </p>
+            <div className="flex gap-2">
+              {(['gradient', 'flat'] as const).map((mode) => {
+                const active = influenceIntensityMode === mode;
+                const label = mode === 'gradient' ? 'Gradient' : 'Flat';
+                return (
+                  <button
+                    key={mode}
+                    type="button"
+                    onClick={() => onInfluenceIntensityModeChange(mode)}
+                    className={[
+                      'flex-1 rounded-full px-3 py-1 text-xs font-semibold transition-colors transition-shadow border',
+                      active
+                        ? 'bg-blue-500 text-white border-blue-300 shadow-[0_6px_14px_rgba(59,130,246,0.32)] ring-2 ring-blue-200/60'
+                        : 'bg-slate-800/60 text-slate-200 border-transparent hover:bg-slate-700/70 hover:border-slate-600/60',
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
+                  >
+                    {label}
                   </button>
                 );
               })}
@@ -156,30 +181,7 @@ export const HeatmapControlsPanel = ({
             </div>
           </div>
 
-          <div>
-            <label className="mb-1 block text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400" htmlFor="heatmap-color-profile">
-              Color Profile
-            </label>
-            <select
-              id="heatmap-color-profile"
-              className="w-full rounded-lg border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 focus:border-blue-400 focus:outline-none focus-visible:ring focus-visible:ring-blue-400"
-              value={colorProfileId}
-              onChange={(event) => onColorProfileChange(event.target.value as HeatmapColorProfileId)}
-            >
-              {colorProfiles.map((profile) => (
-                <option key={profile.id} value={profile.id}>
-                  {profile.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
           <div className="space-y-2 rounded-lg border border-slate-800/80 bg-slate-900/40 p-3">
-            <HeatmapOptionSwitch
-              label="Include both sides"
-              checked={includeBothSides}
-              onChange={onIncludeBothSidesChange}
-            />
             <HeatmapOptionSwitch
               label="Check highlights"
               checked={checkHighlightsEnabled}

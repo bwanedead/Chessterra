@@ -24,6 +24,8 @@ export interface HeatmapSettingsState {
   colorOverrides: HeatmapColorOverrides | null;
   checkHighlightsEnabled: boolean;
   showIntensityLabels: boolean;
+  influenceIntensityMode: 'gradient' | 'flat';
+  friendlyColor: 'white' | 'black';
 }
 
 export interface HeatmapSettingsActions {
@@ -38,6 +40,8 @@ export interface HeatmapSettingsActions {
   setColorOverrides(overrides: HeatmapColorOverrides | null): void;
   setCheckHighlightsEnabled(value: boolean): void;
   setShowIntensityLabels(value: boolean): void;
+  setInfluenceIntensityMode(mode: 'gradient' | 'flat'): void;
+  setFriendlyColor(color: 'white' | 'black'): void;
 }
 
 const HeatmapSettingsStateContext = createContext<HeatmapSettingsState | null>(null);
@@ -61,6 +65,8 @@ const createInitialState = (): HeatmapSettingsState => ({
   colorOverrides: null,
   checkHighlightsEnabled: true,
   showIntensityLabels: false,
+  influenceIntensityMode: 'gradient',
+  friendlyColor: 'white',
 });
 
 export const HeatmapSettingsProvider = memo(({ children }: { children: ReactNode }) => {
@@ -124,6 +130,12 @@ export const HeatmapSettingsProvider = memo(({ children }: { children: ReactNode
       },
       setShowIntensityLabels: (value) => {
         setState((prev) => ({ ...prev, showIntensityLabels: value }));
+      },
+      setInfluenceIntensityMode: (mode) => {
+        setState((prev) => ({ ...prev, influenceIntensityMode: mode }));
+      },
+      setFriendlyColor: (color) => {
+        setState((prev) => ({ ...prev, friendlyColor: color }));
       },
     }),
     [],

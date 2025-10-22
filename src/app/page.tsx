@@ -54,6 +54,7 @@ function HomeContent() {
   const [autoDelay, setAutoDelay] = useState(1200);
   const [consoleLines, setConsoleLines] = useState<string[]>(INITIAL_TERMINAL_LINES);
   const [pendingCommand, setPendingCommand] = useState<PendingCommand | null>(null);
+  const [boardOrientation, setBoardOrientation] = useState<'white' | 'black'>('white');
 
   const gameLogger = useMemo(() => createScopedLogger('app/game'), []);
   const layoutLogger = useMemo(() => createScopedLogger('app/layout'), []);
@@ -61,7 +62,18 @@ function HomeContent() {
   const heatmapState = useHeatmapSettingsState();
   const heatmapSchemes = useMemo(() => listHeatmapSchemes(), []);
   const heatmapColorProfiles = useMemo(() => listColorProfiles(), []);
+  
   const formatTraceModeLabel = useCallback((mode: string) => (mode === 'absolute' ? 'Absolute' : 'Line of Sight'), []);
+
+  const handleOrientationToggle = useCallback(() => {
+    setBoardOrientation((previous) => {
+      const next = previous === 'white' ? 'black' : 'white';
+      if (heatmapState.friendlyColor === previous) {
+        heatmapActions.setFriendlyColor(next);
+      }
+      return next;
+    });
+  }, [heatmapActions, heatmapState.friendlyColor]);
 
   const appendConsoleLine = useCallback(
     (line: string) => {
@@ -992,7 +1004,7 @@ function HomeContent() {
       <div ref={logWorkspaceMetrics} className={workspaceStackClass}>
         <HeatmapBoard
           fen={fen}
-          orientation="white"
+          orientation={boardOrientation}
           moveMode={!pendingPromotion}
           boardSize={BOARD_SIZE}
           onMove={handleMove}
@@ -1003,6 +1015,7 @@ function HomeContent() {
           onCancelPromotion={handlePromotionCancel}
           onCanvasModeChange={setIsCanvasExpanded}
           onExpandedAttachmentTargetChange={setCanvasAttachmentHost}
+          onOrientationToggle={handleOrientationToggle}
         />
         <GameTerminal
           moves={moveHistory}
@@ -1035,4 +1048,5 @@ export default function Home() {
     </HeatmapSettingsProvider>
   );
 }
+
 

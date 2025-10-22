@@ -2,9 +2,9 @@ import type { HeatmapSchemeDefinition } from '@/features/chessboard/overlays/sch
 import {
   analyzeSquareInfluence,
   analyzeCanvasInfluence,
-  intensityFromCount,
+  intensityForMode,
   resolvePieceColor,
-  colorForCount,
+  colorForInfluence,
 } from '@/features/chessboard/overlays/schemes/utils';
 
 export const neutralCancelScheme: HeatmapSchemeDefinition = {
@@ -12,7 +12,7 @@ export const neutralCancelScheme: HeatmapSchemeDefinition = {
   label: 'Neutral Cancel',
   description: 'Classic overlay: contested squares clear out, leaving only dominant influences visible.',
   supportedSubSchemes: ['line-of-sight', 'absolute'],
-  render: ({ summary, colorProfile }) => {
+  render: ({ summary, colorProfile, influenceIntensityMode, friendlyColor }) => {
     const analysisMap = new Map<string, ReturnType<typeof analyzeSquareInfluence>>();
     const squares = summary.squares.reduce<Record<string, ReturnType<typeof buildSolidOverlay>>>((acc, square) => {
       const analysis = analyzeSquareInfluence(square);
@@ -36,13 +36,19 @@ export const neutralCancelScheme: HeatmapSchemeDefinition = {
 
       const pieceCount = hasWhite ? analysis.whiteCount : analysis.blackCount;
       const weight = hasWhite ? analysis.whiteWeight : analysis.blackWeight;
-      const intensity = intensityFromCount(pieceCount);
+      const intensity = intensityForMode(pieceCount, influenceIntensityMode);
 
       if (intensity <= 0) {
         return acc;
       }
 
-      const overlayColor = colorForCount(hasWhite ? 'white' : 'black', pieceCount);
+      const overlayColor = colorForInfluence(
+        colorProfile,
+        hasWhite ? 'white' : 'black',
+        pieceCount,
+        influenceIntensityMode,
+        friendlyColor,
+      );
 
       acc[square.square] = buildSolidOverlay({
         color: overlayColor,
@@ -75,13 +81,19 @@ export const neutralCancelScheme: HeatmapSchemeDefinition = {
       );
       const pieceCount = hasWhite ? analysis.whiteCount : analysis.blackCount;
       const weight = hasWhite ? analysis.whiteWeight : analysis.blackWeight;
-      const intensity = intensityFromCount(pieceCount);
+      const intensity = intensityForMode(pieceCount, influenceIntensityMode);
 
       if (intensity <= 0) {
         return acc;
       }
 
-      const overlayColor = colorForCount(hasWhite ? 'white' : 'black', pieceCount);
+      const overlayColor = colorForInfluence(
+        colorProfile,
+        hasWhite ? 'white' : 'black',
+        pieceCount,
+        influenceIntensityMode,
+        friendlyColor,
+      );
 
       acc.push(
         buildCanvasOverlay({

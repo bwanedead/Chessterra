@@ -25,6 +25,8 @@ export interface UseHeatmapOverlayOptions {
   colorProfileId: HeatmapColorProfileId;
   colorOverrides?: HeatmapColorOverrides | null;
   highlightChecks: boolean;
+  influenceIntensityMode: 'gradient' | 'flat';
+  friendlyColor: 'white' | 'black';
 }
 
 export interface HeatmapOverlayOutput {
@@ -47,6 +49,8 @@ export const useHeatmapOverlay = ({
   colorProfileId,
   colorOverrides,
   highlightChecks,
+  influenceIntensityMode,
+  friendlyColor,
 }: UseHeatmapOverlayOptions): HeatmapOverlayOutput => {
   const toggleSet = useMemo(() => new Set(activeToggleIds), [activeToggleIds]);
 
@@ -116,8 +120,20 @@ export const useHeatmapOverlay = ({
       subScheme,
       includeBothSides,
       colorProfile,
+      influenceIntensityMode,
+      friendlyColor,
     });
-  }, [colorProfile, fen, gameState.activePieces, includeBothSides, orientation, scheme, subScheme]);
+  }, [
+    colorProfile,
+    fen,
+    gameState.activePieces,
+    includeBothSides,
+    influenceIntensityMode,
+    friendlyColor,
+    orientation,
+    scheme,
+    subScheme,
+  ]);
 
   const highlightedResult = useMemo(() => {
     const baseSquares = renderResult ? { ...renderResult.squares } : {};

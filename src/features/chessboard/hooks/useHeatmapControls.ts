@@ -42,6 +42,10 @@ export interface HeatmapControls {
   setCheckHighlightsEnabled: (value: boolean) => void;
   showIntensityLabels: boolean;
   setShowIntensityLabels: (value: boolean) => void;
+  influenceIntensityMode: 'gradient' | 'flat';
+  setInfluenceIntensityMode: (mode: 'gradient' | 'flat') => void;
+  friendlyColor: 'white' | 'black';
+  setFriendlyColor: (color: 'white' | 'black') => void;
 }
 
 export const useHeatmapControls = (): HeatmapControls => {
@@ -99,6 +103,10 @@ export const useHeatmapControls = (): HeatmapControls => {
     setCheckHighlightsEnabled: actions.setCheckHighlightsEnabled,
     showIntensityLabels: state.showIntensityLabels,
     setShowIntensityLabels: actions.setShowIntensityLabels,
+    influenceIntensityMode: state.influenceIntensityMode,
+    setInfluenceIntensityMode: actions.setInfluenceIntensityMode,
+    friendlyColor: state.friendlyColor,
+    setFriendlyColor: actions.setFriendlyColor,
   };
 };
 

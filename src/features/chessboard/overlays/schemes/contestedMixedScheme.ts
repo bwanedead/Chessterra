@@ -2,9 +2,9 @@ import type { HeatmapSchemeDefinition } from '@/features/chessboard/overlays/sch
 import {
   analyzeSquareInfluence,
   analyzeCanvasInfluence,
-  intensityFromCount,
+  intensityForMode,
   resolvePieceColor,
-  colorForCount,
+  colorForInfluence,
 } from '@/features/chessboard/overlays/schemes/utils';
 
 const MIN_SEGMENT = 0.05;
@@ -15,7 +15,7 @@ export const contestedMixedScheme: HeatmapSchemeDefinition = {
   description:
     'Shows contested squares as segmented bars that reflect each side’s piece count and dominant influence.',
   supportedSubSchemes: ['line-of-sight', 'absolute'],
-  render: ({ summary, colorProfile }) => {
+  render: ({ summary, colorProfile, influenceIntensityMode, friendlyColor }) => {
     const squareAnalysis = new Map<string, ReturnType<typeof analyzeSquareInfluence>>();
     const squares = summary.squares.reduce<Record<string, ReturnType<typeof buildSquareOverlay>>>((acc, square) => {
       const analysis = analyzeSquareInfluence(square);
@@ -33,8 +33,14 @@ export const contestedMixedScheme: HeatmapSchemeDefinition = {
           analysis.whiteCount > 0 ? 'w' : 'b',
         );
         const pieceCount = analysis.whiteCount > 0 ? analysis.whiteCount : analysis.blackCount;
-        const intensity = intensityFromCount(pieceCount);
-        const overlayColor = colorForCount(analysis.whiteCount > 0 ? 'white' : 'black', pieceCount);
+        const intensity = intensityForMode(pieceCount, influenceIntensityMode);
+        const overlayColor = colorForInfluence(
+          colorProfile,
+          analysis.whiteCount > 0 ? 'white' : 'black',
+          pieceCount,
+          influenceIntensityMode,
+          friendlyColor,
+        );
         acc[square.square] = buildSquareOverlay({
           mode: 'solid',
           color: overlayColor,
@@ -52,9 +58,9 @@ export const contestedMixedScheme: HeatmapSchemeDefinition = {
         return acc;
       }
 
-      const intensity = intensityFromCount(analysis.totalCount);
-      const whiteColor = colorForCount('white', analysis.whiteCount);
-      const blackColor = colorForCount('black', analysis.blackCount);
+      const intensity = intensityForMode(analysis.totalCount, influenceIntensityMode);
+      const whiteColor = colorForInfluence(colorProfile, 'white', analysis.whiteCount, influenceIntensityMode, friendlyColor);
+      const blackColor = colorForInfluence(colorProfile, 'black', analysis.blackCount, influenceIntensityMode, friendlyColor);
 
       acc[square.square] = buildSquareOverlay({
         mode: 'segmented',
@@ -95,8 +101,14 @@ export const contestedMixedScheme: HeatmapSchemeDefinition = {
           analysis.whiteCount > 0 ? 'w' : 'b',
         );
         const pieceCount = analysis.whiteCount > 0 ? analysis.whiteCount : analysis.blackCount;
-        const intensity = intensityFromCount(pieceCount);
-        const overlayColor = colorForCount(analysis.whiteCount > 0 ? 'white' : 'black', pieceCount);
+        const intensity = intensityForMode(pieceCount, influenceIntensityMode);
+        const overlayColor = colorForInfluence(
+          colorProfile,
+          analysis.whiteCount > 0 ? 'white' : 'black',
+          pieceCount,
+          influenceIntensityMode,
+          friendlyColor,
+        );
         acc.push(
           buildCanvasOverlay({
             id: `${entry.fileIndex}:${entry.rankIndex}`,
@@ -119,9 +131,9 @@ export const contestedMixedScheme: HeatmapSchemeDefinition = {
         return acc;
       }
 
-      const intensity = intensityFromCount(analysis.totalCount);
-      const whiteColor = colorForCount('white', analysis.whiteCount);
-      const blackColor = colorForCount('black', analysis.blackCount);
+      const intensity = intensityForMode(analysis.totalCount, influenceIntensityMode);
+      const whiteColor = colorForInfluence(colorProfile, 'white', analysis.whiteCount, influenceIntensityMode, friendlyColor);
+      const blackColor = colorForInfluence(colorProfile, 'black', analysis.blackCount, influenceIntensityMode, friendlyColor);
 
       acc.push(
         buildCanvasOverlay({
@@ -407,3 +419,4 @@ const buildCanvasOverlay = ({
     },
   };
 };
+
