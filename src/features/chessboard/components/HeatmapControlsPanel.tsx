@@ -120,7 +120,7 @@ export const HeatmapControlsPanel = ({
           </div>
 
           <div className={styles.section}>
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
+            <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
               Influence Fill
             </p>
             <button
@@ -137,7 +137,7 @@ export const HeatmapControlsPanel = ({
           </div>
 
           <div className={styles.section}>
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Trace Mode</p>
+            <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Trace Mode</p>
             {supportedSubSchemes.length > 1 ? (
               <button
                 type="button"
