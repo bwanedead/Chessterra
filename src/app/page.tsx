@@ -55,6 +55,7 @@ function HomeContent() {
   const [consoleLines, setConsoleLines] = useState<string[]>(INITIAL_TERMINAL_LINES);
   const [pendingCommand, setPendingCommand] = useState<PendingCommand | null>(null);
   const [boardOrientation, setBoardOrientation] = useState<'white' | 'black'>('white');
+  const previousOrientationRef = useRef<'white' | 'black'>(boardOrientation);
 
   const gameLogger = useMemo(() => createScopedLogger('app/game'), []);
   const layoutLogger = useMemo(() => createScopedLogger('app/layout'), []);
@@ -66,14 +67,8 @@ function HomeContent() {
   const formatTraceModeLabel = useCallback((mode: string) => (mode === 'absolute' ? 'Absolute' : 'Line of Sight'), []);
 
   const handleOrientationToggle = useCallback(() => {
-    setBoardOrientation((previous) => {
-      const next = previous === 'white' ? 'black' : 'white';
-      if (heatmapState.friendlyColor === previous) {
-        heatmapActions.setFriendlyColor(next);
-      }
-      return next;
-    });
-  }, [heatmapActions, heatmapState.friendlyColor]);
+    setBoardOrientation((previous) => (previous === 'white' ? 'black' : 'white'));
+  }, []);
 
   const appendConsoleLine = useCallback(
     (line: string) => {
@@ -943,6 +938,14 @@ function HomeContent() {
       appendConsoleLine('>> Autoplay paused for promotion.');
     }
   }, [appendConsoleLine, isAutoPlaying, pendingPromotion]);
+
+  useEffect(() => {
+    const previous = previousOrientationRef.current;
+    if (previous !== boardOrientation && heatmapState.friendlyColor === previous) {
+      heatmapActions.setFriendlyColor(boardOrientation);
+    }
+    previousOrientationRef.current = boardOrientation;
+  }, [boardOrientation, heatmapActions, heatmapState.friendlyColor]);
 
   const terminalMargin = isCanvasExpanded ? 0 : 32;
   const workspaceStackClass = [

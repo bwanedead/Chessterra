@@ -110,7 +110,6 @@ const HeatmapBoardContent = ({
   const diagnosticsLogger = useMemo(() => createScopedLogger('chessboard/expanded-stage'), []);
   const lastViewportSizeRef = useRef<{ width: number; height: number } | null>(null);
   const attachmentZoneRef = useRef<HTMLDivElement | null>(null);
-  const friendlyOverlayLabel = controls.friendlyColor === 'white' ? 'White Side' : 'Black Side';
   const sharedBubbleClass = [controlStackStyles.controlButton, 'w-full'].join(' ');
   const orientationBubbleClass = [sharedBubbleClass, 'disabled:cursor-not-allowed', 'disabled:opacity-50']
     .filter(Boolean)
@@ -470,11 +469,8 @@ const HeatmapBoardContent = ({
               label="Swap Color"
               onClick={handleSwapOverlayColors}
               className={sharedBubbleClass}
-              aria-label={`Swap overlay focus color (currently ${friendlyOverlayLabel})`}
+              aria-label="Swap overlay focus color"
             />
-            <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-slate-400/80">
-              Overlay Focus: <span className="text-slate-100">{friendlyOverlayLabel}</span>
-            </p>
           </CanvasChrome>
           <div ref={attachmentZoneRef} className={styles.expandedAttachments} data-attachment-zone />
         </div>
@@ -536,11 +532,8 @@ const HeatmapBoardContent = ({
               label="Swap Color"
               onClick={handleSwapOverlayColors}
               className={sharedBubbleClass}
-              aria-label={`Swap overlay focus color (currently ${friendlyOverlayLabel})`}
+              aria-label="Swap overlay focus color"
             />
-            <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-slate-400/80">
-              Overlay Focus: <span className="text-slate-100">{friendlyOverlayLabel}</span>
-            </p>
           </CanvasChrome>
         </div>
       </div>

@@ -60,8 +60,8 @@ export const HeatmapControlsPanel = ({
 
   return (
     <HeatmapTray>
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col items-center gap-3">
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col items-center gap-4">
           <div className="flex items-start justify-center gap-[0.6rem]">
             <HeatmapToggleColumn
               toggles={ordered.black}
@@ -97,12 +97,12 @@ export const HeatmapControlsPanel = ({
           </button>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-5">
           <div>
-            <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
               Contested Scheme
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-col gap-3">
               {schemes.map((scheme) => {
                 const active = scheme.id === schemeId;
                 return (
@@ -113,8 +113,8 @@ export const HeatmapControlsPanel = ({
                     className={[
                       'rounded-full px-3 py-1 text-xs font-semibold transition-colors transition-shadow border',
                       active
-                        ? 'bg-blue-500 text-white border-blue-300 shadow-[0_8px_18px_rgba(59,130,246,0.35)] ring-2 ring-blue-200/70'
-                        : 'bg-slate-800/60 text-slate-200 border-transparent hover:bg-slate-700/70 hover:border-slate-600/60',
+                        ? 'bg-blue-500 text-white border-blue-200 shadow-[0_8px_20px_rgba(59,130,246,0.35)] outline outline-2 outline-blue-100 ring-2 ring-blue-200/80'
+                        : 'bg-slate-800/60 text-slate-200 border-slate-700/40 hover:bg-slate-700/70 hover:border-slate-500/60',
                     ]
                       .filter(Boolean)
                       .join(' ')}
@@ -128,60 +128,42 @@ export const HeatmapControlsPanel = ({
           </div>
 
           <div>
-            <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
               Influence Fill
             </p>
-            <div className="flex gap-2">
-              {(['gradient', 'flat'] as const).map((mode) => {
-                const active = influenceIntensityMode === mode;
-                const label = mode === 'gradient' ? 'Gradient' : 'Flat';
-                return (
-                  <button
-                    key={mode}
-                    type="button"
-                    onClick={() => onInfluenceIntensityModeChange(mode)}
-                    className={[
-                      'flex-1 rounded-full px-3 py-1 text-xs font-semibold transition-colors transition-shadow border',
-                      active
-                        ? 'bg-blue-500 text-white border-blue-300 shadow-[0_6px_14px_rgba(59,130,246,0.32)] ring-2 ring-blue-200/60'
-                        : 'bg-slate-800/60 text-slate-200 border-transparent hover:bg-slate-700/70 hover:border-slate-600/60',
-                    ]
-                      .filter(Boolean)
-                      .join(' ')}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
-            </div>
+            <button
+              type="button"
+              onClick={() =>
+                onInfluenceIntensityModeChange(influenceIntensityMode === 'gradient' ? 'flat' : 'gradient')
+              }
+              className={[
+                'w-full rounded-full border border-slate-700/60 bg-slate-800/60 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-200 transition hover:border-slate-500 hover:bg-slate-700/70',
+              ].join(' ')}
+            >
+              Use {influenceIntensityMode === 'gradient' ? 'Flat' : 'Gradient'}
+            </button>
           </div>
 
-          <div>
-            <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Trace Mode</p>
-            <div className="flex gap-2">
-              {supportedSubSchemes.map((mode) => {
-                const active = mode === subScheme;
-                const label = mode === 'line-of-sight' ? 'Line of Sight' : 'Absolute';
-                return (
-                  <button
-                    key={mode}
-                    type="button"
-                    onClick={() => onSubSchemeChange(mode)}
-                    className={[
-                      'flex-1 rounded-full px-3 py-1 text-xs font-semibold transition-colors',
-                      active ? 'bg-blue-500 text-white shadow-sm' : 'bg-slate-800/60 text-slate-200 hover:bg-slate-700/70',
-                    ]
-                      .filter(Boolean)
-                      .join(' ')}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
-            </div>
+          <div className="space-y-3">
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Trace Mode</p>
+            {supportedSubSchemes.length > 1 ? (
+              <button
+                type="button"
+                onClick={() =>
+                  onSubSchemeChange(subScheme === 'line-of-sight' ? 'absolute' : 'line-of-sight')
+                }
+                className="w-full rounded-full border border-slate-700/60 bg-slate-800/60 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-200 transition hover:border-slate-500 hover:bg-slate-700/70"
+              >
+                Switch to {subScheme === 'line-of-sight' ? 'Absolute' : 'Line of Sight'}
+              </button>
+            ) : (
+              <div className="rounded-full border border-slate-800/60 bg-slate-900/40 px-4 py-2 text-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">
+                Mode: {subScheme === 'line-of-sight' ? 'Line of Sight' : 'Absolute'}
+              </div>
+            )}
           </div>
 
-          <div className="space-y-2 rounded-lg border border-slate-800/80 bg-slate-900/40 p-3">
+          <div className="mt-4 space-y-3 rounded-lg border border-slate-800/80 bg-slate-900/40 p-4">
             <HeatmapOptionSwitch
               label="Check highlights"
               checked={checkHighlightsEnabled}
