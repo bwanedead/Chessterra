@@ -11,7 +11,8 @@ import { useHeatmapOverlay, type HeatmapOverlayOutput } from '@/features/chessbo
 import { useLayerDiagnostics } from '@/features/chessboard/hooks/useLayerDiagnostics';
 import { createScopedLogger, layoutDebugEnabled } from '@/shared/utils/logger';
 import type { PieceColor, PromotionPieceType } from '@/features/chessboard/types';
-import { listColorProfiles, type HeatmapColorProfileId } from '@/features/chessboard/overlays/colors';
+import controlStackStyles from './ControlStack.module.css';
+import { BubbleButton } from './controls/BubbleButton';
 
 interface HeatmapBoardProps {
   fen: string;
@@ -109,10 +110,20 @@ const HeatmapBoardContent = ({
   const diagnosticsLogger = useMemo(() => createScopedLogger('chessboard/expanded-stage'), []);
   const lastViewportSizeRef = useRef<{ width: number; height: number } | null>(null);
   const attachmentZoneRef = useRef<HTMLDivElement | null>(null);
-  const colorProfiles = useMemo(() => listColorProfiles(), []);
+  const friendlyOverlayLabel = controls.friendlyColor === 'white' ? 'White Side' : 'Black Side';
+  const sharedBubbleClass = [controlStackStyles.controlButton, 'w-full'].join(' ');
+  const orientationBubbleClass = [sharedBubbleClass, 'disabled:cursor-not-allowed', 'disabled:opacity-50']
+    .filter(Boolean)
+    .join(' ');
 
   const handleSwapOverlayColors = () =>
     controls.setFriendlyColor(controls.friendlyColor === 'white' ? 'black' : 'white');
+  const handleOrientationClick = () => {
+    if (!onOrientationToggle) {
+      return;
+    }
+    onOrientationToggle();
+  };
 
   useEffect(() => {
     onCanvasModeChange?.(isExpanded);
@@ -413,8 +424,13 @@ const HeatmapBoardContent = ({
               schemeId={controls.schemeId}
               onSchemeChange={controls.setSchemeId}
               subScheme={controls.subScheme}
-              onSubSchemeChange={controls.setSubScheme}              checkHighlightsEnabled={controls.checkHighlightsEnabled}
+              onSubSchemeChange={controls.setSubScheme}
+              checkHighlightsEnabled={controls.checkHighlightsEnabled}
               onCheckHighlightsChange={controls.setCheckHighlightsEnabled}
+              showIntensityLabels={controls.showIntensityLabels}
+              onShowIntensityLabelsChange={controls.setShowIntensityLabels}
+              influenceIntensityMode={controls.influenceIntensityMode}
+              onInfluenceIntensityModeChange={controls.setInfluenceIntensityMode}
             />
           </CanvasChrome>
           <div className={styles.expandedBoardArea}>
@@ -432,48 +448,33 @@ const HeatmapBoardContent = ({
               {boardElement}
             </div>
           </div>
-          <CanvasChrome className={`${styles.expandedChrome} ${styles.expandedChromeRight}`}>
+          <CanvasChrome className={`${styles.expandedChrome} ${styles.expandedChromeRight} items-stretch`}>
             <NormalizeBoardButton
               normalized={controls.normalizedBoard}
               onToggleNormalized={controls.setNormalizedBoard}
+              className={sharedBubbleClass}
             />
-            <ExpandCanvasToggle />
-            <PiecesVisibilityButton showPieces={controls.showPieces} onToggleShowPieces={controls.setShowPieces} />
-          </CanvasChrome>
-          <CanvasChrome className={`${styles.expandedChrome} ${styles.expandedChromeRight} mt-3 flex flex-col gap-3`}>
-            <button
-              type="button"
-              onClick={onOrientationToggle}
-              className="w-full rounded-lg border border-slate-700/70 bg-slate-900/70 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-100 transition hover:border-blue-400 hover:text-white disabled:cursor-not-allowed disabled:border-slate-800 disabled:text-slate-500"
+            <ExpandCanvasToggle className={sharedBubbleClass} />
+            <PiecesVisibilityButton
+              showPieces={controls.showPieces}
+              onToggleShowPieces={controls.setShowPieces}
+              className={sharedBubbleClass}
+            />
+            <BubbleButton
+              label="Flip Board"
+              onClick={handleOrientationClick}
               disabled={!onOrientationToggle}
-            >
-              Flip Board
-            </button>
-            <button
-              type="button"
+              className={orientationBubbleClass}
+            />
+            <BubbleButton
+              label="Swap Color"
               onClick={handleSwapOverlayColors}
-              className="w-full rounded-lg border border-slate-700/70 bg-slate-900/70 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-100 transition hover:border-blue-400 hover:text-white"
-            >
-              {controls.friendlyColor === 'white' ? 'Blue overlays: White side' : 'Blue overlays: Black side'}
-            </button>
-            <label
-              className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400"
-              htmlFor="heatmap-color-profile-expanded"
-            >
-              Color Profile
-            </label>
-            <select
-              id="heatmap-color-profile-expanded"
-              className="w-full rounded-lg border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 focus:border-blue-400 focus:outline-none focus-visible:ring focus-visible:ring-blue-400"
-              value={controls.colorProfileId}
-              onChange={(event) => controls.setColorProfileId(event.target.value as HeatmapColorProfileId)}
-            >
-              {colorProfiles.map((profile) => (
-                <option key={profile.id} value={profile.id}>
-                  {profile.label}
-                </option>
-              ))}
-            </select>
+              className={sharedBubbleClass}
+              aria-label={`Swap overlay focus color (currently ${friendlyOverlayLabel})`}
+            />
+            <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-slate-400/80">
+              Overlay Focus: <span className="text-slate-100">{friendlyOverlayLabel}</span>
+            </p>
           </CanvasChrome>
           <div ref={attachmentZoneRef} className={styles.expandedAttachments} data-attachment-zone />
         </div>
@@ -505,56 +506,41 @@ const HeatmapBoardContent = ({
               influenceIntensityMode={controls.influenceIntensityMode}
               onInfluenceIntensityModeChange={controls.setInfluenceIntensityMode}
             />
-        </CanvasChrome>
-      </div>
+          </CanvasChrome>
+        </div>
 
         <div ref={boardShellRef} className={styles.boardShell} data-testid="heatmap-board-shell">
           <div className={styles.boardShellInner}>{boardElement}</div>
         </div>
 
         <div className={styles.boardAuxZone}>
-          <CanvasChrome className="items-start">
+          <CanvasChrome className="items-stretch">
             <NormalizeBoardButton
               normalized={controls.normalizedBoard}
               onToggleNormalized={controls.setNormalizedBoard}
+              className={sharedBubbleClass}
             />
-            <ExpandCanvasToggle />
-            <PiecesVisibilityButton showPieces={controls.showPieces} onToggleShowPieces={controls.setShowPieces} />
-          </CanvasChrome>
-          <CanvasChrome className="mt-3 flex flex-col gap-3">
-            <button
-              type="button"
-              onClick={onOrientationToggle}
-              className="w-full rounded-lg border border-slate-700/70 bg-slate-900/70 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-100 transition hover:border-blue-400 hover:text-white disabled:cursor-not-allowed disabled:border-slate-800 disabled:text-slate-500"
+            <ExpandCanvasToggle className={sharedBubbleClass} />
+            <PiecesVisibilityButton
+              showPieces={controls.showPieces}
+              onToggleShowPieces={controls.setShowPieces}
+              className={sharedBubbleClass}
+            />
+            <BubbleButton
+              label="Flip Board"
+              onClick={handleOrientationClick}
               disabled={!onOrientationToggle}
-            >
-              Flip Board
-            </button>
-            <button
-              type="button"
+              className={orientationBubbleClass}
+            />
+            <BubbleButton
+              label="Swap Color"
               onClick={handleSwapOverlayColors}
-              className="w-full rounded-lg border border-slate-700/70 bg-slate-900/70 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-100 transition hover:border-blue-400 hover:text-white"
-            >
-              {controls.friendlyColor === 'white' ? 'Blue overlays: White side' : 'Blue overlays: Black side'}
-            </button>
-            <label
-              className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400"
-              htmlFor="heatmap-color-profile"
-            >
-              Color Profile
-            </label>
-            <select
-              id="heatmap-color-profile"
-              className="w-full rounded-lg border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 focus:border-blue-400 focus:outline-none focus-visible:ring focus-visible:ring-blue-400"
-              value={controls.colorProfileId}
-              onChange={(event) => controls.setColorProfileId(event.target.value as HeatmapColorProfileId)}
-            >
-              {colorProfiles.map((profile) => (
-                <option key={profile.id} value={profile.id}>
-                  {profile.label}
-                </option>
-              ))}
-            </select>
+              className={sharedBubbleClass}
+              aria-label={`Swap overlay focus color (currently ${friendlyOverlayLabel})`}
+            />
+            <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-slate-400/80">
+              Overlay Focus: <span className="text-slate-100">{friendlyOverlayLabel}</span>
+            </p>
           </CanvasChrome>
         </div>
       </div>

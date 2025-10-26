@@ -3,7 +3,8 @@
 }
 
 .controlButton {
-  width: 10.75rem;
+  width: 100%;
+  max-width: 11.5rem;
   text-align: center;
   white-space: normal;
   letter-spacing: 0.18em;
