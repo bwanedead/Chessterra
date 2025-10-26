@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
+import styles from './HeatmapControlsPanel.module.css';
 import type { HeatmapToggle } from '@/features/chessboard/hooks/useHeatmapControls';
 import { HeatmapTray } from '@/features/chessboard/components/heatmap/HeatmapTray';
 import { HeatmapToggleColumn } from '@/features/chessboard/components/heatmap/HeatmapToggleColumn';
-import { HeatmapOptionSwitch } from '@/features/chessboard/components/heatmap/HeatmapOptionSwitch';
 import type { ChessPieceDescriptor } from '@/features/chessboard/types';
 import type { HeatmapSchemeId } from '@/features/chessboard/overlays/schemes';
 import { listHeatmapSchemes } from '@/features/chessboard/overlays/schemes';
@@ -16,10 +16,6 @@ interface HeatmapControlsPanelProps {
   onSchemeChange: (id: HeatmapSchemeId) => void;
   subScheme: HeatmapTraceMode;
   onSubSchemeChange: (mode: HeatmapTraceMode) => void;
-  checkHighlightsEnabled: boolean;
-  onCheckHighlightsChange: (value: boolean) => void;
-  showIntensityLabels: boolean;
-  onShowIntensityLabelsChange: (value: boolean) => void;
   influenceIntensityMode: 'gradient' | 'flat';
   onInfluenceIntensityModeChange: (mode: 'gradient' | 'flat') => void;
 }
@@ -32,10 +28,6 @@ export const HeatmapControlsPanel = ({
   onSchemeChange,
   subScheme,
   onSubSchemeChange,
-  checkHighlightsEnabled,
-  onCheckHighlightsChange,
-  showIntensityLabels,
-  onShowIntensityLabelsChange,
   influenceIntensityMode,
   onInfluenceIntensityModeChange,
 }: HeatmapControlsPanelProps) => {
@@ -102,7 +94,7 @@ export const HeatmapControlsPanel = ({
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
               Contested Scheme
             </p>
-            <div className="flex flex-col gap-3">
+            <div className={styles.schemes}>
               {schemes.map((scheme) => {
                 const active = scheme.id === schemeId;
                 return (
@@ -127,7 +119,7 @@ export const HeatmapControlsPanel = ({
             </div>
           </div>
 
-          <div>
+          <div className={styles.section}>
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
               Influence Fill
             </p>
@@ -144,7 +136,7 @@ export const HeatmapControlsPanel = ({
             </button>
           </div>
 
-          <div className="space-y-3">
+          <div className={styles.section}>
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Trace Mode</p>
             {supportedSubSchemes.length > 1 ? (
               <button
@@ -161,19 +153,6 @@ export const HeatmapControlsPanel = ({
                 Mode: {subScheme === 'line-of-sight' ? 'Line of Sight' : 'Absolute'}
               </div>
             )}
-          </div>
-
-          <div className="mt-4 space-y-3 rounded-lg border border-slate-800/80 bg-slate-900/40 p-4">
-            <HeatmapOptionSwitch
-              label="Check highlights"
-              checked={checkHighlightsEnabled}
-              onChange={onCheckHighlightsChange}
-            />
-            <HeatmapOptionSwitch
-              label="Show intensity numbers"
-              checked={showIntensityLabels}
-              onChange={onShowIntensityLabelsChange}
-            />
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ import { createScopedLogger, layoutDebugEnabled } from '@/shared/utils/logger';
 import type { PieceColor, PromotionPieceType } from '@/features/chessboard/types';
 import controlStackStyles from './ControlStack.module.css';
 import { BubbleButton } from './controls/BubbleButton';
+import { HeatmapOptionSwitch } from './heatmap/HeatmapOptionSwitch';
 
 interface HeatmapBoardProps {
   fen: string;
@@ -114,6 +115,20 @@ const HeatmapBoardContent = ({
   const orientationBubbleClass = [sharedBubbleClass, 'disabled:cursor-not-allowed', 'disabled:opacity-50']
     .filter(Boolean)
     .join(' ');
+  const overlayOptionsCard = (
+    <div className="mt-4 w-full space-y-3 rounded-lg border border-slate-800/80 bg-slate-900/40 p-4">
+      <HeatmapOptionSwitch
+        label="Check highlights"
+        checked={controls.checkHighlightsEnabled}
+        onChange={controls.setCheckHighlightsEnabled}
+      />
+      <HeatmapOptionSwitch
+        label="Show intensity numbers"
+        checked={controls.showIntensityLabels}
+        onChange={controls.setShowIntensityLabels}
+      />
+    </div>
+  );
 
   const handleSwapOverlayColors = () =>
     controls.setFriendlyColor(controls.friendlyColor === 'white' ? 'black' : 'white');
@@ -424,10 +439,6 @@ const HeatmapBoardContent = ({
               onSchemeChange={controls.setSchemeId}
               subScheme={controls.subScheme}
               onSubSchemeChange={controls.setSubScheme}
-              checkHighlightsEnabled={controls.checkHighlightsEnabled}
-              onCheckHighlightsChange={controls.setCheckHighlightsEnabled}
-              showIntensityLabels={controls.showIntensityLabels}
-              onShowIntensityLabelsChange={controls.setShowIntensityLabels}
               influenceIntensityMode={controls.influenceIntensityMode}
               onInfluenceIntensityModeChange={controls.setInfluenceIntensityMode}
             />
@@ -471,6 +482,7 @@ const HeatmapBoardContent = ({
               className={sharedBubbleClass}
               aria-label="Swap overlay focus color"
             />
+            {overlayOptionsCard}
           </CanvasChrome>
           <div ref={attachmentZoneRef} className={styles.expandedAttachments} data-attachment-zone />
         </div>
@@ -495,10 +507,6 @@ const HeatmapBoardContent = ({
               onSchemeChange={controls.setSchemeId}
               subScheme={controls.subScheme}
               onSubSchemeChange={controls.setSubScheme}
-              checkHighlightsEnabled={controls.checkHighlightsEnabled}
-              onCheckHighlightsChange={controls.setCheckHighlightsEnabled}
-              showIntensityLabels={controls.showIntensityLabels}
-              onShowIntensityLabelsChange={controls.setShowIntensityLabels}
               influenceIntensityMode={controls.influenceIntensityMode}
               onInfluenceIntensityModeChange={controls.setInfluenceIntensityMode}
             />
@@ -534,6 +542,7 @@ const HeatmapBoardContent = ({
               className={sharedBubbleClass}
               aria-label="Swap overlay focus color"
             />
+            {overlayOptionsCard}
           </CanvasChrome>
         </div>
       </div>

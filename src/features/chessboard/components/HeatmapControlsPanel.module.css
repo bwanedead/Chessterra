@@ -1,0 +1,11 @@
+.schemes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
