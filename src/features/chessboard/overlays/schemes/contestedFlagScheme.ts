@@ -34,10 +34,12 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
       }
 
       if (contested) {
-        const flagColor = lightenHex(colorProfile.contested.flag, Math.min(0.6, 0.25 + intensity * 0.4));
+        // Use a high-visibility yellow for contested flags regardless of theme
+        const flagColor = '#ffff00';
+        const visibleIntensity = Math.max(0.85, intensity);
         acc[square.square] = buildFlagOverlay({
           color: flagColor,
-          intensity,
+          intensity: visibleIntensity,
           dominant: 'tie',
           weight: analysis.totalWeight,
           count: analysis.totalCount,
@@ -46,7 +48,7 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
             whiteContributors: analysis.whiteCount,
             blackContributors: analysis.blackCount,
           },
-          glowColor: colorProfile.contested.glow,
+          glowColor: colorProfile.contested.glow ?? '#fff176',
           label: `${analysis.whiteCount}/${analysis.blackCount}`,
         });
         return acc;
