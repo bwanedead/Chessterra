@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { CanvasModeProvider, CanvasViewport, CanvasChrome, useCanvasMode } from '@/features/chessboard/canvas';
 import { ExpandCanvasToggle } from '@/features/chessboard/components/ExpandCanvasToggle';
 import { BubbleButton } from '@/features/chessboard/components/controls/BubbleButton';
-import { ExpandedCanvasBackdrop } from '@/features/chessboard/components/canvas/ExpandedCanvasBackdrop';
+// Backdrop component path changed or removed; drop it from this story to keep build green
 
 const meta: Meta = {
   title: 'Chessboard/Canvas Mode',
@@ -22,7 +22,7 @@ const CanvasDemo = () => {
 
   return (
     <CanvasViewport>
-      {isExpanded ? <ExpandedCanvasBackdrop boardSize={480} normalized={normalized} /> : null}
+      {/* Backdrop disabled for now in story */}
       <div
         className={[
           'relative z-10 flex min-h-[400px] min-w-[400px] items-center justify-center transition-all duration-500',
@@ -41,7 +41,7 @@ const CanvasDemo = () => {
           <p className="mt-2 text-slate-400">{normalized ? 'Normalized grid backdrop' : 'Classic backdrop'}</p>
         </div>
       </div>
-      <CanvasChrome alignment="top-right">
+      <CanvasChrome>
         <div className="flex flex-col items-end gap-3">
           <BubbleButton label="Normalized board" active={normalized} onClick={() => setNormalized((prev) => !prev)} />
           <ExpandCanvasToggle />

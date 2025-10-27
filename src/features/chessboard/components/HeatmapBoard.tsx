@@ -1,4 +1,5 @@
 import { forwardRef, memo, useEffect, useMemo, useRef } from 'react';
+import type React from 'react';
 import styles from './BoardWorkspaceLayout.module.css';
 import { CustomChessboard } from '@/features/chessboard/components/CustomChessboard';
 import { HeatmapControlsPanel } from '@/features/chessboard/components/HeatmapControlsPanel';
@@ -411,10 +412,10 @@ const HeatmapBoardContent = ({
       ['--canvas-offset' as const]: `${coreOffset}px`,
       ['--board-size' as const]: `${boardSize}px`,
       ['--canvas-vertical-compensation' as const]: `${verticalCompensation}px`,
-    };
+    } as React.CSSProperties;
     const viewportVars = {
-      ['--canvas-viewport-padding' as const]: `${viewportPadding}px`,
-    };
+      ['--canvas-viewport-padding' as string]: `${viewportPadding}px`,
+    } as unknown as React.CSSProperties;
     if (layoutDebugEnabled) {
       diagnosticsLogger.debug('expanded-layout-vars', {
         squareSize,
@@ -490,12 +491,16 @@ const HeatmapBoardContent = ({
     );
   }
 
+  const layoutVars = {
+    ['--board-shell-width' as string]: `${boardSize}px`,
+  } as unknown as React.CSSProperties;
+
   return (
     <CanvasViewport>
       <div
         ref={layoutRef}
         className={styles.layout}
-        style={{ ['--board-shell-width' as const]: `${boardSize}px` }}
+        style={layoutVars}
       >
         <div ref={trayRef} className={styles.trayZone} data-testid="heatmap-tray-zone">
           <CanvasChrome>

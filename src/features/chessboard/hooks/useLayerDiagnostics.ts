@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import type { LoggerApi } from '@/shared/utils/logger';
 
-interface UseLayerDiagnosticsParams {
-  ref: React.RefObject<HTMLElement>;
+interface UseLayerDiagnosticsParams<T extends HTMLElement = HTMLElement> {
+  ref: React.RefObject<T | null>;
   logger: LoggerApi;
   label: string;
   enabled?: boolean;
@@ -12,7 +12,7 @@ interface UseLayerDiagnosticsParams {
   extra?: () => Record<string, unknown> | void;
 }
 
-export const useLayerDiagnostics = ({
+export const useLayerDiagnostics = <T extends HTMLElement = HTMLElement>({
   ref,
   logger,
   label,
@@ -21,7 +21,7 @@ export const useLayerDiagnostics = ({
   sampleChildren = false,
   sampleLimit = 6,
   extra,
-}: UseLayerDiagnosticsParams) => {
+}: UseLayerDiagnosticsParams<T>) => {
   useEffect(() => {
     if (!enabled) {
       return;

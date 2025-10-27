@@ -34,7 +34,7 @@ export const CanvasViewport = ({ children, className, style }: CanvasViewportPro
   const diagnosticsEnabled = layoutDebugEnabled;
   const logger = useMemo(() => createScopedLogger('chessboard/canvas-viewport'), []);
 
-  useLayerDiagnostics({
+  useLayerDiagnostics<HTMLDivElement>({
     ref: containerRef,
     logger,
     label: 'viewport',

@@ -1,4 +1,4 @@
-import type { HeatmapSchemeDefinition } from '@/features/chessboard/overlays/schemes/types';
+import type { HeatmapSchemeDefinition, SquareOverlayDescriptor } from '@/features/chessboard/overlays/schemes/types';
 import {
   analyzeSquareInfluence,
   analyzeCanvasInfluence,
@@ -14,7 +14,7 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
   description: 'Marks every contested square with a dedicated highlight so ambiguity disappears.',
   supportedSubSchemes: ['line-of-sight', 'absolute'],
   render: ({ summary, colorProfile, influenceIntensityMode, friendlyColor }) => {
-    const squares = summary.squares.reduce<Record<string, ReturnType<typeof buildSquareOverlay>>>((acc, square) => {
+    const squares = summary.squares.reduce<Record<string, SquareOverlayDescriptor>>((acc, square) => {
       const analysis = analyzeSquareInfluence(square);
       const contested = analysis.whiteCount > 0 && analysis.blackCount > 0;
       const dominantColor = contested
@@ -35,30 +35,20 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
 
       if (contested) {
         const flagColor = lightenHex(colorProfile.contested.flag, Math.min(0.6, 0.25 + intensity * 0.4));
-        acc[square.square] = {
-          style: {
-            kind: 'flag',
-            color: flagColor,
-            intensity,
-            glow: colorProfile.contested.glow
-              ? {
-                  color: colorProfile.contested.glow,
-                  strength: 0.55,
-                }
-              : undefined,
-            label: `${analysis.whiteCount}/${analysis.blackCount}`,
+        acc[square.square] = buildFlagOverlay({
+          color: flagColor,
+          intensity,
+          dominant: 'tie',
+          weight: analysis.totalWeight,
+          count: analysis.totalCount,
+          contested: {
+            totalContributors: analysis.totalCount,
+            whiteContributors: analysis.whiteCount,
+            blackContributors: analysis.blackCount,
           },
-          meta: {
-            dominantColor: 'tie',
-            weight: analysis.totalWeight,
-            count: analysis.totalCount,
-            contested: {
-              totalContributors: analysis.totalCount,
-              whiteContributors: analysis.whiteCount,
-              blackContributors: analysis.blackCount,
-            },
-          },
-        };
+          glowColor: colorProfile.contested.glow,
+          label: `${analysis.whiteCount}/${analysis.blackCount}`,
+        });
         return acc;
       }
 
@@ -73,29 +63,19 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
         friendlyColor,
       );
 
-      acc[square.square] = {
-        style: {
-          kind: 'solid',
-          color: overlayColor,
-          intensity,
-          glow: palette.accent
-            ? {
-                color: palette.accent,
-                strength: 0.45,
-              }
-            : undefined,
+      acc[square.square] = buildSolidOverlay({
+        color: overlayColor,
+        glowColor: palette.accent,
+        intensity,
+        dominant: dominantColor === 'tie' ? 'white' : dominantColor, // tie won't be used here
+        weight: analysis.totalWeight,
+        count: analysis.totalCount,
+        contested: {
+          totalContributors: analysis.totalCount,
+          whiteContributors: analysis.whiteCount,
+          blackContributors: analysis.blackCount,
         },
-        meta: {
-          dominantColor,
-          weight: analysis.totalWeight,
-          count: analysis.totalCount,
-          contested: {
-            totalContributors: analysis.totalCount,
-            whiteContributors: analysis.whiteCount,
-            blackContributors: analysis.blackCount,
-          },
-        },
-      };
+      });
 
       return acc;
     }, {});
@@ -221,6 +201,89 @@ export const contestedFlagScheme: HeatmapSchemeDefinition = {
     };
   },
 };
+
+const buildSolidOverlay = ({
+  color,
+  glowColor,
+  intensity,
+  dominant,
+  weight,
+  count,
+  contested,
+}: {
+  color: string;
+  glowColor?: string;
+  intensity: number;
+  dominant: 'white' | 'black';
+  weight: number;
+  count: number;
+  contested?: {
+    totalContributors: number;
+    whiteContributors: number;
+    blackContributors: number;
+  };
+}) => ({
+  style: {
+    kind: 'solid' as const,
+    color,
+    intensity,
+    glow: glowColor
+      ? {
+          color: glowColor,
+          strength: 0.45,
+        }
+      : undefined,
+  },
+  meta: {
+    dominantColor: dominant,
+    weight,
+    count,
+    contested,
+  },
+});
+
+const buildFlagOverlay = ({
+  color,
+  glowColor,
+  intensity,
+  label,
+  dominant,
+  weight,
+  count,
+  contested,
+}: {
+  color: string;
+  glowColor?: string;
+  intensity: number;
+  label?: string;
+  dominant: 'white' | 'black' | 'tie';
+  weight: number;
+  count: number;
+  contested?: {
+    totalContributors: number;
+    whiteContributors: number;
+    blackContributors: number;
+  };
+}) => ({
+  style: {
+    kind: 'flag' as const,
+    color,
+    intensity,
+    glow: glowColor
+      ? {
+          color: glowColor,
+          strength: 0.55,
+        }
+      : undefined,
+    label,
+  },
+  meta: {
+    dominantColor: dominant,
+    weight,
+    count,
+    contested,
+  },
+});
 
 const buildCanvasOverlay = ({
   id,

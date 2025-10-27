@@ -1,4 +1,8 @@
-import type { HeatmapSchemeDefinition } from '@/features/chessboard/overlays/schemes/types';
+import type {
+  HeatmapSchemeDefinition,
+  SquareOverlayDescriptor,
+  CanvasOverlayDescriptor,
+} from '@/features/chessboard/overlays/schemes/types';
 import {
   analyzeSquareInfluence,
   analyzeCanvasInfluence,
@@ -17,7 +21,7 @@ export const contestedMixedScheme: HeatmapSchemeDefinition = {
   supportedSubSchemes: ['line-of-sight', 'absolute'],
   render: ({ summary, colorProfile, influenceIntensityMode, friendlyColor }) => {
     const squareAnalysis = new Map<string, ReturnType<typeof analyzeSquareInfluence>>();
-    const squares = summary.squares.reduce<Record<string, ReturnType<typeof buildSquareOverlay>>>((acc, square) => {
+    const squares = summary.squares.reduce<Record<string, SquareOverlayDescriptor>>((acc, square) => {
       const analysis = analyzeSquareInfluence(square);
       squareAnalysis.set(square.square, analysis);
       if (analysis.totalCount === 0) {
@@ -86,7 +90,7 @@ export const contestedMixedScheme: HeatmapSchemeDefinition = {
       return acc;
     }, {});
 
-    const canvas = summary.canvasSquares.reduce<ReturnType<typeof buildCanvasOverlay>[]>((acc, entry) => {
+    const canvas = summary.canvasSquares.reduce<CanvasOverlayDescriptor[]>((acc, entry) => {
       const analysis = analyzeCanvasInfluence(entry);
       if (analysis.totalCount === 0) {
         return acc;
@@ -177,9 +181,9 @@ export const contestedMixedScheme: HeatmapSchemeDefinition = {
           }
           const breakdown = squareAnalysis.get(id);
           const whiteCount =
-            breakdown?.whiteCount ?? overlay.meta.contested.whiteContributors ?? 0;
+            breakdown?.whiteCount ?? overlay.meta?.contested?.whiteContributors ?? 0;
           const blackCount =
-            breakdown?.blackCount ?? overlay.meta.contested.blackContributors ?? 0;
+            breakdown?.blackCount ?? overlay.meta?.contested?.blackContributors ?? 0;
           const intensityLabel = overlay.style.intensity.toFixed(2);
           return `${id}: w${whiteCount}/b${blackCount} @ ${intensityLabel}`;
         });
@@ -191,9 +195,9 @@ export const contestedMixedScheme: HeatmapSchemeDefinition = {
           if (overlay.style.kind !== 'solid') {
             return `${id}:n/a`;
           }
-          const count = breakdown?.totalCount ?? overlay.meta.count ?? 0;
+          const count = breakdown?.totalCount ?? overlay.meta?.count ?? 0;
           const intensityLabel = overlay.style.intensity.toFixed(2);
-          return `${id}: ${overlay.meta.dominantColor} ${count} @ ${intensityLabel}`;
+          return `${id}: ${overlay.meta?.dominantColor ?? 'n/a'} ${count} @ ${intensityLabel}`;
         });
       const segmentLog = sampleSegments.length > 0 ? sampleSegments.join(' | ') : '(none)';
       const solidLog = sampleSolids.length > 0 ? sampleSolids.join(' | ') : '(none)';
@@ -216,19 +220,7 @@ export const contestedMixedScheme: HeatmapSchemeDefinition = {
   },
 };
 
-const buildSquareOverlay = ({
-  mode,
-  color,
-  intensity,
-  glow,
-  dominant,
-  white,
-  black,
-  dividerColor,
-  totalWeight,
-  totalCount,
-  contestedMeta,
-}: {
+type SolidSquareArgs = {
   mode: 'solid';
   color: string;
   intensity: number;
@@ -241,7 +233,9 @@ const buildSquareOverlay = ({
     whiteContributors: number;
     blackContributors: number;
   };
-} | {
+};
+
+type SegmentedSquareArgs = {
   mode: 'segmented';
   intensity: number;
   glow?: string;
@@ -255,8 +249,11 @@ const buildSquareOverlay = ({
     whiteContributors: number;
     blackContributors: number;
   };
-}) => {
-  if (mode === 'solid') {
+};
+
+const buildSquareOverlay = (args: SolidSquareArgs | SegmentedSquareArgs): SquareOverlayDescriptor => {
+  if (args.mode === 'solid') {
+    const { color, intensity, glow, dominant, totalWeight, totalCount, contestedMeta } = args;
     return {
       style: {
         kind: 'solid' as const,
@@ -278,6 +275,7 @@ const buildSquareOverlay = ({
     };
   }
 
+  const { white, black, dividerColor, intensity, glow, totalWeight, totalCount, contestedMeta } = args;
   const total = white.count + black.count;
   const whiteRatio = total === 0 ? 0 : Math.max(MIN_SEGMENT, white.count / total);
   const blackRatio = total === 0 ? 0 : Math.max(MIN_SEGMENT, black.count / total);
@@ -298,35 +296,23 @@ const buildSquareOverlay = ({
             strength: 0.5,
           }
         : undefined,
-      orientation: 'vertical',
+      orientation: 'vertical' as const,
       label: `${white.count}:${black.count}`,
     },
     meta: {
       contested: contestedMeta,
       weight: totalWeight,
       count: totalCount,
-      dominantColor:
-        white.count === black.count ? 'tie' : white.count > black.count ? 'white' : 'black',
+      dominantColor: (white.count === black.count
+        ? 'tie'
+        : white.count > black.count
+          ? 'white'
+          : 'black') as 'white' | 'black' | 'tie',
     },
   };
 };
 
-const buildCanvasOverlay = ({
-  id,
-  fileIndex,
-  rankIndex,
-  mode,
-  color,
-  intensity,
-  glow,
-  dominant,
-  white,
-  black,
-  dividerColor,
-  totalWeight,
-  totalCount,
-  contestedMeta,
-}: {
+type SolidCanvasArgs = {
   id: string;
   fileIndex: number;
   rankIndex: number;
@@ -342,7 +328,9 @@ const buildCanvasOverlay = ({
     whiteContributors: number;
     blackContributors: number;
   };
-} | {
+};
+
+type SegmentedCanvasArgs = {
   id: string;
   fileIndex: number;
   rankIndex: number;
@@ -359,8 +347,11 @@ const buildCanvasOverlay = ({
     whiteContributors: number;
     blackContributors: number;
   };
-}) => {
-  if (mode === 'solid') {
+};
+
+const buildCanvasOverlay = (args: SolidCanvasArgs | SegmentedCanvasArgs): CanvasOverlayDescriptor => {
+  if (args.mode === 'solid') {
+    const { id, fileIndex, rankIndex, color, intensity, glow, dominant, totalWeight, contestedMeta } = args;
     return {
       id,
       fileIndex,
@@ -384,6 +375,7 @@ const buildCanvasOverlay = ({
     };
   }
 
+  const { id, fileIndex, rankIndex, white, black, dividerColor, intensity, glow, totalWeight, totalCount, contestedMeta } = args;
   const total = white.count + black.count;
   const whiteRatio = total === 0 ? 0 : Math.max(MIN_SEGMENT, white.count / total);
   const blackRatio = total === 0 ? 0 : Math.max(MIN_SEGMENT, black.count / total);
@@ -407,15 +399,18 @@ const buildCanvasOverlay = ({
             strength: 0.45,
           }
         : undefined,
-      orientation: 'vertical',
+      orientation: 'vertical' as const,
       label: `${white.count}:${black.count}`,
     },
     meta: {
       contested: contestedMeta,
       weight: totalWeight,
       count: totalCount,
-      dominantColor:
-        white.count === black.count ? 'tie' : white.count > black.count ? 'white' : 'black',
+      dominantColor: (white.count === black.count
+        ? 'tie'
+        : white.count > black.count
+          ? 'white'
+          : 'black') as 'white' | 'black' | 'tie',
     },
   };
 };
