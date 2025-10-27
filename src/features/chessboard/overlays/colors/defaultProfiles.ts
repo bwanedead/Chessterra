@@ -28,8 +28,8 @@ export const classicProfile: HeatmapColorProfileDefinition = {
   },
   contested: {
     divider: '#94a3b8',
-    flag: '#facc15',
-    glow: '#fde047',
+    flag: '#ffeb3b',
+    glow: '#fff59d',
   },
   check: {
     inCheck: '#f97316',
@@ -66,8 +66,8 @@ export const mutedProfile: HeatmapColorProfileDefinition = {
   },
   contested: {
     divider: '#a1a1aa',
-    flag: '#f59e0b',
-    glow: '#fcd34d',
+    flag: '#ffd54f',
+    glow: '#ffe082',
   },
   check: {
     inCheck: '#f97316',
@@ -104,8 +104,8 @@ export const contrastProfile: HeatmapColorProfileDefinition = {
   },
   contested: {
     divider: '#e2e8f0',
-    flag: '#fbbf24',
-    glow: '#fde68a',
+    flag: '#ffea00',
+    glow: '#fff59d',
   },
   check: {
     inCheck: '#f97316',
