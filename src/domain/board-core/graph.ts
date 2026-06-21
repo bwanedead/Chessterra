@@ -23,7 +23,14 @@ export const applyPatch = (graph: BoardGraph, patch: BoardPatch): BoardGraph => 
 
   switch (patch.op) {
     case 'set-node':
-      next.nodes[patch.node.id] = patch.node;
+      next.nodes[patch.node.id] = {
+        ...next.nodes[patch.node.id],
+        ...patch.node,
+        tags: patch.node.tags ?? next.nodes[patch.node.id]?.tags,
+        attrs: patch.node.attrs
+          ? { ...(next.nodes[patch.node.id]?.attrs ?? {}), ...patch.node.attrs }
+          : next.nodes[patch.node.id]?.attrs,
+      };
       if (!(patch.node.id in next.occupancy)) {
         next.occupancy[patch.node.id] = null;
       }

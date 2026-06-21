@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
+import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import {
   BoardSession,
   buildBoardViewModel,
@@ -11,40 +11,37 @@ import {
 } from '@/domain/board-session';
 
 export const useBoardSession = (config: BoardSessionConfig) => {
+  const configRef = useRef(config);
   const sessionRef = useRef<BoardSession | null>(null);
+  const [sessionKey, setSessionKey] = useState(0);
 
   if (!sessionRef.current) {
-    sessionRef.current = createBoardSession(config);
+    sessionRef.current = createBoardSession(configRef.current);
   }
 
-  const session = sessionRef.current;
-
   const subscribe = useCallback(
-    (listener: () => void) => session.subscribe(() => listener()),
-    [session],
+    (listener: () => void) => sessionRef.current!.subscribe(() => listener()),
+    [sessionKey],
   );
 
-  const getSnapshot = useCallback(() => session.getState(), [session]);
+  const getSnapshot = useCallback(() => sessionRef.current!.getState(), [sessionKey]);
 
   const state = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
   const apply = useCallback(
-    (message: ProgressMessage) => session.apply(message),
-    [session],
+    (message: ProgressMessage) => sessionRef.current!.apply(message),
+    [sessionKey],
   );
 
-  const reload = useCallback(
-    (nextConfig: Partial<BoardSessionConfig>) => {
-      sessionRef.current = createBoardSession({
-        rulesetId: nextConfig.rulesetId ?? config.rulesetId,
-        fen: nextConfig.fen ?? config.fen,
-        snapshot: nextConfig.snapshot ?? config.snapshot,
-      });
-    },
-    [config],
-  );
+  const resetSession = useCallback((nextConfig: BoardSessionConfig) => {
+    configRef.current = nextConfig;
+    sessionRef.current = createBoardSession(nextConfig);
+    setSessionKey((value) => value + 1);
+  }, []);
 
-  return { session, state, apply, reload };
+  const getSession = useCallback(() => sessionRef.current!, [sessionKey]);
+
+  return { state, apply, resetSession, getSession };
 };
 
 export const useBoardViewModel = (

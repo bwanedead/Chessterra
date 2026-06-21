@@ -4,7 +4,9 @@ Persistent pursuit state for Chessterra → **Endgame** vision.
 Agents: read this file at session start; update at session end.
 
 **Vision:** `docs/project-visions/endgame.md`  
-**Foundation:** `docs/plans/foundation-architecture.md`
+**Foundation:** `docs/plans/foundation-architecture.md`  
+**Board core:** `docs/plans/universal-board-foundation.md`  
+**Board CLI:** `docs/plans/board-command-language.md`
 
 ---
 
@@ -52,7 +54,8 @@ Phase 0 is **complete** when all are true:
 
 | ID | Story | Evidence |
 |----|-------|----------|
-| fnd-001 | Play platform foundation | `src/domain/play/`, `src/platform/`, board themes/interaction, `PlayBoard` |
+| fnd-001 | Play platform foundation | `src/domain/play/`, matchmaking, ratings |
+| ubc-001 | Universal board core | graph, rulesets, `UniversalBoard`, progression messages |
 | eg-001 | Domain scaffold | `src/domain/endgame/position.ts`, `src/domain/play/time-control/clock.ts` |
 
 ---
@@ -71,7 +74,7 @@ _(none)_
 | 2026-06-21 | Phase 0 before auth/multiplayer |
 | 2026-06-21 | Registry pattern for game modes, time controls, themes, rating buckets |
 | 2026-06-21 | `ChessEngine` interface abstracts chess.js for server swap later |
-| 2026-06-21 | Phase 0 uses fixed `DEV_START_FEN`; position pool (`eg-002`) deferred to last |
+| 2026-06-21 | Universal board: graph + ruleset + ProgressMessage session | Custom pieces/variants without renderer rewrites |
 
 ---
 

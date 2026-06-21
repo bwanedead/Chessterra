@@ -14,12 +14,12 @@
       "acceptance": "src/domain/endgame/ with typed exports; clock flag logic unit-testable or pure"
     },
     {
-      "id": "ubc-001",
+      "id": "ubc-002",
       "phase": "foundation",
-      "title": "Universal board core (graph, rulesets, session, UniversalBoard)",
+      "title": "Board CLI + agent BoardVariantConfig + EditableBoard",
       "priority": 0,
       "passes": true,
-      "acceptance": "board-core, board-rules, board-session, UniversalBoard; docs/plans/universal-board-foundation.md; build passes"
+      "acceptance": "board-commands, board-config, EditableBoard, /board-lab, docs/plans/board-command-language.md"
     },
     {
       "id": "eg-003",

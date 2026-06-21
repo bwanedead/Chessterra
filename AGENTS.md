@@ -20,7 +20,7 @@ Before sizeable changes, read:
 - `docs/progress.md` and `.cursor/goals.md` updated with evidence
 
 ## Project Structure & Module Organization
-Chessterra is a Next.js (app router) workspace. UI routes, layouts, and server actions live in `src/app`, shared UI elements in `src/components`, and chess utilities in `src/lib`. Endgame domain logic lives in `src/domain/endgame/`; Endgame UI in `src/features/endgame/`. Storybook-ready UI examples live beside components under `src/stories`, while exploratory scenarios sit in the top-level `stories/`. Static assets and icons belong in `public/`, and `.storybook/` hosts Storybook configuration. Review `PROJECT_PLAN.md` for historical setup context; prefer `docs/project-visions/endgame.md` for product direction.
+Chessterra is a Next.js (app router) workspace. UI routes, layouts, and server actions live in `src/app`, shared UI elements in `src/components`, and chess utilities in `src/lib`. Endgame domain logic lives in `src/domain/endgame/`; universal board in `src/domain/board-core/`, `src/domain/board-rules/`, `src/domain/board-session/`; play UI in `src/features/board/` and `src/features/play/`. Storybook-ready UI examples live beside components under `src/stories`, while exploratory scenarios sit in the top-level `stories/`. Static assets and icons belong in `public/`, and `.storybook/` hosts Storybook configuration. Review `PROJECT_PLAN.md` for historical setup context; prefer `docs/project-visions/endgame.md` for product direction.
 
 ## Build, Test, and Development Commands
 - `npm install` - install dependencies; rerun after pulling new packages.
