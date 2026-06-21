@@ -25,9 +25,11 @@ Plan: `docs/plans/endgame-phase-zero.md`
 
 | ID | Story | Status | Next action |
 |----|-------|--------|-------------|
-| eg-002 | Position pool JSON | `pending` | Add `src/data/position-pool.json` + wire `pickRandomPosition` |
-| eg-003 | Play route + shell | `pending` | `/play` route using `PlayBoard` |
+| eg-003 | Play route + shell | `pending` | `/play` with `DEV_START_FEN` + `PlayBoard` |
 | eg-004 | GameClock component | `pending` | Wire `domain/play/time-control/clock.ts` to UI |
+| eg-005 | Bot opponent | `pending` | After clock + play shell |
+
+**Deferred:** `eg-002` position pool — last in Phase 0; use `DEV_START_FEN` until then.
 
 Full backlog: `docs/backlog/prd.json`
 
@@ -37,7 +39,7 @@ Full backlog: `docs/backlog/prd.json`
 
 Phase 0 is **complete** when all are true:
 
-1. `/play` runs a full game vs bot from random pool position
+1. `/play` runs a full game vs bot from stable dev position (`DEV_START_FEN`)
 2. Clock (3+2) and all end conditions work
 3. `npm run lint` and `npm run build` exit 0
 4. PlayShell Storybook story exists
@@ -69,6 +71,7 @@ _(none)_
 | 2026-06-21 | Phase 0 before auth/multiplayer |
 | 2026-06-21 | Registry pattern for game modes, time controls, themes, rating buckets |
 | 2026-06-21 | `ChessEngine` interface abstracts chess.js for server swap later |
+| 2026-06-21 | Phase 0 uses fixed `DEV_START_FEN`; position pool (`eg-002`) deferred to last |
 
 ---
 

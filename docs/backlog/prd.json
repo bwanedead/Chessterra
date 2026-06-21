@@ -22,26 +22,18 @@
       "acceptance": "src/domain/play/, src/platform/, board themes/interaction, PlayBoard story; lint + build pass"
     },
     {
-      "id": "eg-002",
-      "phase": "0",
-      "title": "Curated position pool JSON (50+ FENs)",
-      "priority": 2,
-      "passes": false,
-      "acceptance": "src/data/position-pool.json; pickRandomPosition() in domain"
-    },
-    {
       "id": "eg-003",
       "phase": "0",
-      "title": "Play route and PlayShell with CustomChessboard",
-      "priority": 3,
+      "title": "Play route and PlayShell with stable dev position",
+      "priority": 2,
       "passes": false,
-      "acceptance": "/play loads random position; legal moves work via chess.js"
+      "acceptance": "/play loads DEV_START_FEN; legal moves work via chess engine"
     },
     {
       "id": "eg-004",
       "phase": "0",
       "title": "GameClock component (3+2 default)",
-      "priority": 4,
+      "priority": 3,
       "passes": false,
       "acceptance": "Active side ticks; flag fall ends game"
     },
@@ -49,7 +41,7 @@
       "id": "eg-005",
       "phase": "0",
       "title": "Bot opponent (Stockfish WASM or interim bot)",
-      "priority": 5,
+      "priority": 4,
       "passes": false,
       "acceptance": "Bot responds after human move; completes full games"
     },
@@ -57,15 +49,15 @@
       "id": "eg-006",
       "phase": "0",
       "title": "Game end, result modal, rematch",
-      "priority": 6,
+      "priority": 5,
       "passes": false,
-      "acceptance": "Checkmate, stalemate, draw, flag, resignation handled; rematch loads new position"
+      "acceptance": "Checkmate, stalemate, draw, flag, resignation handled; rematch resets to DEV_START_FEN"
     },
     {
       "id": "eg-007",
       "phase": "0",
       "title": "Storybook story for PlayShell",
-      "priority": 7,
+      "priority": 6,
       "passes": false,
       "acceptance": "Story renders board + clocks; npm run lint clean"
     },
@@ -73,9 +65,18 @@
       "id": "eg-008",
       "phase": "0",
       "title": "Navigation link to /play",
-      "priority": 8,
+      "priority": 7,
       "passes": false,
       "acceptance": "Discoverable entry from app home or header"
+    },
+    {
+      "id": "eg-002",
+      "phase": "0",
+      "title": "Curated position pool JSON (50+ FENs)",
+      "priority": 99,
+      "passes": false,
+      "deferred": true,
+      "acceptance": "src/data/position-pool.json; pickRandomPosition(); rematch uses pool — build after play loop works"
     },
     {
       "id": "eg-101",

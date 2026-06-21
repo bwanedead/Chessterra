@@ -13,9 +13,9 @@ Session handoff for long-horizon work. Update at the end of every agent session 
 ## Current focus
 
 **Phase 0 — Local play validation**  
-Next story: `eg-002` — Curated position pool JSON
+Next story: `eg-003` — Play route with stable dev position (`DEV_START_FEN`)
 
-Foundation layer (`fnd-001`, `eg-001`) is in place.
+Position pool (`eg-002`) deferred until play loop, clock, and bot work.
 
 ---
 
@@ -48,7 +48,7 @@ Foundation layer (`fnd-001`, `eg-001`) is in place.
 | 2026-06-21 | Registry pattern for modes/time controls/themes | Add variants without rewriting core |
 | 2026-06-21 | Match event reducer | Shared server/client game state logic |
 | 2026-06-21 | Rating bucket = mode × time control × subdivision | Independent leaderboards per queue |
-| 2026-06-21 | `PlayBoard` wraps engine + interaction + themed board | Single UI entry for live play |
+| 2026-06-21 | Phase 0 uses `DEV_START_FEN` not position pool | Pool is last; unblocks play route + bot first |
 
 ---
 
@@ -59,13 +59,13 @@ Foundation layer (`fnd-001`, `eg-001`) is in place.
 - [x] eg-001 Domain scaffold
 
 ### Phase 0
-- [ ] eg-002 Position pool
-- [ ] eg-003 Play route
+- [ ] eg-003 Play route (stable FEN)
 - [ ] eg-004 Clock
 - [ ] eg-005 Bot
 - [ ] eg-006 Game end + rematch
 - [ ] eg-007 Storybook PlayShell
 - [ ] eg-008 Navigation
+- [ ] eg-002 Position pool (deferred — last)
 
 ### Phase 1+
 See `docs/backlog/prd.json`
