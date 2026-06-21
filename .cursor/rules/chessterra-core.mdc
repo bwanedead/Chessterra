@@ -1,0 +1,24 @@
+---
+description: Core Chessterra and Endgame architecture — apply to all sessions
+alwaysApply: true
+---
+
+Follow `/workspace/AGENTS.md` for build commands, style, and architecture expectations.
+
+## Product direction
+- North star: `docs/project-visions/endgame.md` — competitive endgame chess in the browser
+- Session focus: `.cursor/goals.md` and `docs/progress.md`
+- Active execution plan: `docs/plans/endgame-phase-zero.md` (until Phase 0 completes)
+
+## Architecture (non-negotiable)
+- Domain logic in `src/domain/` — never in React components
+- Endgame-specific: `src/domain/endgame/`, `src/features/endgame/`
+- Reuse chessboard from `src/features/chessboard/` — do not fork board rendering
+- Heatmap state via `heatmapSettingsContext.tsx`; register overlays in registry files
+- Server owns game truth in multiplayer (Phase 1+); client sends move intents only
+
+## Definition of done (feature work)
+- `npm run lint` clean
+- `npm run build` succeeds
+- Storybook story for new interactive UI
+- Update `docs/progress.md` and `.cursor/goals.md`

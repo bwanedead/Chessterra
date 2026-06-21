@@ -1,0 +1,32 @@
+---
+description: When user says /goal or asks to continue long-horizon vision work
+alwaysApply: false
+---
+
+## `/goal` command (emulated)
+
+Cursor does not ship a native `/goal` slash command. Treat these as equivalent:
+
+- User types `/goal`
+- User says "continue the vision", "pursue endgame", "what's next on the goal"
+- Skill `goal` is invoked
+
+## Required session flow
+
+1. Read `.cursor/goals.md` (active stories, completion criteria)
+2. Read `docs/progress.md` (blockers, last evidence)
+3. Read `docs/plans/endgame-phase-zero.md` or the plan matching active phase
+4. Read `docs/project-visions/endgame.md` before architectural decisions
+5. Pick highest-priority story with `passes: false` in `docs/backlog/prd.json`
+6. Implement smallest verifiable slice — do not skip ahead to later phases
+7. Verify: `npm run lint`, `npm run build`
+8. Update `.cursor/goals.md`, `docs/progress.md`, and set `passes: true` in `prd.json` when acceptance met
+
+## Phase gates
+
+- Do **not** start Phase 1 (auth, multiplayer, ratings) until Phase 0 completion criteria in `goals.md` are met
+- Draft mode, per-arrangement ELO, and time bank are Phase 2+ per vision doc
+
+## Autonomous loops
+
+For multi-turn pursuit, user may combine with Cursor `/loop` and `--max-turns`. Always stop and report if blocked or if acceptance criteria require human judgment (e.g. "is this fun?").

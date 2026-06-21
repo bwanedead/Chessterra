@@ -62,8 +62,11 @@ build-storybook.log
 *.sln
 *.sw?
 
-# Editor/assistant artifacts
-.cursor/
+# Editor/assistant artifacts (commit rules, skills, goals — not local secrets)
+.cursor/*
+!.cursor/rules/
+!.cursor/skills/
+!.cursor/goals.md
 
 # Local temp files
 temp_*.txt

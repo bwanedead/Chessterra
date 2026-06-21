@@ -1,0 +1,129 @@
+{
+  "product": "Endgame",
+  "visionDoc": "docs/project-visions/endgame.md",
+  "activePhase": "phase-0",
+  "activePlan": "docs/plans/endgame-phase-zero.md",
+  "branchName": "cursor/endgame-phase-zero-117d",
+  "stories": [
+    {
+      "id": "eg-001",
+      "phase": "0",
+      "title": "Endgame domain scaffold (position, match, clock types)",
+      "priority": 1,
+      "passes": false,
+      "acceptance": "src/domain/endgame/ with typed exports; clock flag logic unit-testable or pure"
+    },
+    {
+      "id": "eg-002",
+      "phase": "0",
+      "title": "Curated position pool JSON (50+ FENs)",
+      "priority": 2,
+      "passes": false,
+      "acceptance": "src/data/position-pool.json; pickRandomPosition() in domain"
+    },
+    {
+      "id": "eg-003",
+      "phase": "0",
+      "title": "Play route and PlayShell with CustomChessboard",
+      "priority": 3,
+      "passes": false,
+      "acceptance": "/play loads random position; legal moves work via chess.js"
+    },
+    {
+      "id": "eg-004",
+      "phase": "0",
+      "title": "GameClock component (3+2 default)",
+      "priority": 4,
+      "passes": false,
+      "acceptance": "Active side ticks; flag fall ends game"
+    },
+    {
+      "id": "eg-005",
+      "phase": "0",
+      "title": "Bot opponent (Stockfish WASM or interim bot)",
+      "priority": 5,
+      "passes": false,
+      "acceptance": "Bot responds after human move; completes full games"
+    },
+    {
+      "id": "eg-006",
+      "phase": "0",
+      "title": "Game end, result modal, rematch",
+      "priority": 6,
+      "passes": false,
+      "acceptance": "Checkmate, stalemate, draw, flag, resignation handled; rematch loads new position"
+    },
+    {
+      "id": "eg-007",
+      "phase": "0",
+      "title": "Storybook story for PlayShell",
+      "priority": 7,
+      "passes": false,
+      "acceptance": "Story renders board + clocks; npm run lint clean"
+    },
+    {
+      "id": "eg-008",
+      "phase": "0",
+      "title": "Navigation link to /play",
+      "priority": 8,
+      "passes": false,
+      "acceptance": "Discoverable entry from app home or header"
+    },
+    {
+      "id": "eg-101",
+      "phase": "1",
+      "title": "Supabase auth + user profiles",
+      "priority": 1,
+      "passes": false,
+      "acceptance": "Sign up/in; profile stores display name"
+    },
+    {
+      "id": "eg-102",
+      "phase": "1",
+      "title": "Server-authoritative game room + move API",
+      "priority": 2,
+      "passes": false,
+      "acceptance": "Moves validated server-side; game state persisted"
+    },
+    {
+      "id": "eg-103",
+      "phase": "1",
+      "title": "Invite-link multiplayer",
+      "priority": 3,
+      "passes": false,
+      "acceptance": "Two browsers complete a game via shared link"
+    },
+    {
+      "id": "eg-104",
+      "phase": "1",
+      "title": "Glicko-2 rating per time control",
+      "priority": 4,
+      "passes": false,
+      "acceptance": "Rating updates after rated game; provisional for first 20"
+    },
+    {
+      "id": "eg-201",
+      "phase": "2",
+      "title": "Skill-based matchmaking queue",
+      "priority": 1,
+      "passes": false,
+      "acceptance": "Pair within widening rating window; bot backfill optional"
+    },
+    {
+      "id": "eg-202",
+      "phase": "2",
+      "title": "Post-game heatmap replay",
+      "priority": 2,
+      "passes": false,
+      "acceptance": "Replay uses heatmap overlays + move timeline"
+    },
+    {
+      "id": "eg-301",
+      "phase": "3",
+      "title": "Draft + ban queue (approved pools)",
+      "priority": 1,
+      "passes": false,
+      "acceptance": "Separate queue; positions pass fairness gate"
+    }
+  ]
+}

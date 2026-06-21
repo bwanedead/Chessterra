@@ -1,8 +1,28 @@
 # Chessterra Docs
 
-This directory is split into two working collections so contributors and agents can find the right level of detail quickly.
+This directory is split into collections so contributors and agents can find the right level of detail quickly.
 
-- `development-insights/` captures implementation notes, architectural breadcrumbs, and technical experiments that inform how the current system works.
-- `project-visions/` holds exploratory roadmaps, experience briefs, and future-facing concepts that guide where the product is headed next.
+## North star
+
+**`project-visions/endgame.md`** — competitive endgame chess in the browser; the primary product direction for Chessterra.
+
+## Collections
+
+| Path | Purpose |
+|------|---------|
+| `project-visions/` | Product north star, experience pillars, long-horizon concepts |
+| `plans/` | Execution contracts with steps and acceptance criteria (e.g. `endgame-phase-zero.md`) |
+| `backlog/` | Machine-readable stories (`prd.json`) for `/goal` pursuit |
+| `development-insights/` | Implementation notes and architectural breadcrumbs for the current system |
+| `progress.md` | Session handoff — focus, blockers, evidence (update every agent session) |
+
+## Agent workflow
+
+1. `.cursor/goals.md` — active phase and stories
+2. `progress.md` — what happened last session
+3. Active plan under `plans/`
+4. Vision under `project-visions/endgame.md` for architectural decisions
+
+Invoke **`/goal`** in Cursor chat or the `goal` skill to continue the next backlog story.
 
 Add new material to the directory that matches its intent so we can grow documentation without losing the plot.

@@ -1,7 +1,25 @@
 ﻿# Repository Guidelines
 
+## Long-horizon goal: Endgame
+
+Chessterra is evolving into **Endgame** — a browser-based, rated competitive chess product where every game starts in the endgame. Heatmap analytics remain a first-class study layer.
+
+Before sizeable changes, read:
+- `docs/project-visions/endgame.md` — product north star and architecture constitution
+- `docs/plans/endgame-phase-zero.md` — active execution plan (Phase 0)
+- `.cursor/goals.md` and `docs/progress.md` — current focus and session handoff
+- `docs/backlog/prd.json` — checkable stories (`eg-001`, …)
+
+**`/goal`:** Cursor has no native `/goal` command. Use the `goal` skill (`.cursor/skills/goal/SKILL.md`) or say `/goal` in chat; the agent reads the goal ledger and continues the highest-priority incomplete story. For bounded autonomous runs, combine with Cursor `/loop` and a max turn count.
+
+**Definition of done** for feature work:
+- `npm run lint` clean
+- `npm run build` succeeds
+- Relevant Storybook story updated or added
+- `docs/progress.md` and `.cursor/goals.md` updated with evidence
+
 ## Project Structure & Module Organization
-Chessterra is a Next.js (app router) workspace. UI routes, layouts, and server actions live in `src/app`, shared UI elements in `src/components`, and chess utilities in `src/lib`. Storybook-ready UI examples live beside components under `src/stories`, while exploratory scenarios sit in the top-level `stories/`. Static assets and icons belong in `public/`, and `.storybook/` hosts Storybook configuration. Review `PROJECT_PLAN.md` for roadmap context before planning sizeable changes.
+Chessterra is a Next.js (app router) workspace. UI routes, layouts, and server actions live in `src/app`, shared UI elements in `src/components`, and chess utilities in `src/lib`. Endgame domain logic lives in `src/domain/endgame/`; Endgame UI in `src/features/endgame/`. Storybook-ready UI examples live beside components under `src/stories`, while exploratory scenarios sit in the top-level `stories/`. Static assets and icons belong in `public/`, and `.storybook/` hosts Storybook configuration. Review `PROJECT_PLAN.md` for historical setup context; prefer `docs/project-visions/endgame.md` for product direction.
 
 ## Build, Test, and Development Commands
 - `npm install` - install dependencies; rerun after pulling new packages.

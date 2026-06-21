@@ -1,0 +1,19 @@
+---
+description: Chessboard, heatmap overlays, and canvas mode conventions
+globs: src/features/chessboard/**/*
+alwaysApply: false
+---
+
+Heatmap and board work must stay aligned with Endgame post-game study plans.
+
+- Centralise overlay state: `src/features/chessboard/state/heatmapSettingsContext.tsx`
+- Register schemes: `src/features/chessboard/overlays/schemes/registry.ts`
+- Register colour profiles: `src/features/chessboard/overlays/colors/registry.ts`
+- Terminal heatmap commands: update help when behaviour changes
+
+Reference docs:
+- `docs/development-insights/heatmap-overlays.md`
+- `docs/project-visions/normalized-board-phase-two.md`
+- `docs/plans/expanded-canvas-mode.md`
+
+Live play (`src/features/endgame/`) consumes board components; do not embed match logic in chessboard feature.
