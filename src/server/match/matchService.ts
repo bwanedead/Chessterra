@@ -14,6 +14,7 @@ import type { MatchmakingPoolKey } from '@/domain/play/matchmaking/types';
 import { asUserId, type UserId } from '@/platform/ids';
 import { err, ok, type Result } from '@/platform/result';
 import { memoryMatchRepository } from './memoryRepository';
+import { getMatchRepository } from './getMatchRepository';
 import type { MatchRepository } from './types';
 import { processCompletedRatedMatch } from '../rating/ratingService';
 
@@ -30,7 +31,7 @@ export class MatchService {
   private async persist(snapshot: MatchSnapshot): Promise<void> {
     await this.repository.save(snapshot);
     if (snapshot.status === 'completed') {
-      processCompletedRatedMatch(snapshot);
+      await processCompletedRatedMatch(snapshot);
     }
   }
 
@@ -121,7 +122,7 @@ export class MatchService {
   }
 }
 
-export const matchService = new MatchService();
+export const matchService = new MatchService(getMatchRepository());
 
 export const resolvePlayerId = (headerValue: string | null): UserId | null => {
   if (!headerValue || headerValue.trim().length === 0) {

@@ -8,8 +8,8 @@
 
 ## Current focus
 
-**Phase 1 — auth infrastructure shipped**  
-Next: Supabase persistence, realtime, persisted ratings
+**Phase 1 — Supabase persistence complete (code)**  
+Next: Apply migrations to production project; Phase 2 matchmaking queue
 
 ---
 
@@ -17,17 +17,21 @@ Next: Supabase persistence, realtime, persisted ratings
 
 **Date:** 2026-06-21  
 **Work:**
-- Server auth: `src/server/auth/` (`resolveRequestActor`, `requireRequestActor`, profile helpers)
-- Middleware: Supabase session refresh on all routes
-- API: `GET /api/me` returns actor + profile
-- Match routes: create/join/move/resign use verified session (guest `X-Player-Id` fallback in dev)
-- Client: `authenticatedFetch` with `credentials: 'same-origin'`; `AuthProvider` syncs `/api/me`
+- **eg-101b:** `createSupabaseServiceClient`, `isSupabasePersistenceEnabled`, `.env.example` service role, `supabase/config.toml`, `npm run db:push`
+- **eg-102b:** `supabaseRepository` (matches upsert + match_events), `getMatchRepository` factory
+- **eg-103b:** `useMatchRealtime` postgres_changes on `matches`; poll only when Supabase unset
+- **eg-104b:** `supabaseRatingStore` — Glicko updates persist to `ratings` table for authenticated users
 
 **Evidence:** `npm run lint` exit 0; `npm run build` exit 0
 
-**Stories:** `eg-101c` passes
+**Stories:** `eg-101b`, `eg-102b`, `eg-103b`, `eg-104`, `eg-104b` pass
 
-**Next:** Wire Supabase repository; apply migration; Realtime; persist ratings
+**Manual setup (production):**
+1. Copy `.env.example` → `.env.local` with URL, anon key, service role key
+2. `npm run db:push` or run SQL migrations in Supabase dashboard
+3. Enable OAuth providers per `docs/plans/auth-strategy.md`
+
+**Next:** eg-201 skill-based matchmaking queue
 
 ---
 
@@ -38,8 +42,11 @@ Next: Supabase persistence, realtime, persisted ratings
 
 ### Phase 1
 - [x] eg-101 auth foundation
+- [x] eg-101b Supabase production wiring (code)
 - [x] eg-101c server auth infrastructure
-- [x] eg-102 match API (memory)
-- [x] eg-103 invite multiplayer (poll)
-- [ ] eg-104 persisted ratings
-- [ ] Supabase repo + realtime
+- [x] eg-102 match API
+- [x] eg-102b Supabase match repository
+- [x] eg-103 invite multiplayer
+- [x] eg-103b Realtime sync
+- [x] eg-104 persisted ratings
+- [x] eg-104b ratings table wiring

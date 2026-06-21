@@ -9,8 +9,8 @@ Persistent pursuit state for Chessterra → **Endgame** vision.
 
 ## Active phase
 
-**Phase 1 — Competitive core (auth infra shipped)**  
-Next: Supabase persistence + realtime + rated queue
+**Phase 1 — Competitive core (persistence shipped)**  
+Next: Production Supabase project setup + rated queue (Phase 2)
 
 ---
 
@@ -18,10 +18,7 @@ Next: Supabase persistence + realtime + rated queue
 
 | ID | Story | Status | Next action |
 |----|-------|--------|-------------|
-| eg-101b | Supabase production wiring | `pending` | Apply migration; set `.env.local`; enable OAuth providers |
-| eg-102b | Supabase match repository | `pending` | Replace memory store |
-| eg-103b | Realtime sync | `pending` | Supabase channel `match:{id}` |
-| eg-104b | Persisted ratings | `pending` | Wire `ratings` table |
+| eg-201 | Skill-based matchmaking queue | `pending` | Widening rating window pairing |
 
 Full backlog: `docs/backlog/prd.json`
 
@@ -33,21 +30,25 @@ All `eg-001`–`eg-008` including 500-position pool (`eg-002`).
 
 ---
 
-## Completed (Phase 1 foundation)
+## Completed (Phase 1)
 
 | ID | Story | Evidence |
 |----|-------|----------|
 | eg-101 | Auth foundation | `AuthProvider`, guest ids, `/auth`, Supabase clients |
-| eg-101c | Server auth infrastructure | `resolveRequestActor`, middleware, `/api/me`, match routes wired |
+| eg-101b | Supabase production wiring | Service role client, `.env.example`, `supabase/config.toml` |
+| eg-101c | Server auth infrastructure | `resolveRequestActor`, middleware, `/api/me` |
 | eg-102 | Match API | `/api/matches/*`, `MatchService`, `reduceMatch` on server |
+| eg-102b | Supabase match repository | `supabaseRepository`, `getMatchRepository` factory |
 | eg-103 | Invite multiplayer | `/match/[id]`, `OnlinePlayShell`, `InviteMatchPanel` |
-| eg-104 | Rating hook | `processCompletedRatedMatch` (in-memory until DB) |
+| eg-103b | Realtime sync | `useMatchRealtime`, polling fallback |
+| eg-104 | Rating hook | `processCompletedRatedMatch` |
+| eg-104b | Persisted ratings | `supabaseRatingStore` |
 
 ---
 
 ## Blocked
 
-_(none — Supabase optional for local dev)_
+_(none — apply migrations + `.env.local` for production Supabase)_
 
 ---
 
@@ -59,3 +60,5 @@ _(none — Supabase optional for local dev)_
 | 2026-06-21 | Memory match repo when Supabase unset (CI/dev friendly) |
 | 2026-06-21 | Guest `X-Player-Id` until auth configured |
 | 2026-06-21 | API auth: verified Supabase session first; `guest-*` header fallback only |
+| 2026-06-21 | Service role key required for server-side match/rating persistence |
+| 2026-06-21 | Realtime when Supabase configured; poll fallback otherwise |

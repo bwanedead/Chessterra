@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "db:push": "supabase db push",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },

@@ -99,6 +99,33 @@
       "acceptance": "API routes reject spoofed player ids when Supabase configured; session cookies work for authenticated play"
     },
     {
+      "id": "eg-101b",
+      "phase": "1",
+      "title": "Supabase production wiring",
+      "priority": 1,
+      "passes": true,
+      "note": "Service role client, isSupabasePersistenceEnabled, .env.example, supabase/config.toml, db:push script; manual: set .env.local + apply migrations + OAuth providers",
+      "acceptance": "Server uses service role for DB writes when env configured; falls back to memory when not"
+    },
+    {
+      "id": "eg-102b",
+      "phase": "1",
+      "title": "Supabase match repository",
+      "priority": 2,
+      "passes": true,
+      "note": "supabaseRepository upserts matches + appends match_events; getMatchRepository factory",
+      "acceptance": "Match snapshots persist to Postgres when SUPABASE_SERVICE_ROLE_KEY set"
+    },
+    {
+      "id": "eg-103b",
+      "phase": "1",
+      "title": "Realtime sync",
+      "priority": 3,
+      "passes": true,
+      "note": "useMatchRealtime subscribes to matches UPDATE; polling fallback when Supabase unset",
+      "acceptance": "Online play syncs via Realtime when configured"
+    },
+    {
       "id": "eg-102",
       "phase": "1",
       "title": "Server-authoritative game room + move API",

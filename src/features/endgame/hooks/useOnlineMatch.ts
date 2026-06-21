@@ -5,7 +5,9 @@ import type { MatchSnapshot } from '@/domain/play/match/types';
 import { findPlayerByUserId } from '@/domain/play/match/factory';
 import type { PieceColor } from '@/features/chessboard/types';
 import { asUserId } from '@/platform/ids';
+import { isSupabaseConfigured } from '@/platform/supabase/env';
 import { fetchMatch, joinMatch, postMatchMove, postMatchResign } from '../api/matchApi';
+import { useMatchRealtime } from './useMatchRealtime';
 
 const POLL_MS = 1500;
 
@@ -33,6 +35,14 @@ export const useOnlineMatch = ({ matchId, playerId, autoJoin = true }: UseOnline
     }
   }, [matchId]);
 
+  const handleRealtimeUpdate = useCallback((snapshot: MatchSnapshot) => {
+    setMatch(snapshot);
+    setError(null);
+    setLoading(false);
+  }, []);
+
+  useMatchRealtime(matchId, handleRealtimeUpdate, isSupabaseConfigured());
+
   useEffect(() => {
     void refresh();
   }, [refresh]);
@@ -57,6 +67,10 @@ export const useOnlineMatch = ({ matchId, playerId, autoJoin = true }: UseOnline
 
   useEffect(() => {
     if (!match || match.status === 'completed' || match.status === 'aborted') {
+      return undefined;
+    }
+
+    if (isSupabaseConfigured()) {
       return undefined;
     }
 

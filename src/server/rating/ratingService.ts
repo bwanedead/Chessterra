@@ -1,20 +1,22 @@
+import { createSupabaseServiceClient } from '@/platform/supabase/service';
 import type { MatchSnapshot } from '@/domain/play/match/types';
 import { toRatingBucketId } from '@/domain/play/rating/bucket';
 import { createDefaultRating, updateRatings } from '@/domain/play/rating/glicko2';
 import type { RatingRecord } from '@/domain/play/rating/types';
-import type { UserId } from '@/platform/ids';
+import { asRatingBucketId, type UserId } from '@/platform/ids';
+import { createSupabaseRatingStore } from './supabaseRatingStore';
 
 const memoryRatings = new Map<string, RatingRecord>();
 
 const ratingKey = (userId: UserId, bucketId: string) => `${userId}::${bucketId}`;
 
-const getOrCreateRating = (userId: UserId, bucketId: string): RatingRecord => {
+const loadMemoryRating = (userId: UserId, bucketId: string): RatingRecord => {
   const key = ratingKey(userId, bucketId);
   const existing = memoryRatings.get(key);
   if (existing) {
     return existing;
   }
-  const created = createDefaultRating(userId, bucketId as never);
+  const created = createDefaultRating(userId, asRatingBucketId(bucketId));
   memoryRatings.set(key, created);
   return created;
 };
@@ -33,8 +35,8 @@ const scoreForColor = (
   return 0.5;
 };
 
-/** In-memory rating updates until Supabase ratings table is wired. */
-export const processCompletedRatedMatch = (snapshot: MatchSnapshot): void => {
+/** Updates ratings after a completed rated match (Supabase when configured, else in-memory). */
+export const processCompletedRatedMatch = async (snapshot: MatchSnapshot): Promise<void> => {
   if (!snapshot.rated || snapshot.status !== 'completed') {
     return;
   }
@@ -46,8 +48,26 @@ export const processCompletedRatedMatch = (snapshot: MatchSnapshot): void => {
   }
 
   const bucketId = toRatingBucketId(snapshot.poolKey);
-  const whiteRating = getOrCreateRating(white, bucketId);
-  const blackRating = getOrCreateRating(black, bucketId);
+  const serviceClient = createSupabaseServiceClient();
+
+  if (serviceClient) {
+    const store = createSupabaseRatingStore(serviceClient);
+    const whiteRating = await store.getOrCreate(white, bucketId);
+    const blackRating = await store.getOrCreate(black, bucketId);
+
+    const whiteResult = updateRatings({
+      playerRating: whiteRating,
+      opponentRating: blackRating,
+      score: scoreForColor(snapshot, 'w'),
+    });
+
+    await store.save(whiteResult.player);
+    await store.save(whiteResult.opponent);
+    return;
+  }
+
+  const whiteRating = loadMemoryRating(white, bucketId);
+  const blackRating = loadMemoryRating(black, bucketId);
 
   const whiteResult = updateRatings({
     playerRating: whiteRating,
