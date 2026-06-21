@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@storybook/react": "^8.6.4",
+    "@supabase/ssr": "^0.12.0",
+    "@supabase/supabase-js": "^2.108.2",
     "chess.js": "^1.1.0",
     "next": "15.2.1",
     "react": "^19.0.0",

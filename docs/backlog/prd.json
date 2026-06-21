@@ -1,8 +1,8 @@
 {
   "product": "Endgame",
   "visionDoc": "docs/project-visions/endgame.md",
-  "activePhase": "phase-0",
-  "activePlan": "docs/plans/endgame-phase-zero.md",
+  "activePhase": "phase-1",
+  "activePlan": "docs/plans/phase-1-platform-contract.md",
   "branchName": "cursor/endgame-phase-zero-117d",
   "stories": [
     {

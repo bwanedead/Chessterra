@@ -1,8 +1,11 @@
+export { EndgameNav } from './components/EndgameNav';
 export { PlayShell } from './components/PlayShell';
 export { GameClock } from './components/GameClock';
 export { GameClockPair } from './components/GameClockPair';
 export { GameResultModal } from './components/GameResultModal';
-export { EndgameNav } from './components/EndgameNav';
+export { OnlinePlayShell } from './components/OnlinePlayShell';
+export { InviteMatchPanel } from './components/InviteMatchPanel';
+export { useOnlineMatch } from './hooks/useOnlineMatch';
 export { useLocalPlaySession, useLocalPlayBoardView, getBoardDisplayFen } from './hooks/useLocalPlaySession';
 export { useGameClock } from './hooks/useGameClock';
 export { useBotOpponent } from './hooks/useBotOpponent';

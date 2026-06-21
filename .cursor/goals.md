@@ -1,74 +1,52 @@
 # Goal Ledger
 
-Persistent pursuit state for Chessterra → **Endgame** vision.  
-Agents: read this file at session start; update at session end.
+Persistent pursuit state for Chessterra → **Endgame** vision.
 
 **Vision:** `docs/project-visions/endgame.md`  
-**Foundation:** `docs/plans/foundation-architecture.md`  
-**Board core:** `docs/plans/universal-board-foundation.md`  
-**Board CLI:** `docs/plans/board-command-language.md`
-
----
-
-## North star goal
-
-Build a browser-based, rated endgame chess platform on Chessterra infrastructure — fair curated positions, fluid play, scalable architecture, and heatmap analytics as the study layer.
+**Phase 1 contract:** `docs/plans/phase-1-platform-contract.md`
 
 ---
 
 ## Active phase
 
-**Phase 0 — Local play validation** ✅ **COMPLETE**  
-Plan: `docs/plans/endgame-phase-zero.md`
+**Phase 1 — Competitive core (foundation shipped)**  
+Next: Supabase persistence + realtime + rated queue
 
 ---
 
-## Active stories (pick up in priority order)
+## Active stories
 
 | ID | Story | Status | Next action |
 |----|-------|--------|-------------|
-| eg-101 | Supabase auth | `pending` | Phase 1 — first story |
+| eg-101b | Supabase production wiring | `pending` | Apply migration; set `.env.local` |
+| eg-102b | Supabase match repository | `pending` | Replace memory store |
+| eg-103b | Realtime sync | `pending` | Supabase channel `match:{id}` |
+| eg-104b | Persisted ratings | `pending` | Wire `ratings` table |
 
 Full backlog: `docs/backlog/prd.json`
 
 ---
 
-## Completion criteria (Phase 0)
+## Completed (Phase 0)
 
-All criteria met:
-
-1. `/play` runs full games vs bot from pool positions ✅
-2. Clock (3+2) and end conditions work ✅
-3. `npm run lint` and `npm run build` exit 0 ✅
-4. PlayShell Storybook stories exist ✅
-5. `docs/progress.md` and this file updated ✅
-6. Stories `eg-001`–`eg-008` marked `passes: true` ✅
-
-**Optional before Phase 1:** Stockfish WASM bot replacing `randomLegalBot`
+All `eg-001`–`eg-008` including 500-position pool (`eg-002`).
 
 ---
 
-## Completed
+## Completed (Phase 1 foundation)
 
 | ID | Story | Evidence |
 |----|-------|----------|
-| fnd-001 | Play platform foundation | `src/domain/play/` |
-| ubc-001 | Universal board core | graph, rulesets, `UniversalBoard` |
-| ubc-002 | Board CLI + EditableBoard | `/board-lab` |
-| eg-001 | Domain scaffold | position, clock types |
-| eg-002 | Position pool (500) | `src/data/position-pool.json` (~136 KB) |
-| eg-003 | Play route + shell | `/play`, `PlayShell` |
-| eg-004 | GameClock | active/low/flag styling |
-| eg-005 | Bot opponent | `randomLegalBot` interim |
-| eg-006 | Game end + rematch | `GameResultModal`, pool rematch |
-| eg-007 | PlayShell Storybook | `Play/Endgame/*` |
-| eg-008 | Navigation | `EndgameNav` |
+| eg-101 | Auth foundation | `AuthProvider`, guest ids, `/auth`, Supabase clients |
+| eg-102 | Match API | `/api/matches/*`, `MatchService`, `reduceMatch` on server |
+| eg-103 | Invite multiplayer | `/match/[id]`, `OnlinePlayShell`, `InviteMatchPanel` |
+| eg-104 | Rating hook | `processCompletedRatedMatch` (in-memory until DB) |
 
 ---
 
 ## Blocked
 
-_(none)_
+_(none — Supabase optional for local dev)_
 
 ---
 
@@ -76,21 +54,6 @@ _(none)_
 
 | Date | Decision |
 |------|----------|
-| 2026-06-21 | Pursue Endgame as Chessterra evolution; analytics retained |
-| 2026-06-21 | Phase 0 before auth/multiplayer |
-| 2026-06-21 | Registry pattern for modes/time controls/themes, rating buckets |
-| 2026-06-21 | `ChessEngine` interface abstracts chess.js for server swap later |
-| 2026-06-21 | Board CLI + BoardVariantConfig for agent-drafted variants |
-| 2026-06-21 | Play foundation: domain reducer + hooks before polished UI |
-| 2026-06-21 | Phase 0 bot: `randomLegalBot` interim; Stockfish before Phase 1 |
-| 2026-06-21 | Position pool: 500 validated endgame FENs via generator script |
-
----
-
-## How to use `/goal`
-
-In Cursor chat, invoke the **goal** skill or say:
-
-> `/goal` — continue Endgame Phase 1 per goals.md
-
-For bounded autonomous runs, use Cursor `/loop` with a turn limit.
+| 2026-06-21 | Phase 1a: REST + poll before Realtime |
+| 2026-06-21 | Memory match repo when Supabase unset (CI/dev friendly) |
+| 2026-06-21 | Guest `X-Player-Id` until auth configured |

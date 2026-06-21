@@ -12,8 +12,8 @@ export const EndgameNav = () => (
     <Link href="/play" className="font-medium text-sky-400 transition hover:text-sky-300">
       Play
     </Link>
-    <Link href="/board-lab" className="text-slate-400 transition hover:text-slate-200">
-      Board Lab
+    <Link href="/auth" className="text-slate-400 transition hover:text-slate-200">
+      Account
     </Link>
   </nav>
 );
