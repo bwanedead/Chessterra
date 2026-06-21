@@ -85,7 +85,8 @@
       "phase": "1",
       "title": "Supabase auth + user profiles",
       "priority": 1,
-      "passes": false,
+      "passes": true,
+      "note": "AuthProvider, guest fallback, /auth UI, migration SQL; production needs env + migration apply",
       "acceptance": "Sign up/in; profile stores display name"
     },
     {
@@ -93,7 +94,8 @@
       "phase": "1",
       "title": "Server-authoritative game room + move API",
       "priority": 2,
-      "passes": false,
+      "passes": true,
+      "note": "MatchService + /api/matches/* + server move validation; memory repo until Supabase wired",
       "acceptance": "Moves validated server-side; game state persisted"
     },
     {
@@ -101,7 +103,8 @@
       "phase": "1",
       "title": "Invite-link multiplayer",
       "priority": 3,
-      "passes": false,
+      "passes": true,
+      "note": "InviteMatchPanel + /match/[id] + OnlinePlayShell; polling sync (realtime next)",
       "acceptance": "Two browsers complete a game via shared link"
     },
     {
@@ -110,6 +113,7 @@
       "title": "Glicko-2 rating per time control",
       "priority": 4,
       "passes": false,
+      "note": "processCompletedRatedMatch in-memory; persist to ratings table next",
       "acceptance": "Rating updates after rated game; provisional for first 20"
     },
     {

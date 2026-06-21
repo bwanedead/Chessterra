@@ -28,12 +28,16 @@ reduceMatch + ChessEngine (src/domain/play/match/)
 
 ## Identity
 
+See **`docs/plans/auth-strategy.md`** for OAuth (Microsoft, Facebook), magic-link email, and guest mode.
+
 | Mode | When | Player ID |
 |------|------|-----------|
-| Guest | No Supabase env | `guest-{uuid}` in localStorage |
-| Auth | `NEXT_PUBLIC_SUPABASE_URL` set | Supabase `user.id` |
+| Guest | Bot play / no session | `guest-{uuid}` in localStorage |
+| OAuth | Facebook, Microsoft, Google | Supabase `user.id` |
+| Magic link | Email one-time link | Supabase `user.id` |
+| Password | Optional fallback | Supabase `user.id` |
 
-Profiles table stores `display_name` for rated games.
+Profiles table stores `display_name` for rated games. Provider secrets live in Supabase Dashboard only.
 
 ---
 

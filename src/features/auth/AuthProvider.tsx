@@ -4,25 +4,54 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { createSupabaseBrowserClient } from '@/platform/supabase/client';
 import { isSupabaseConfigured } from '@/platform/supabase/env';
 import { getOrCreateGuestId } from './guest';
+import { getAuthCallbackUrl, type OAuthProvider } from './providers';
 
 export interface AuthUser {
   id: string;
   email?: string;
   displayName: string;
   isGuest: boolean;
+  avatarUrl?: string;
+  authProvider?: string;
 }
 
 interface AuthContextValue {
   user: AuthUser | null;
   loading: boolean;
   supabaseEnabled: boolean;
-  signIn: (email: string, password: string) => Promise<string | null>;
-  signUp: (email: string, password: string, displayName: string) => Promise<string | null>;
+  signInWithOAuth: (provider: OAuthProvider) => Promise<string | null>;
+  signInWithMagicLink: (email: string) => Promise<string | null>;
+  signInWithPassword: (email: string, password: string) => Promise<string | null>;
+  signUpWithPassword: (email: string, password: string, displayName: string) => Promise<string | null>;
   signOut: () => Promise<void>;
   playerId: string | null;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
+
+const mapSessionUser = (sessionUser: {
+  id: string;
+  email?: string;
+  user_metadata?: Record<string, unknown>;
+  app_metadata?: { provider?: string };
+}): AuthUser => {
+  const meta = sessionUser.user_metadata ?? {};
+  const displayName =
+    (meta.display_name as string | undefined) ??
+    (meta.full_name as string | undefined) ??
+    (meta.name as string | undefined) ??
+    sessionUser.email?.split('@')[0] ??
+    'Player';
+
+  return {
+    id: sessionUser.id,
+    email: sessionUser.email,
+    displayName,
+    isGuest: false,
+    avatarUrl: (meta.avatar_url as string | undefined) ?? (meta.picture as string | undefined),
+    authProvider: sessionUser.app_metadata?.provider,
+  };
+};
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -54,15 +83,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const sessionUser = data.session?.user;
       if (sessionUser) {
-        setUser({
-          id: sessionUser.id,
-          email: sessionUser.email,
-          displayName:
-            (sessionUser.user_metadata?.display_name as string | undefined) ??
-            sessionUser.email?.split('@')[0] ??
-            'Player',
-          isGuest: false,
-        });
+        setUser(mapSessionUser(sessionUser));
       } else {
         hydrateGuest();
       }
@@ -74,15 +95,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       const sessionUser = session?.user;
       if (sessionUser) {
-        setUser({
-          id: sessionUser.id,
-          email: sessionUser.email,
-          displayName:
-            (sessionUser.user_metadata?.display_name as string | undefined) ??
-            sessionUser.email?.split('@')[0] ??
-            'Player',
-          isGuest: false,
-        });
+        setUser(mapSessionUser(sessionUser));
       } else {
         hydrateGuest();
       }
@@ -94,7 +107,39 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, [hydrateGuest, supabase]);
 
-  const signIn = useCallback(
+  const signInWithOAuth = useCallback(
+    async (provider: OAuthProvider) => {
+      if (!supabase) {
+        return 'Supabase is not configured';
+      }
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: getAuthCallbackUrl(),
+        },
+      });
+      return error?.message ?? null;
+    },
+    [supabase],
+  );
+
+  const signInWithMagicLink = useCallback(
+    async (email: string) => {
+      if (!supabase) {
+        return 'Supabase is not configured';
+      }
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: getAuthCallbackUrl(),
+        },
+      });
+      return error?.message ?? null;
+    },
+    [supabase],
+  );
+
+  const signInWithPassword = useCallback(
     async (email: string, password: string) => {
       if (!supabase) {
         return 'Supabase is not configured';
@@ -105,7 +150,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [supabase],
   );
 
-  const signUp = useCallback(
+  const signUpWithPassword = useCallback(
     async (email: string, password: string, displayName: string) => {
       if (!supabase) {
         return 'Supabase is not configured';
@@ -132,12 +177,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       user,
       loading,
       supabaseEnabled,
-      signIn,
-      signUp,
+      signInWithOAuth,
+      signInWithMagicLink,
+      signInWithPassword,
+      signUpWithPassword,
       signOut,
       playerId: user?.id ?? null,
     }),
-    [loading, signIn, signOut, signUp, supabaseEnabled, user],
+    [
+      loading,
+      signInWithMagicLink,
+      signInWithOAuth,
+      signInWithPassword,
+      signOut,
+      signUpWithPassword,
+      supabaseEnabled,
+      user,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
