@@ -27,9 +27,9 @@ Plan: `docs/plans/endgame-phase-zero.md`
 
 | ID | Story | Status | Next action |
 |----|-------|--------|-------------|
-| eg-003 | Play route + shell | `pending` | `/play` with `UniversalBoard` + `DEV_START_FEN` |
-| eg-004 | GameClock component | `pending` | Wire `domain/play/time-control/clock.ts` to UI |
-| eg-005 | Bot opponent | `pending` | After clock + play shell |
+| eg-004 | GameClock component | `pending` | Promote `PlayClockSlot` → styled `GameClock`; wire flag fall UI |
+| eg-005 | Bot opponent | `pending` | Stockfish WASM or interim bot after clock |
+| eg-006 | Game end + rematch | `pending` | Result modal; wire `reset()` |
 
 **Deferred:** `eg-002` position pool — last in Phase 0; use `DEV_START_FEN` until then.
 
@@ -55,8 +55,10 @@ Phase 0 is **complete** when all are true:
 | ID | Story | Evidence |
 |----|-------|----------|
 | fnd-001 | Play platform foundation | `src/domain/play/`, matchmaking, ratings |
-| ubc-001 | Universal board core | graph, rulesets, `UniversalBoard`, progression messages |
-| eg-001 | Domain scaffold | `src/domain/endgame/position.ts`, `src/domain/play/time-control/clock.ts` |
+| ubc-001 | Universal board core | graph, rulesets, `UniversalBoard` |
+| ubc-002 | Board CLI + EditableBoard | `/board-lab`, `config apply`, agent schema |
+| eg-001 | Domain scaffold | `src/domain/endgame/position.ts`, clock math |
+| eg-003 | Play route + shell | `/play`, `PlayShell`, `useLocalPlaySession`, domain `localMatch` |
 
 ---
 
@@ -74,7 +76,8 @@ _(none)_
 | 2026-06-21 | Phase 0 before auth/multiplayer |
 | 2026-06-21 | Registry pattern for game modes, time controls, themes, rating buckets |
 | 2026-06-21 | `ChessEngine` interface abstracts chess.js for server swap later |
-| 2026-06-21 | Universal board: graph + ruleset + ProgressMessage session | Custom pieces/variants without renderer rewrites |
+| 2026-06-21 | Board CLI + BoardVariantConfig for agent-drafted variants | `config apply`, `/board-lab` |
+| 2026-06-21 | Play foundation: domain `localMatch` reducer + feature hooks before polished UI |
 
 ---
 

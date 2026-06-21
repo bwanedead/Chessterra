@@ -13,7 +13,7 @@ Session handoff for long-horizon work. Update at the end of every agent session 
 ## Current focus
 
 **Phase 0 — Local play validation**  
-Next story: `eg-003` — Play route with stable dev position (`DEV_START_FEN`)
+Next story: `eg-004` — GameClock UI wired to `domain/play/time-control/clock.ts`
 
 Position pool (`eg-002`) deferred until play loop, clock, and bot work.
 
@@ -23,17 +23,19 @@ Position pool (`eg-002`) deferred until play loop, clock, and bot work.
 
 **Date:** 2026-06-21  
 **Work:**
-- Laid play platform foundation: `src/platform/`, `src/domain/play/` (chess engine, game modes, time controls, ratings, matchmaking, match reducer)
-- Endgame position domain: `src/domain/endgame/position.ts`
-- Board layer: themes registry, interaction (click-to-move + highlights), `PlayBoard` component
-- Architecture doc: `docs/plans/foundation-architecture.md`
-- Storybook: `Play/Foundation/PlayBoard`
+- Play domain foundation: `src/domain/endgame/play/` — `LocalMatchState`, `reduceLocalMatch`, `createPhase0PlayConfig`
+- Feature hooks: `useLocalPlaySession` (board session + match reducer), `useGameClock` (tick driver)
+- Structural UI: `PlayShell`, `PlayClockSlot` (clock slot for eg-004 upgrade)
+- Route: `/play` with `DEV_START_FEN`, legal moves via `BoardSessionView`
+- Storybook: `Play/Endgame/PlayShell`
 
-**Evidence:** `npm run build` exit 0 (lint: pre-existing hook warnings only)
+**Evidence:** `npm run lint` exit 0 (pre-existing hook warnings only); `npm run build` exit 0; `/play` route in build output
 
-**Next:** `eg-002` position pool JSON, then `/play` route shell
+**Next:** `eg-004` GameClock component — styled clocks + flag fall UX
 
 ---
+
+## Previous session
 
 ## Blockers
 
@@ -59,7 +61,7 @@ Position pool (`eg-002`) deferred until play loop, clock, and bot work.
 - [x] eg-001 Domain scaffold
 
 ### Phase 0
-- [ ] eg-003 Play route (stable FEN)
+- [x] eg-003 Play route (stable FEN)
 - [ ] eg-004 Clock
 - [ ] eg-005 Bot
 - [ ] eg-006 Game end + rematch

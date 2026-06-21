@@ -26,7 +26,7 @@
       "phase": "0",
       "title": "Play route and PlayShell with stable dev position",
       "priority": 2,
-      "passes": false,
+      "passes": true,
       "acceptance": "/play loads DEV_START_FEN; legal moves work via chess engine"
     },
     {
