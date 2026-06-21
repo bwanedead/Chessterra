@@ -12,10 +12,9 @@ Session handoff for long-horizon work. Update at the end of every agent session 
 
 ## Current focus
 
-**Phase 0 — Local play validation**  
-Next story: `eg-004` — GameClock UI wired to `domain/play/time-control/clock.ts`
-
-Position pool (`eg-002`) deferred until play loop, clock, and bot work.
+**Phase 0 — Local play validation (functionally complete)**  
+Deferred: `eg-002` position pool (last before Phase 1)  
+Optional upgrade: Stockfish WASM bot replacing `randomLegalBot`
 
 ---
 
@@ -23,19 +22,23 @@ Position pool (`eg-002`) deferred until play loop, clock, and bot work.
 
 **Date:** 2026-06-21  
 **Work:**
-- Play domain foundation: `src/domain/endgame/play/` — `LocalMatchState`, `reduceLocalMatch`, `createPhase0PlayConfig`
-- Feature hooks: `useLocalPlaySession` (board session + match reducer), `useGameClock` (tick driver)
-- Structural UI: `PlayShell`, `PlayClockSlot` (clock slot for eg-004 upgrade)
-- Route: `/play` with `DEV_START_FEN`, legal moves via `BoardSessionView`
-- Storybook: `Play/Endgame/PlayShell`
+- **eg-004** `GameClock` + `clockDisplay` helpers — active highlight, low-time pulse, flag styling
+- **eg-005** `randomLegalBot` domain adapter + `useBotOpponent` hook; `commitMove` on session
+- **eg-006** `GameResultModal`, resign, rematch via `reset()`
+- **eg-007** Storybook: `Play/Endgame/GameClock`, `PlayShell` BulletClock variant
+- **eg-008** `EndgameNav` on home + `/play`
 
-**Evidence:** `npm run lint` exit 0 (pre-existing hook warnings only); `npm run build` exit 0; `/play` route in build output
+**Evidence:** `npm run lint` exit 0; `npm run build` exit 0
 
-**Next:** `eg-004` GameClock component — styled clocks + flag fall UX
+**Next:** `eg-002` position pool when ready; Stockfish bot upgrade; Phase 1 planning
 
 ---
 
 ## Previous session
+
+Play route foundation (`eg-003`): `PlayShell`, `useLocalPlaySession`, `/play` with `DEV_START_FEN`.
+
+---
 
 ## Blockers
 
@@ -51,6 +54,7 @@ Position pool (`eg-002`) deferred until play loop, clock, and bot work.
 | 2026-06-21 | Match event reducer | Shared server/client game state logic |
 | 2026-06-21 | Rating bucket = mode × time control × subdivision | Independent leaderboards per queue |
 | 2026-06-21 | Phase 0 uses `DEV_START_FEN` not position pool | Pool is last; unblocks play route + bot first |
+| 2026-06-21 | Interim `randomLegalBot` for Phase 0 | Unblocks full game loop; Stockfish before Phase 1 |
 
 ---
 
@@ -62,11 +66,11 @@ Position pool (`eg-002`) deferred until play loop, clock, and bot work.
 
 ### Phase 0
 - [x] eg-003 Play route (stable FEN)
-- [ ] eg-004 Clock
-- [ ] eg-005 Bot
-- [ ] eg-006 Game end + rematch
-- [ ] eg-007 Storybook PlayShell
-- [ ] eg-008 Navigation
+- [x] eg-004 Clock
+- [x] eg-005 Bot (interim random-legal)
+- [x] eg-006 Game end + rematch
+- [x] eg-007 Storybook PlayShell
+- [x] eg-008 Navigation
 - [ ] eg-002 Position pool (deferred — last)
 
 ### Phase 1+

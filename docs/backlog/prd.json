@@ -34,7 +34,7 @@
       "phase": "0",
       "title": "GameClock component (3+2 default)",
       "priority": 3,
-      "passes": false,
+      "passes": true,
       "acceptance": "Active side ticks; flag fall ends game"
     },
     {
@@ -42,7 +42,8 @@
       "phase": "0",
       "title": "Bot opponent (Stockfish WASM or interim bot)",
       "priority": 4,
-      "passes": false,
+      "passes": true,
+      "note": "Interim randomLegalBot shipped; Stockfish WASM upgrade before Phase 1",
       "acceptance": "Bot responds after human move; completes full games"
     },
     {
@@ -50,7 +51,7 @@
       "phase": "0",
       "title": "Game end, result modal, rematch",
       "priority": 5,
-      "passes": false,
+      "passes": true,
       "acceptance": "Checkmate, stalemate, draw, flag, resignation handled; rematch resets to DEV_START_FEN"
     },
     {
@@ -58,7 +59,7 @@
       "phase": "0",
       "title": "Storybook story for PlayShell",
       "priority": 6,
-      "passes": false,
+      "passes": true,
       "acceptance": "Story renders board + clocks; npm run lint clean"
     },
     {
@@ -66,7 +67,7 @@
       "phase": "0",
       "title": "Navigation link to /play",
       "priority": 7,
-      "passes": false,
+      "passes": true,
       "acceptance": "Discoverable entry from app home or header"
     },
     {

@@ -38,9 +38,11 @@ export interface LocalPlaySession {
   matchState: LocalMatchState;
   boardState: BoardSessionState;
   apply: (message: ProgressMessage) => ApplyResult;
+  commitMove: (from: string, to: string, promotion?: string) => ApplyResult;
   dispatchMatch: (event: LocalMatchEvent) => void;
   handleBoardProgress: (payload: BoardProgressPayload) => void;
   reset: () => void;
+  resign: () => void;
   canPlayerMove: boolean;
   activeColor: PieceColor;
   isTerminal: boolean;
@@ -81,14 +83,9 @@ export const useLocalPlaySession = (
   const canPlayerMove =
     !isTerminal && isPlayersTurn && (matchState.phase === 'ready' || matchState.phase === 'active');
 
-  const handleBoardProgress = useCallback(
-    (payload: BoardProgressPayload) => {
-      if (payload.message.type !== 'move') {
-        return;
-      }
-
+  const syncMoveToMatch = useCallback(
+    (mover: PieceColor) => {
       const now = Date.now();
-      const mover = matchRef.current.clock.activeColor;
       const outcome = getSession().getState().outcome;
 
       if (matchRef.current.phase === 'ready') {
@@ -105,6 +102,28 @@ export const useLocalPlaySession = (
     [getSession],
   );
 
+  const commitMove = useCallback(
+    (from: string, to: string, promotion?: string): ApplyResult => {
+      const mover = matchRef.current.clock.activeColor;
+      const result = apply({ type: 'move', from, to, promotion });
+      if (result.ok) {
+        syncMoveToMatch(mover);
+      }
+      return result;
+    },
+    [apply, syncMoveToMatch],
+  );
+
+  const handleBoardProgress = useCallback(
+    (payload: BoardProgressPayload) => {
+      if (payload.message.type !== 'move') {
+        return;
+      }
+      syncMoveToMatch(matchRef.current.clock.activeColor);
+    },
+    [syncMoveToMatch],
+  );
+
   const reset = useCallback(() => {
     const nextConfig = createPhase0PlayConfig(options.config);
     resetSession(boardConfigFromPlay(nextConfig));
@@ -116,6 +135,13 @@ export const useLocalPlaySession = (
     });
   }, [options.config, resetSession]);
 
+  const resign = useCallback(() => {
+    if (matchRef.current.phase === 'completed') {
+      return;
+    }
+    dispatchMatch({ type: 'RESIGN', color: config.playerColor });
+  }, [config.playerColor]);
+
   const orientation = config.playerColor === 'b' ? 'black' : 'white';
 
   return {
@@ -123,9 +149,11 @@ export const useLocalPlaySession = (
     matchState,
     boardState,
     apply,
+    commitMove,
     dispatchMatch,
     handleBoardProgress,
     reset,
+    resign,
     canPlayerMove,
     activeColor,
     isTerminal,

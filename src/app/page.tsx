@@ -17,6 +17,7 @@ import { listHeatmapSchemes } from '@/features/chessboard/overlays/schemes';
 import type { HeatmapColorProfileId } from '@/features/chessboard/overlays/colors';
 import { listColorProfiles } from '@/features/chessboard/overlays/colors';
 import { ChessteraTitle } from '@/features/branding';
+import { EndgameNav } from '@/features/endgame';
 
 const BOARD_SIZE = 480;
 const DEFAULT_FEN = new Chess().fen();
@@ -1006,7 +1007,12 @@ function HomeContent() {
       style={{ paddingTop: '72px', paddingBottom: '96px' }}
     >
       <div ref={logWorkspaceMetrics} className={workspaceStackClass}>
-        {!isCanvasExpanded ? <ChessteraTitle /> : null}
+        {!isCanvasExpanded ? (
+          <div className="flex flex-col items-center gap-4">
+            <ChessteraTitle />
+            <EndgameNav />
+          </div>
+        ) : null}
         <HeatmapBoard
           fen={fen}
           orientation={boardOrientation}
