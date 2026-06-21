@@ -8,7 +8,7 @@
 
 ## Current focus
 
-**Phase 1 foundation — shipped**  
+**Phase 1 — auth infrastructure shipped**  
 Next: Supabase persistence, realtime, persisted ratings
 
 ---
@@ -17,19 +17,17 @@ Next: Supabase persistence, realtime, persisted ratings
 
 **Date:** 2026-06-21  
 **Work:**
-- Phase 1 contract: `docs/plans/phase-1-platform-contract.md`
-- Supabase: clients, `.env.example`, SQL migration (`profiles`, `matches`, `match_events`, `ratings`)
-- Match server: `MatchService`, `applyMatchMove`, memory repository
-- API: `POST/GET /api/matches`, join, move, resign
-- Auth: `AuthProvider`, guest ids, `/auth` page
-- Online play: `OnlinePlayShell`, `useOnlineMatch` (poll), `/match/[id]`, `InviteMatchPanel` on `/play`
-- Ratings: `processCompletedRatedMatch` (in-memory hook)
+- Server auth: `src/server/auth/` (`resolveRequestActor`, `requireRequestActor`, profile helpers)
+- Middleware: Supabase session refresh on all routes
+- API: `GET /api/me` returns actor + profile
+- Match routes: create/join/move/resign use verified session (guest `X-Player-Id` fallback in dev)
+- Client: `authenticatedFetch` with `credentials: 'same-origin'`; `AuthProvider` syncs `/api/me`
 
 **Evidence:** `npm run lint` exit 0; `npm run build` exit 0
 
-**Manual test:** `/play` → Create invite link → open in second tab → join → play moves
+**Stories:** `eg-101c` passes
 
-**Next:** Wire Supabase repository; Realtime; persist ratings
+**Next:** Wire Supabase repository; apply migration; Realtime; persist ratings
 
 ---
 
@@ -40,6 +38,7 @@ Next: Supabase persistence, realtime, persisted ratings
 
 ### Phase 1
 - [x] eg-101 auth foundation
+- [x] eg-101c server auth infrastructure
 - [x] eg-102 match API (memory)
 - [x] eg-103 invite multiplayer (poll)
 - [ ] eg-104 persisted ratings

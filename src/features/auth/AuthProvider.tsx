@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { createSupabaseBrowserClient } from '@/platform/supabase/client';
 import { isSupabaseConfigured } from '@/platform/supabase/env';
+import { authenticatedFetch } from './authenticatedFetch';
 import { getOrCreateGuestId } from './guest';
 import { getAuthCallbackUrl, type OAuthProvider } from './providers';
 
@@ -106,6 +107,54 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       listener.subscription.unsubscribe();
     };
   }, [hydrateGuest, supabase]);
+
+  useEffect(() => {
+    if (loading || !user) {
+      return undefined;
+    }
+
+    let cancelled = false;
+
+    const syncServerProfile = async () => {
+      try {
+        const response = await authenticatedFetch('/api/me', {
+          playerId: user.isGuest ? user.id : null,
+        });
+        if (!response.ok || cancelled) {
+          return;
+        }
+
+        const data = (await response.json()) as {
+          actor: {
+            displayName?: string;
+            avatarUrl?: string | null;
+            email?: string;
+          };
+        };
+
+        setUser((prev) => {
+          if (!prev || prev.id !== user.id) {
+            return prev;
+          }
+
+          return {
+            ...prev,
+            displayName: data.actor.displayName ?? prev.displayName,
+            email: data.actor.email ?? prev.email,
+            avatarUrl: data.actor.avatarUrl ?? prev.avatarUrl,
+          };
+        });
+      } catch {
+        // Profile sync is best-effort; client session remains authoritative.
+      }
+    };
+
+    void syncServerProfile();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [loading, user]);
 
   const signInWithOAuth = useCallback(
     async (provider: OAuthProvider) => {

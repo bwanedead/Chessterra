@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
-import { matchService, resolvePlayerId } from '@/server/match';
+import { requireRequestActor } from '@/server/auth';
+import { matchService } from '@/server/match';
 
 export async function POST(request: Request) {
-  const playerId = resolvePlayerId(request.headers.get('x-player-id'));
-  if (!playerId) {
-    return NextResponse.json({ error: 'Missing X-Player-Id header' }, { status: 401 });
+  const resolved = await requireRequestActor(request);
+  if ('error' in resolved) {
+    return NextResponse.json({ error: resolved.error }, { status: resolved.status });
   }
+
+  const { actor } = resolved;
 
   let body: { gameModeId?: string; timeControlId?: string; rated?: boolean } = {};
   try {
@@ -15,7 +18,7 @@ export async function POST(request: Request) {
   }
 
   const result = await matchService.createInviteMatch({
-    hostUserId: playerId,
+    hostUserId: actor.userId,
     gameModeId: body.gameModeId,
     timeControlId: body.timeControlId,
     rated: body.rated,

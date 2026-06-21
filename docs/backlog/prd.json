@@ -90,6 +90,15 @@
       "acceptance": "Sign up/in; profile stores display name"
     },
     {
+      "id": "eg-101c",
+      "phase": "1",
+      "title": "Server auth infrastructure",
+      "priority": 1,
+      "passes": true,
+      "note": "resolveRequestActor, middleware session refresh, /api/me, match routes use verified session; guest X-Player-Id fallback in dev",
+      "acceptance": "API routes reject spoofed player ids when Supabase configured; session cookies work for authenticated play"
+    },
+    {
       "id": "eg-102",
       "phase": "1",
       "title": "Server-authoritative game room + move API",

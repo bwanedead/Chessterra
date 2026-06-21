@@ -1,4 +1,5 @@
 import type { MatchSnapshot } from '@/domain/play/match/types';
+import { authenticatedFetch } from '@/features/auth/authenticatedFetch';
 
 const jsonHeaders = (playerId: string) => ({
   'Content-Type': 'application/json',
@@ -6,7 +7,7 @@ const jsonHeaders = (playerId: string) => ({
 });
 
 export const fetchMatch = async (matchId: string): Promise<MatchSnapshot> => {
-  const response = await fetch(`/api/matches/${matchId}`, { cache: 'no-store' });
+  const response = await authenticatedFetch(`/api/matches/${matchId}`, { cache: 'no-store' });
   if (!response.ok) {
     throw new Error('Failed to load match');
   }
@@ -18,10 +19,11 @@ export const createInviteMatch = async (
   playerId: string,
   options?: { rated?: boolean; timeControlId?: string },
 ): Promise<{ match: MatchSnapshot; invitePath: string }> => {
-  const response = await fetch('/api/matches', {
+  const response = await authenticatedFetch('/api/matches', {
     method: 'POST',
     headers: jsonHeaders(playerId),
     body: JSON.stringify(options ?? {}),
+    playerId,
   });
   const data = await response.json();
   if (!response.ok) {
@@ -31,9 +33,10 @@ export const createInviteMatch = async (
 };
 
 export const joinMatch = async (matchId: string, playerId: string): Promise<MatchSnapshot> => {
-  const response = await fetch(`/api/matches/${matchId}/join`, {
+  const response = await authenticatedFetch(`/api/matches/${matchId}/join`, {
     method: 'POST',
     headers: jsonHeaders(playerId),
+    playerId,
   });
   const data = await response.json();
   if (!response.ok) {
@@ -47,10 +50,11 @@ export const postMatchMove = async (
   playerId: string,
   move: { from: string; to: string; promotion?: string },
 ): Promise<MatchSnapshot> => {
-  const response = await fetch(`/api/matches/${matchId}/move`, {
+  const response = await authenticatedFetch(`/api/matches/${matchId}/move`, {
     method: 'POST',
     headers: jsonHeaders(playerId),
     body: JSON.stringify(move),
+    playerId,
   });
   const data = await response.json();
   if (!response.ok) {
@@ -60,9 +64,10 @@ export const postMatchMove = async (
 };
 
 export const postMatchResign = async (matchId: string, playerId: string): Promise<MatchSnapshot> => {
-  const response = await fetch(`/api/matches/${matchId}/resign`, {
+  const response = await authenticatedFetch(`/api/matches/${matchId}/resign`, {
     method: 'POST',
     headers: jsonHeaders(playerId),
+    playerId,
   });
   const data = await response.json();
   if (!response.ok) {

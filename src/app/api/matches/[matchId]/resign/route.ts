@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { matchService, resolvePlayerId } from '@/server/match';
+import { requireRequestActor } from '@/server/auth';
+import { matchService } from '@/server/match';
 
 interface RouteContext {
   params: Promise<{ matchId: string }>;
@@ -7,12 +8,12 @@ interface RouteContext {
 
 export async function POST(request: Request, context: RouteContext) {
   const { matchId } = await context.params;
-  const playerId = resolvePlayerId(request.headers.get('x-player-id'));
-  if (!playerId) {
-    return NextResponse.json({ error: 'Missing X-Player-Id header' }, { status: 401 });
+  const resolved = await requireRequestActor(request);
+  if ('error' in resolved) {
+    return NextResponse.json({ error: resolved.error }, { status: resolved.status });
   }
 
-  const result = await matchService.resign(matchId, playerId);
+  const result = await matchService.resign(matchId, resolved.actor.userId);
   if (!result.ok) {
     return NextResponse.json({ error: result.error }, { status: 400 });
   }
