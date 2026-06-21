@@ -10,8 +10,16 @@
       "phase": "0",
       "title": "Endgame domain scaffold (position, match, clock types)",
       "priority": 1,
-      "passes": false,
+      "passes": true,
       "acceptance": "src/domain/endgame/ with typed exports; clock flag logic unit-testable or pure"
+    },
+    {
+      "id": "fnd-001",
+      "phase": "foundation",
+      "title": "Play platform foundation (modes, clocks, ratings, matchmaking, board)",
+      "priority": 0,
+      "passes": true,
+      "acceptance": "src/domain/play/, src/platform/, board themes/interaction, PlayBoard story; lint + build pass"
     },
     {
       "id": "eg-002",

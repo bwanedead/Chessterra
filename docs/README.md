@@ -11,7 +11,7 @@ This directory is split into collections so contributors and agents can find the
 | Path | Purpose |
 |------|---------|
 | `project-visions/` | Product north star, experience pillars, long-horizon concepts |
-| `plans/` | Execution contracts with steps and acceptance criteria (e.g. `endgame-phase-zero.md`) |
+| `plans/` | Execution contracts with steps and acceptance criteria (e.g. `endgame-phase-zero.md`, `foundation-architecture.md`) |
 | `backlog/` | Machine-readable stories (`prd.json`) for `/goal` pursuit |
 | `development-insights/` | Implementation notes and architectural breadcrumbs for the current system |
 | `progress.md` | Session handoff — focus, blockers, evidence (update every agent session) |

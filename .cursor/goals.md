@@ -3,7 +3,8 @@
 Persistent pursuit state for Chessterra → **Endgame** vision.  
 Agents: read this file at session start; update at session end.
 
-**Vision:** `docs/project-visions/endgame.md`
+**Vision:** `docs/project-visions/endgame.md`  
+**Foundation:** `docs/plans/foundation-architecture.md`
 
 ---
 
@@ -24,9 +25,9 @@ Plan: `docs/plans/endgame-phase-zero.md`
 
 | ID | Story | Status | Next action |
 |----|-------|--------|-------------|
-| eg-001 | Domain scaffold | `pending` | Create `src/domain/endgame/{position,match,clock}.ts` |
-| eg-002 | Position pool JSON | `pending` | After eg-001 |
-| eg-003 | Play route + shell | `pending` | After eg-002 |
+| eg-002 | Position pool JSON | `pending` | Add `src/data/position-pool.json` + wire `pickRandomPosition` |
+| eg-003 | Play route + shell | `pending` | `/play` route using `PlayBoard` |
+| eg-004 | GameClock component | `pending` | Wire `domain/play/time-control/clock.ts` to UI |
 
 Full backlog: `docs/backlog/prd.json`
 
@@ -47,7 +48,10 @@ Phase 0 is **complete** when all are true:
 
 ## Completed
 
-_(none yet)_
+| ID | Story | Evidence |
+|----|-------|----------|
+| fnd-001 | Play platform foundation | `src/domain/play/`, `src/platform/`, board themes/interaction, `PlayBoard` |
+| eg-001 | Domain scaffold | `src/domain/endgame/position.ts`, `src/domain/play/time-control/clock.ts` |
 
 ---
 
@@ -63,7 +67,8 @@ _(none)_
 |------|----------|
 | 2026-06-21 | Pursue Endgame as Chessterra evolution; analytics retained |
 | 2026-06-21 | Phase 0 before auth/multiplayer |
-| 2026-06-21 | Goal ledger + skill replaces native Cursor `/goal` |
+| 2026-06-21 | Registry pattern for game modes, time controls, themes, rating buckets |
+| 2026-06-21 | `ChessEngine` interface abstracts chess.js for server swap later |
 
 ---
 
@@ -73,13 +78,4 @@ In Cursor chat, invoke the **goal** skill or say:
 
 > `/goal` — continue Endgame Phase 0 per goals.md
 
-The agent should:
-1. Read this file, `docs/progress.md`, and the active plan
-2. Pick the highest-priority incomplete story
-3. Implement the smallest verifiable slice
-4. Run `npm run lint` and `npm run build`
-5. Update this ledger and `docs/progress.md` with evidence
-
-For bounded autonomous runs, use Cursor `/loop` with a turn limit, e.g.:
-
-> `/loop` until eg-003 passes acceptance criteria, max 15 turns
+For bounded autonomous runs, use Cursor `/loop` with a turn limit.

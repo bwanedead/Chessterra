@@ -1,6 +1,9 @@
 import { Fragment, type ReactNode, useEffect, useRef } from 'react';
-import type { BoardAppearance } from '@/features/chessboard/components/ChessboardSurface';
+import type { BoardAppearance } from '@/features/chessboard/themes/types';
 import type { SquareOverlayDescriptor } from '@/features/chessboard/overlays/schemes';
+
+import type { BoardSquareHighlight } from '@/features/chessboard/interaction/types';
+import { getHighlightColor } from '@/features/chessboard/interaction/highlights';
 
 interface ChessboardSquareProps {
   square: string;
@@ -10,6 +13,7 @@ interface ChessboardSquareProps {
   onPointerUp?: (event: React.PointerEvent<HTMLDivElement>) => void;
   children?: ReactNode;
   highlight?: boolean;
+  interactionHighlight?: BoardSquareHighlight | null;
   className?: string;
   overlay?: SquareOverlayDescriptor | null;
   showContent?: boolean;
@@ -156,6 +160,7 @@ export const ChessboardSquare = ({
   onPointerUp,
   children,
   highlight,
+  interactionHighlight,
   className,
   overlay,
   showContent = true,
@@ -314,6 +319,17 @@ export const ChessboardSquare = ({
             .filter(Boolean)
             .join(' ')}
           style={{ backgroundColor: HIGHLIGHT_COLOR }}
+        />
+      )}
+      {interactionHighlight && (
+        <div
+          className={[
+            'absolute inset-0 pointer-events-none transition-colors duration-150',
+            normalized ? '' : 'rounded-md',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+          style={{ backgroundColor: getHighlightColor(interactionHighlight.kind) }}
         />
       )}
       <div className="relative z-10 flex h-full w-full select-none items-center justify-center pointer-events-none">

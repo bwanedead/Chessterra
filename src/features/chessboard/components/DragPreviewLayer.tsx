@@ -1,7 +1,7 @@
 import { memo, useEffect, useMemo, useRef } from 'react';
 import { ChessPieceSprite } from './ChessPieceSprite';
 import type { DragVisual } from '@/features/chessboard/hooks/usePieceDrag';
-import type { BoardAppearance } from '@/features/chessboard/components/ChessboardSurface';
+import type { BoardAppearance } from '@/features/chessboard/themes/types';
 import { createScopedLogger } from '@/shared/utils/logger';
 
 interface DragPreviewLayerProps {

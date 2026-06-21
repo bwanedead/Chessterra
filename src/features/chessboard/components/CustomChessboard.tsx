@@ -4,13 +4,16 @@ import { useEffect, useMemo, useRef } from 'react';
 import { ChessboardSurface } from './ChessboardSurface';
 import { DragPreviewLayer } from './DragPreviewLayer';
 import { ChessPieceSprite } from './ChessPieceSprite';
-import type { BoardAppearance } from '@/features/chessboard/components/ChessboardSurface';
+import type { BoardAppearance } from '@/features/chessboard/themes/types';
 import { useBoardSquares } from '@/features/chessboard/hooks/useBoardSquares';
 import { usePieceDrag } from '@/features/chessboard/hooks/usePieceDrag';
 import { createScopedLogger, layoutDebugEnabled } from '@/shared/utils/logger';
 import { FILES } from '@/lib/chessboard/boardState';
 import type { PieceColor, PromotionPieceType } from '@/features/chessboard/types';
 import type { SquareOverlayDescriptor } from '@/features/chessboard/overlays/schemes';
+import type { BoardSquareHighlight } from '@/features/chessboard/interaction/types';
+import { resolveBoardAppearance } from '@/features/chessboard/themes';
+import '@/features/chessboard/themes';
 
 interface PromotionOverlayConfig {
   square: string;
@@ -26,6 +29,9 @@ interface CustomChessboardProps {
   boardSize: number;
   onMove: (from: string, to: string) => boolean;
   squareOverlays?: Record<string, SquareOverlayDescriptor>;
+  interactionHighlights?: Record<string, BoardSquareHighlight>;
+  onSquareActivate?: (square: string, pieceColor?: PieceColor) => void;
+  themeId?: string;
   showPieces?: boolean;
   normalizedBoard?: boolean;
   showIntensityLabels?: boolean;
@@ -156,6 +162,9 @@ export const CustomChessboard = ({
   boardSize,
   onMove,
   squareOverlays,
+  interactionHighlights,
+  onSquareActivate,
+  themeId,
   showPieces = true,
   normalizedBoard = false,
   showIntensityLabels = false,
@@ -173,7 +182,11 @@ export const CustomChessboard = ({
   const layoutLogger = useMemo(() => createScopedLogger('chessboard/layout'), []);
   const activePreviewRef = useRef<string | null>(null);
   const previewIssueLoggedRef = useRef(false);
-  const appearance = normalizedBoard ? NORMALIZED_APPEARANCE : CLASSIC_APPEARANCE;
+  const appearance = themeId
+    ? resolveBoardAppearance(themeId, normalizedBoard ? NORMALIZED_APPEARANCE : CLASSIC_APPEARANCE)
+    : normalizedBoard
+      ? NORMALIZED_APPEARANCE
+      : CLASSIC_APPEARANCE;
   useEffect(() => {
     if (!layoutDebugEnabled) {
       return;
@@ -326,6 +339,10 @@ export const CustomChessboard = ({
           dragSourceSquare={dragVisual?.square}
           onSquarePointerDown={beginDrag}
           squareOverlays={squareOverlays}
+          interactionHighlights={interactionHighlights}
+          onSquareActivate={(squareId, piece) =>
+            onSquareActivate?.(squareId, piece?.color)
+          }
           showPieces={showPieces}
           appearance={appearance}
           boardSize={boardSize}

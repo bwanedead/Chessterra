@@ -9,14 +9,9 @@ import type { BoardSquare, ChessPieceDescriptor } from '@/features/chessboard/ty
 import { useLayerDiagnostics } from '@/features/chessboard/hooks/useLayerDiagnostics';
 import { createScopedLogger, layoutDebugEnabled } from '@/shared/utils/logger';
 import type { SquareOverlayDescriptor } from '@/features/chessboard/overlays/schemes';
+import type { BoardSquareHighlight } from '@/features/chessboard/interaction/types';
 
-export interface BoardAppearance {
-  mode: 'classic' | 'normalized';
-  lightSquare: string;
-  darkSquare: string;
-  wireframeColor?: string;
-  backgroundColor?: string;
-}
+import type { BoardAppearance } from '@/features/chessboard/themes/types';
 
 interface ChessboardSurfaceProps {
   squares: BoardSquare[];
@@ -29,6 +24,8 @@ interface ChessboardSurfaceProps {
     event: ReactPointerEvent<HTMLDivElement>,
   ) => void;
   squareOverlays?: Record<string, SquareOverlayDescriptor>;
+  interactionHighlights?: Record<string, BoardSquareHighlight>;
+  onSquareActivate?: (squareId: string, piece?: ChessPieceDescriptor) => void;
   showPieces?: boolean;
   appearance: BoardAppearance;
   showIntensityLabels?: boolean;
@@ -41,6 +38,8 @@ export const ChessboardSurface = memo(
     dragSourceSquare,
     onSquarePointerDown,
     squareOverlays,
+    interactionHighlights,
+    onSquareActivate,
     showPieces = true,
     appearance,
     boardSize,
@@ -50,6 +49,7 @@ export const ChessboardSurface = memo(
     const stackRef = useRef<HTMLDivElement | null>(null);
     const gridRef = useRef<HTMLDivElement | null>(null);
     const lastLoggedModeRef = useRef<string | null>(null);
+    const pointerDownRef = useRef<{ square: string; x: number; y: number } | null>(null);
     const normalized = appearance.mode === 'normalized';
     const wireframeColor = appearance.wireframeColor ?? '#ffffff';
     const boardBackground = appearance.backgroundColor ?? (normalized ? '#000000' : undefined);
@@ -204,17 +204,24 @@ export const ChessboardSurface = memo(
             {squares.map((square) => {
               const isDraggingSource = dragSourceSquare === square.id;
               const overlay = squareOverlays?.[square.id];
+              const interactionHighlight = interactionHighlights?.[square.id] ?? null;
               return (
                 <ChessboardSquare
                   key={square.id}
                   square={square.id}
                   color={square.color}
                   highlight={isDraggingSource}
+                  interactionHighlight={interactionHighlight}
                   overlay={overlay}
                   showContent={showPieces}
                   appearance={appearance}
                   showIntensityLabel={showIntensityLabels}
                   onPointerDown={(event) => {
+                    pointerDownRef.current = {
+                      square: square.id,
+                      x: event.clientX,
+                      y: event.clientY,
+                    };
                     if (layoutDebugEnabled) {
                       surfaceLogger.debug('square-pointer-down', {
                         squareId: square.id,
@@ -226,6 +233,20 @@ export const ChessboardSurface = memo(
                     if (square.piece) {
                       onSquarePointerDown(square.id, square.piece, event);
                     }
+                  }}
+                  onPointerUp={(event) => {
+                    const start = pointerDownRef.current;
+                    pointerDownRef.current = null;
+                    if (!start || start.square !== square.id) {
+                      return;
+                    }
+                    const dx = event.clientX - start.x;
+                    const dy = event.clientY - start.y;
+                    const distance = Math.hypot(dx, dy);
+                    if (distance > 8) {
+                      return;
+                    }
+                    onSquareActivate?.(square.id, square.piece);
                   }}
                 >
                   {square.piece ? (
@@ -256,3 +277,5 @@ export const ChessboardSurface = memo(
 );
 
 ChessboardSurface.displayName = 'ChessboardSurface';
+
+export type { BoardAppearance } from '@/features/chessboard/themes/types';

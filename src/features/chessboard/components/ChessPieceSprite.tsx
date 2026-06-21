@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { CSSProperties } from 'react';
 import { ChessPieceDescriptor } from '@/features/chessboard/types';
-import type { BoardAppearance } from '@/features/chessboard/components/ChessboardSurface';
+import type { BoardAppearance } from '@/features/chessboard/themes/types';
 import { getPieceSprite } from '@/shared/utils/pieceAssets';
 
 interface ChessPieceSpriteProps {
