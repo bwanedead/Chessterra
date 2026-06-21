@@ -6,6 +6,7 @@ Chessterra is evolving into **Endgame** — a browser-based, rated competitive c
 
 Before sizeable changes, read:
 - `docs/project-visions/endgame.md` — product north star and architecture constitution
+- `docs/plans/universal-board-foundation.md` — graph board, rulesets, progression messages
 - `docs/plans/endgame-phase-zero.md` — active execution plan (Phase 0)
 - `.cursor/goals.md` and `docs/progress.md` — current focus and session handoff
 - `docs/backlog/prd.json` — checkable stories (`eg-001`, …)

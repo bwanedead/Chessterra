@@ -1,12 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { PlayBoard } from '@/features/play';
-import { createChessEngine } from '@/domain/play/chess';
-
-const START_FEN = '4k3/8/8/4K3/8/8/8/8 w - - 0 1';
+import { DEV_START_FEN } from '@/domain/endgame/devPosition';
 
 const PlayBoardDemo = () => {
-  const [fen, setFen] = useState(START_FEN);
+  const [fen, setFen] = useState(DEV_START_FEN);
 
   return (
     <div className="flex flex-col items-center gap-4 p-6 bg-slate-950 min-h-[520px]">
@@ -17,7 +15,7 @@ const PlayBoardDemo = () => {
         <PlayBoard
           fen={fen}
           boardSize={480}
-          playerColor={createChessEngine(fen).turn()}
+          playerColor="w"
           themeId="endgame-slate"
           onFenChange={(nextFen) => setFen(nextFen)}
         />

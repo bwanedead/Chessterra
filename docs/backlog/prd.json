@@ -14,12 +14,12 @@
       "acceptance": "src/domain/endgame/ with typed exports; clock flag logic unit-testable or pure"
     },
     {
-      "id": "fnd-001",
+      "id": "ubc-001",
       "phase": "foundation",
-      "title": "Play platform foundation (modes, clocks, ratings, matchmaking, board)",
+      "title": "Universal board core (graph, rulesets, session, UniversalBoard)",
       "priority": 0,
       "passes": true,
-      "acceptance": "src/domain/play/, src/platform/, board themes/interaction, PlayBoard story; lint + build pass"
+      "acceptance": "board-core, board-rules, board-session, UniversalBoard; docs/plans/universal-board-foundation.md; build passes"
     },
     {
       "id": "eg-003",

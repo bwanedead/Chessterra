@@ -25,7 +25,7 @@ Plan: `docs/plans/endgame-phase-zero.md`
 
 | ID | Story | Status | Next action |
 |----|-------|--------|-------------|
-| eg-003 | Play route + shell | `pending` | `/play` with `DEV_START_FEN` + `PlayBoard` |
+| eg-003 | Play route + shell | `pending` | `/play` with `UniversalBoard` + `DEV_START_FEN` |
 | eg-004 | GameClock component | `pending` | Wire `domain/play/time-control/clock.ts` to UI |
 | eg-005 | Bot opponent | `pending` | After clock + play shell |
 
