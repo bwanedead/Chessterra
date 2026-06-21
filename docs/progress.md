@@ -12,9 +12,10 @@ Session handoff for long-horizon work. Update at the end of every agent session 
 
 ## Current focus
 
-**Phase 0 — Local play validation (functionally complete)**  
-Deferred: `eg-002` position pool (last before Phase 1)  
-Optional upgrade: Stockfish WASM bot replacing `randomLegalBot`
+**Phase 0 — COMPLETE**  
+**Phase 1 — Auth + server play** (`eg-101` next)
+
+Optional pre-Phase 1: Stockfish WASM bot upgrade
 
 ---
 
@@ -22,21 +23,15 @@ Optional upgrade: Stockfish WASM bot replacing `randomLegalBot`
 
 **Date:** 2026-06-21  
 **Work:**
-- **eg-004** `GameClock` + `clockDisplay` helpers — active highlight, low-time pulse, flag styling
-- **eg-005** `randomLegalBot` domain adapter + `useBotOpponent` hook; `commitMove` on session
-- **eg-006** `GameResultModal`, resign, rematch via `reset()`
-- **eg-007** Storybook: `Play/Endgame/GameClock`, `PlayShell` BulletClock variant
-- **eg-008** `EndgameNav` on home + `/play`
+- **eg-002** Position pool: 500 validated endgame FENs in `src/data/position-pool.json` (~136 KB)
+- Generator: `scripts/generate-position-pool.mjs` (`npm run generate:position-pool`)
+- Domain: `src/domain/endgame/pool.ts` — `pickPoolPositionForMatch`, `getPoolEntry`
+- Play wired: new game + rematch pick random pool position (excludes last on rematch)
+- `PlayShell` shows pool entry id + material note
 
-**Evidence:** `npm run lint` exit 0; `npm run build` exit 0
+**Evidence:** `npm run lint` exit 0; `npm run build` exit 0; pool count 500
 
-**Next:** `eg-002` position pool when ready; Stockfish bot upgrade; Phase 1 planning
-
----
-
-## Previous session
-
-Play route foundation (`eg-003`): `PlayShell`, `useLocalPlaySession`, `/play` with `DEV_START_FEN`.
+**Next:** Phase 1 planning — `eg-101` Supabase auth
 
 ---
 
@@ -50,11 +45,9 @@ Play route foundation (`eg-003`): `PlayShell`, `useLocalPlaySession`, `/play` wi
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
-| 2026-06-21 | Registry pattern for modes/time controls/themes | Add variants without rewriting core |
-| 2026-06-21 | Match event reducer | Shared server/client game state logic |
-| 2026-06-21 | Rating bucket = mode × time control × subdivision | Independent leaderboards per queue |
-| 2026-06-21 | Phase 0 uses `DEV_START_FEN` not position pool | Pool is last; unblocks play route + bot first |
-| 2026-06-21 | Interim `randomLegalBot` for Phase 0 | Unblocks full game loop; Stockfish before Phase 1 |
+| 2026-06-21 | 500-position generated pool for Phase 0 | User request; ~136 KB on disk, fine to bundle |
+| 2026-06-21 | Generator script + chess.js validation | Ensures legal playable endgames; regen when needed |
+| 2026-06-21 | Rematch excludes previous position id | Avoid immediate repeat |
 
 ---
 
@@ -65,13 +58,13 @@ Play route foundation (`eg-003`): `PlayShell`, `useLocalPlaySession`, `/play` wi
 - [x] eg-001 Domain scaffold
 
 ### Phase 0
-- [x] eg-003 Play route (stable FEN)
+- [x] eg-002 Position pool (500 FENs)
+- [x] eg-003 Play route
 - [x] eg-004 Clock
-- [x] eg-005 Bot (interim random-legal)
+- [x] eg-005 Bot (interim)
 - [x] eg-006 Game end + rematch
-- [x] eg-007 Storybook PlayShell
+- [x] eg-007 Storybook
 - [x] eg-008 Navigation
-- [ ] eg-002 Position pool (deferred — last)
 
 ### Phase 1+
 See `docs/backlog/prd.json`

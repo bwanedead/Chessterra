@@ -45,6 +45,7 @@ export const createLocalMatchState = (
     rulesetId: config.rulesetId,
     timeControlId: config.timeControlId,
     startingFen: config.fen,
+    positionId: config.positionId,
     playerColor: config.playerColor,
     opponentKind: config.opponentKind,
     clock: createMatchClock(timeControl, activeColor),

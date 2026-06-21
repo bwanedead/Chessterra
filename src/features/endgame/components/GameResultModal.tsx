@@ -13,7 +13,7 @@ export interface GameResultModalProps {
   onRematch: () => void;
 }
 
-/** Phase 0 result overlay — rematch resets to DEV_START_FEN via session.reset(). */
+/** Phase 0 result overlay — rematch picks a new position from the pool. */
 export const GameResultModal = ({
   open,
   endReason,

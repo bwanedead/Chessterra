@@ -1,0 +1,5697 @@
+{
+  "version": 1,
+  "generatedAt": "2026-06-21T10:30:15.880Z",
+  "count": 500,
+  "entries": [
+    {
+      "id": "eg-pool-001",
+      "fen": "6k1/5ppp/8/8/8/8/5PPP/6K1 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #1 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-002",
+      "fen": "1k6/ppp5/8/8/8/8/PPP5/1K6 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #2 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-003",
+      "fen": "6k1/ppp5/8/8/8/8/5PPP/6K1 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #3 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-004",
+      "fen": "1k6/5ppp/8/8/8/8/PPP5/1K6 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #4 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-005",
+      "fen": "5k2/5ppp/8/8/8/8/5PPP/4K3 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #5 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-006",
+      "fen": "2k5/ppp5/8/8/8/8/PPP5/3K4 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #6 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-007",
+      "fen": "4k3/5ppp/8/8/8/8/5PPP/5K2 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #7 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-008",
+      "fen": "3k4/ppp5/8/8/8/8/PPP5/2K5 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #8 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-009",
+      "fen": "8/5k2/5ppp/8/8/8/5PPP/5K2 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #9 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-010",
+      "fen": "8/2k5/ppp5/8/8/8/PPP5/2K5 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #10 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-011",
+      "fen": "8/8/4k3/5ppp/8/8/5PPP/5K2 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #11 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-012",
+      "fen": "8/8/3k4/ppp5/8/8/PPP5/2K5 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #12 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-013",
+      "fen": "8/8/8/4k3/5ppp/8/5PPP/5K2 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #13 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-014",
+      "fen": "8/8/8/3k4/ppp5/8/PPP5/2K5 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #14 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-015",
+      "fen": "8/4k3/8/5ppp/8/8/5PPP/5K2 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #15 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-016",
+      "fen": "8/3k4/8/ppp5/8/8/PPP5/2K5 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #16 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-017",
+      "fen": "8/8/8/4k3/8/5ppp/5PPP/5K2 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #17 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-018",
+      "fen": "8/8/8/3k4/8/ppp5/PPP5/2K5 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #18 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-019",
+      "fen": "8/8/8/8/4k3/5ppp/5PPP/4K3 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #19 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-020",
+      "fen": "8/8/8/8/3k4/ppp5/PPP5/3K4 w - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #20 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-021",
+      "fen": "8/8/8/8/4k3/5ppp/5PPP/4K3 b - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #21 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-022",
+      "fen": "8/8/8/8/3k4/ppp5/PPP5/3K4 b - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #22 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-023",
+      "fen": "8/8/8/8/4k3/5ppp/5PPP/5K2 b - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #23 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-024",
+      "fen": "8/8/8/8/3k4/ppp5/PPP5/2K5 b - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #24 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-025",
+      "fen": "8/8/8/4k3/8/5ppp/5PPP/5K2 b - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #25 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-026",
+      "fen": "8/8/8/3k4/8/ppp5/PPP5/2K5 b - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #26 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-027",
+      "fen": "8/8/4k3/5ppp/8/8/5PPP/5K2 b - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #27 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-028",
+      "fen": "8/8/3k4/ppp5/8/8/PPP5/2K5 b - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #28 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-029",
+      "fen": "6k1/5ppp/8/8/8/8/5PPP/6K1 b - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #29 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-030",
+      "fen": "1k6/ppp5/8/8/8/8/PPP5/1K6 b - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #30 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-031",
+      "fen": "8/8/8/8/4k3/8/4R3/4K3 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #31 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-032",
+      "fen": "8/8/8/8/3k4/8/3R4/3K4 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #32 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-033",
+      "fen": "8/8/8/8/4k3/8/R7/4K3 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #33 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-034",
+      "fen": "8/8/8/8/3k4/8/7R/3K4 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #34 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-035",
+      "fen": "8/8/8/4k3/8/8/4R3/4K3 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #35 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-036",
+      "fen": "8/8/8/3k4/8/8/3R4/3K4 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #36 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-037",
+      "fen": "8/8/4k3/8/8/8/4R3/4K3 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #37 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-038",
+      "fen": "8/8/3k4/8/8/8/3R4/3K4 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #38 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-039",
+      "fen": "8/4k3/8/8/8/8/4R3/4K3 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #39 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-040",
+      "fen": "8/3k4/8/8/8/8/3R4/3K4 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #40 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-041",
+      "fen": "4k3/8/8/8/8/8/4R3/4K3 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #41 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-042",
+      "fen": "3k4/8/8/8/8/8/3R4/3K4 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #42 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-043",
+      "fen": "8/8/8/8/4k3/4r3/8/4K2R w - - 0 1",
+      "materialSignature": "w:R:b:R",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #43 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-044",
+      "fen": "8/8/8/8/3k4/3r4/8/R2K4 w - - 0 1",
+      "materialSignature": "w:R:b:R",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #44 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-045",
+      "fen": "8/8/8/8/4k3/4r3/8/R3K3 w - - 0 1",
+      "materialSignature": "w:R:b:R",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #45 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-046",
+      "fen": "8/8/8/8/3k4/3r4/8/3K3R w - - 0 1",
+      "materialSignature": "w:R:b:R",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #46 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-047",
+      "fen": "8/8/8/4k3/8/4r3/8/4K2R w - - 0 1",
+      "materialSignature": "w:R:b:R",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #47 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-048",
+      "fen": "8/8/8/3k4/8/3r4/8/R2K4 w - - 0 1",
+      "materialSignature": "w:R:b:R",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #48 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-049",
+      "fen": "8/8/4k3/8/8/4r3/8/4K2R w - - 0 1",
+      "materialSignature": "w:R:b:R",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #49 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-050",
+      "fen": "8/8/3k4/8/8/3r4/8/R2K4 w - - 0 1",
+      "materialSignature": "w:R:b:R",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #50 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-051",
+      "fen": "8/8/8/8/4k3/8/4r3/4K2R w - - 0 1",
+      "materialSignature": "w:R:b:R",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #51 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-052",
+      "fen": "8/8/8/8/3k4/8/3r4/R2K4 w - - 0 1",
+      "materialSignature": "w:R:b:R",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #52 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-053",
+      "fen": "8/8/8/8/3k4/8/4R3/4K3 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #53 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-054",
+      "fen": "8/8/8/8/4k3/8/3R4/3K4 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #54 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-055",
+      "fen": "8/8/8/8/4k3/8/3R4/4K3 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #55 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-056",
+      "fen": "8/8/8/8/3k4/8/4R3/3K4 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #56 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-057",
+      "fen": "8/8/8/3k4/8/8/4R3/4K3 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #57 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-058",
+      "fen": "8/8/8/4k3/8/8/3R4/3K4 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #58 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-059",
+      "fen": "8/8/3k4/8/8/8/4R3/4K3 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #59 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-060",
+      "fen": "8/8/4k3/8/8/8/3R4/3K4 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #60 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-061",
+      "fen": "8/8/8/8/4k3/8/4R3/4K3 b - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #61 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-062",
+      "fen": "8/8/8/8/3k4/8/3R4/3K4 b - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #62 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-063",
+      "fen": "8/8/8/8/4k3/4r3/8/4K2R b - - 0 1",
+      "materialSignature": "w:R:b:R",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #63 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-064",
+      "fen": "8/8/8/8/3k4/3r4/8/R2K4 b - - 0 1",
+      "materialSignature": "w:R:b:R",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #64 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-065",
+      "fen": "8/8/8/8/4k3/8/4r3/4K2R b - - 0 1",
+      "materialSignature": "w:R:b:R",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #65 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-066",
+      "fen": "8/8/8/8/3k4/8/3r4/R2K4 b - - 0 1",
+      "materialSignature": "w:R:b:R",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #66 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-067",
+      "fen": "8/8/8/8/4k3/8/4b3/4K1B1 w - - 0 1",
+      "materialSignature": "w:B:b:B",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #67 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-068",
+      "fen": "8/8/8/8/3k4/8/3b4/1B1K4 w - - 0 1",
+      "materialSignature": "w:B:b:B",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #68 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-069",
+      "fen": "8/8/8/8/4k3/8/4n3/4K1N1 w - - 0 1",
+      "materialSignature": "w:N:b:N",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #69 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-070",
+      "fen": "8/8/8/8/3k4/8/3n4/1N1K4 w - - 0 1",
+      "materialSignature": "w:N:b:N",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #70 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-071",
+      "fen": "8/8/8/8/4k3/4n3/8/4K1N1 w - - 0 1",
+      "materialSignature": "w:N:b:N",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #71 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-072",
+      "fen": "8/8/8/8/3k4/3n4/8/1N1K4 w - - 0 1",
+      "materialSignature": "w:N:b:N",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #72 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-073",
+      "fen": "8/8/8/8/4k3/8/4Q3/4K3 w - - 0 1",
+      "materialSignature": "w:Q:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #73 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-074",
+      "fen": "8/8/8/8/3k4/8/3Q4/3K4 w - - 0 1",
+      "materialSignature": "w:Q:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #74 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-075",
+      "fen": "8/8/8/8/4k3/8/7Q/4K3 w - - 0 1",
+      "materialSignature": "w:Q:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #75 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-076",
+      "fen": "8/8/8/8/3k4/8/Q7/3K4 w - - 0 1",
+      "materialSignature": "w:Q:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #76 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-077",
+      "fen": "8/8/8/8/4k3/8/4q3/4K1Q1 w - - 0 1",
+      "materialSignature": "w:Q:b:Q",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #77 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-078",
+      "fen": "8/8/8/8/3k4/8/3q4/1Q1K4 w - - 0 1",
+      "materialSignature": "w:Q:b:Q",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #78 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-079",
+      "fen": "8/8/8/8/4k3/4q3/8/4K1Q1 w - - 0 1",
+      "materialSignature": "w:Q:b:Q",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #79 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-080",
+      "fen": "8/8/8/8/3k4/3q4/8/1Q1K4 w - - 0 1",
+      "materialSignature": "w:Q:b:Q",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #80 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-081",
+      "fen": "8/8/8/8/4k3/8/3Q4/4K3 w - - 0 1",
+      "materialSignature": "w:Q:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #81 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-082",
+      "fen": "8/8/8/8/3k4/8/4Q3/3K4 w - - 0 1",
+      "materialSignature": "w:Q:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #82 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-083",
+      "fen": "8/8/8/3k4/8/8/3Q4/4K3 w - - 0 1",
+      "materialSignature": "w:Q:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #83 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-084",
+      "fen": "8/8/8/4k3/8/8/4Q3/3K4 w - - 0 1",
+      "materialSignature": "w:Q:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #84 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-085",
+      "fen": "8/8/8/8/4k3/8/4R3/5K2 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #85 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-086",
+      "fen": "8/8/8/8/3k4/8/3R4/2K5 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #86 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-087",
+      "fen": "8/8/8/8/4k3/8/5R2/5K2 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #87 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-088",
+      "fen": "8/8/8/8/3k4/8/2R5/2K5 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #88 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-089",
+      "fen": "8/8/8/8/4k3/8/6R1/5K2 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #89 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-090",
+      "fen": "8/8/8/8/3k4/8/1R6/2K5 w - - 0 1",
+      "materialSignature": "w:R:b:K",
+      "pieceCount": 3,
+      "tags": [
+        "endgame",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #90 (3 pieces)"
+    },
+    {
+      "id": "eg-pool-091",
+      "fen": "8/8/8/8/4k3/5ppp/4R3/5K2 w - - 0 1",
+      "materialSignature": "w:R:b:P3",
+      "pieceCount": 6,
+      "tags": [
+        "endgame",
+        "pawns",
+        "rooks"
+      ],
+      "note": "Generated endgame #91 (6 pieces)"
+    },
+    {
+      "id": "eg-pool-092",
+      "fen": "8/8/8/8/3k4/ppp5/3R4/2K5 w - - 0 1",
+      "materialSignature": "w:R:b:P3",
+      "pieceCount": 6,
+      "tags": [
+        "endgame",
+        "pawns",
+        "rooks"
+      ],
+      "note": "Generated endgame #92 (6 pieces)"
+    },
+    {
+      "id": "eg-pool-093",
+      "fen": "8/8/8/8/4k3/8/4R2P/5K2 w - - 0 1",
+      "materialSignature": "w:RP:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "pawns",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #93 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-094",
+      "fen": "8/8/8/8/3k4/8/P2R4/2K5 w - - 0 1",
+      "materialSignature": "w:RP:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "pawns",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #94 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-095",
+      "fen": "8/8/8/8/4k3/8/5RP1/5K2 w - - 0 1",
+      "materialSignature": "w:RP:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "pawns",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #95 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-096",
+      "fen": "8/8/8/8/3k4/8/1PR5/2K5 w - - 0 1",
+      "materialSignature": "w:RP:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "pawns",
+        "rooks",
+        "light"
+      ],
+      "note": "Generated endgame #96 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-097",
+      "fen": "8/8/8/8/4k3/8/4BN2/4K3 w - - 0 1",
+      "materialSignature": "w:BN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "bishops",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #97 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-098",
+      "fen": "8/8/8/8/3k4/8/2NB4/3K4 w - - 0 1",
+      "materialSignature": "w:BN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "bishops",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #98 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-099",
+      "fen": "8/8/8/8/4k3/8/4NB2/4K3 w - - 0 1",
+      "materialSignature": "w:BN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "bishops",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #99 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-100",
+      "fen": "8/8/8/8/3k4/8/2BN4/3K4 w - - 0 1",
+      "materialSignature": "w:BN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "bishops",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #100 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-101",
+      "fen": "8/8/8/8/4k3/8/4BP2/4K3 w - - 0 1",
+      "materialSignature": "w:BP:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "pawns",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #101 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-102",
+      "fen": "8/8/8/8/3k4/8/2PB4/3K4 w - - 0 1",
+      "materialSignature": "w:BP:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "pawns",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #102 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-103",
+      "fen": "8/8/8/8/4k3/4pp2/4BN2/4K3 w - - 0 1",
+      "materialSignature": "w:BN:b:P2",
+      "pieceCount": 6,
+      "tags": [
+        "endgame",
+        "pawns",
+        "bishops",
+        "knights"
+      ],
+      "note": "Generated endgame #103 (6 pieces)"
+    },
+    {
+      "id": "eg-pool-104",
+      "fen": "8/8/8/8/3k4/2pp4/2NB4/3K4 w - - 0 1",
+      "materialSignature": "w:BN:b:P2",
+      "pieceCount": 6,
+      "tags": [
+        "endgame",
+        "pawns",
+        "bishops",
+        "knights"
+      ],
+      "note": "Generated endgame #104 (6 pieces)"
+    },
+    {
+      "id": "eg-pool-105",
+      "fen": "8/8/8/8/4k3/5pp1/4BN2/4K3 w - - 0 1",
+      "materialSignature": "w:BN:b:P2",
+      "pieceCount": 6,
+      "tags": [
+        "endgame",
+        "pawns",
+        "bishops",
+        "knights"
+      ],
+      "note": "Generated endgame #105 (6 pieces)"
+    },
+    {
+      "id": "eg-pool-106",
+      "fen": "8/8/8/8/3k4/1pp5/2NB4/3K4 w - - 0 1",
+      "materialSignature": "w:BN:b:P2",
+      "pieceCount": 6,
+      "tags": [
+        "endgame",
+        "pawns",
+        "bishops",
+        "knights"
+      ],
+      "note": "Generated endgame #106 (6 pieces)"
+    },
+    {
+      "id": "eg-pool-107",
+      "fen": "8/8/8/8/4k3/8/4R1N1/4K3 w - - 0 1",
+      "materialSignature": "w:RN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #107 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-108",
+      "fen": "8/8/8/8/3k4/8/1N1R4/3K4 w - - 0 1",
+      "materialSignature": "w:RN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #108 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-109",
+      "fen": "8/8/8/8/4k3/8/4RN2/4K3 w - - 0 1",
+      "materialSignature": "w:RN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #109 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-110",
+      "fen": "8/8/8/8/3k4/8/2NR4/3K4 w - - 0 1",
+      "materialSignature": "w:RN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #110 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-111",
+      "fen": "8/8/8/8/4k3/8/4R1B1/4K3 w - - 0 1",
+      "materialSignature": "w:RB:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #111 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-112",
+      "fen": "8/8/8/8/3k4/8/1B1R4/3K4 w - - 0 1",
+      "materialSignature": "w:RB:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #112 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-113",
+      "fen": "8/8/8/8/4k3/8/2R1B3/4K3 w - - 0 1",
+      "materialSignature": "w:RB:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #113 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-114",
+      "fen": "8/8/8/8/3k4/8/3B1R2/3K4 w - - 0 1",
+      "materialSignature": "w:RB:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #114 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-115",
+      "fen": "8/8/8/8/4k3/8/2RB4/4K3 w - - 0 1",
+      "materialSignature": "w:RB:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #115 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-116",
+      "fen": "8/8/8/8/3k4/8/4BR2/3K4 w - - 0 1",
+      "materialSignature": "w:RB:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #116 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-117",
+      "fen": "8/8/8/8/4k3/8/1R2B3/4K3 w - - 0 1",
+      "materialSignature": "w:RB:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #117 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-118",
+      "fen": "8/8/8/8/3k4/8/3B2R1/3K4 w - - 0 1",
+      "materialSignature": "w:RB:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #118 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-119",
+      "fen": "8/8/8/8/4k3/8/1RB5/4K3 w - - 0 1",
+      "materialSignature": "w:RB:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #119 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-120",
+      "fen": "8/8/8/8/3k4/8/5BR1/3K4 w - - 0 1",
+      "materialSignature": "w:RB:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #120 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-121",
+      "fen": "8/8/8/8/4k3/8/R3B3/4K3 w - - 0 1",
+      "materialSignature": "w:RB:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #121 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-122",
+      "fen": "8/8/8/8/3k4/8/3B3R/3K4 w - - 0 1",
+      "materialSignature": "w:RB:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #122 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-123",
+      "fen": "8/8/8/8/4k3/8/RB6/4K3 w - - 0 1",
+      "materialSignature": "w:RB:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #123 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-124",
+      "fen": "8/8/8/8/3k4/8/6BR/3K4 w - - 0 1",
+      "materialSignature": "w:RB:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "bishops",
+        "light"
+      ],
+      "note": "Generated endgame #124 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-125",
+      "fen": "8/8/8/8/4k3/8/4Q1R1/4K3 w - - 0 1",
+      "materialSignature": "w:QR:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #125 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-126",
+      "fen": "8/8/8/8/3k4/8/1R1Q4/3K4 w - - 0 1",
+      "materialSignature": "w:QR:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #126 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-127",
+      "fen": "8/8/8/8/4k3/8/4QR2/4K3 w - - 0 1",
+      "materialSignature": "w:QR:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #127 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-128",
+      "fen": "8/8/8/8/3k4/8/2RQ4/3K4 w - - 0 1",
+      "materialSignature": "w:QR:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #128 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-129",
+      "fen": "8/8/8/8/4k3/8/2Q1R3/4K3 w - - 0 1",
+      "materialSignature": "w:QR:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #129 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-130",
+      "fen": "8/8/8/8/3k4/8/3R1Q2/3K4 w - - 0 1",
+      "materialSignature": "w:QR:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #130 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-131",
+      "fen": "8/8/8/8/4k3/8/2QR4/4K3 w - - 0 1",
+      "materialSignature": "w:QR:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #131 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-132",
+      "fen": "8/8/8/8/3k4/8/4RQ2/3K4 w - - 0 1",
+      "materialSignature": "w:QR:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #132 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-133",
+      "fen": "8/8/8/8/4k3/8/1Q2R3/4K3 w - - 0 1",
+      "materialSignature": "w:QR:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #133 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-134",
+      "fen": "8/8/8/8/3k4/8/3R2Q1/3K4 w - - 0 1",
+      "materialSignature": "w:QR:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #134 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-135",
+      "fen": "8/8/8/8/4k3/8/1QR5/4K3 w - - 0 1",
+      "materialSignature": "w:QR:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #135 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-136",
+      "fen": "8/8/8/8/3k4/8/5RQ1/3K4 w - - 0 1",
+      "materialSignature": "w:QR:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #136 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-137",
+      "fen": "8/8/8/8/4k3/8/Q3R3/4K3 w - - 0 1",
+      "materialSignature": "w:QR:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #137 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-138",
+      "fen": "8/8/8/8/3k4/8/3R3Q/3K4 w - - 0 1",
+      "materialSignature": "w:QR:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #138 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-139",
+      "fen": "8/8/8/8/4k3/8/QR6/4K3 w - - 0 1",
+      "materialSignature": "w:QR:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #139 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-140",
+      "fen": "8/8/8/8/3k4/8/6RQ/3K4 w - - 0 1",
+      "materialSignature": "w:QR:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "rooks",
+        "queens",
+        "light"
+      ],
+      "note": "Generated endgame #140 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-141",
+      "fen": "8/8/8/8/4k3/8/4Q1N1/4K3 w - - 0 1",
+      "materialSignature": "w:QN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #141 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-142",
+      "fen": "8/8/8/8/3k4/8/1N1Q4/3K4 w - - 0 1",
+      "materialSignature": "w:QN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #142 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-143",
+      "fen": "8/8/8/8/4k3/8/4QN2/4K3 w - - 0 1",
+      "materialSignature": "w:QN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #143 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-144",
+      "fen": "8/8/8/8/3k4/8/2NQ4/3K4 w - - 0 1",
+      "materialSignature": "w:QN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #144 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-145",
+      "fen": "8/8/8/8/4k3/8/3Q1N2/4K3 w - - 0 1",
+      "materialSignature": "w:QN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #145 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-146",
+      "fen": "8/8/8/8/3k4/8/2N1Q3/3K4 w - - 0 1",
+      "materialSignature": "w:QN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #146 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-147",
+      "fen": "8/8/8/8/4k3/8/3QN3/4K3 w - - 0 1",
+      "materialSignature": "w:QN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #147 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-148",
+      "fen": "8/8/8/8/3k4/8/3NQ3/3K4 w - - 0 1",
+      "materialSignature": "w:QN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #148 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-149",
+      "fen": "8/8/8/8/4k3/8/2Q1N3/4K3 w - - 0 1",
+      "materialSignature": "w:QN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #149 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-150",
+      "fen": "8/8/8/8/3k4/8/3N1Q2/3K4 w - - 0 1",
+      "materialSignature": "w:QN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #150 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-151",
+      "fen": "8/8/8/8/4k3/8/2QN4/4K3 w - - 0 1",
+      "materialSignature": "w:QN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #151 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-152",
+      "fen": "8/8/8/8/3k4/8/4NQ2/3K4 w - - 0 1",
+      "materialSignature": "w:QN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #152 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-153",
+      "fen": "8/8/8/8/4k3/8/1Q2N3/4K3 w - - 0 1",
+      "materialSignature": "w:QN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #153 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-154",
+      "fen": "8/8/8/8/3k4/8/3N2Q1/3K4 w - - 0 1",
+      "materialSignature": "w:QN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #154 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-155",
+      "fen": "8/8/8/8/4k3/8/Q2N4/4K3 w - - 0 1",
+      "materialSignature": "w:QN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #155 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-156",
+      "fen": "8/8/8/8/3k4/8/4N2Q/3K4 w - - 0 1",
+      "materialSignature": "w:QN:b:K",
+      "pieceCount": 4,
+      "tags": [
+        "endgame",
+        "queens",
+        "knights",
+        "light"
+      ],
+      "note": "Generated endgame #156 (4 pieces)"
+    },
+    {
+      "id": "eg-pool-157",
+      "fen": "6k1/5ppp/8/8/8/8/5PPP/5K2 b - - 1 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #157 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-158",
+      "fen": "6k1/5ppp/8/8/8/6P1/5P1P/6K1 b - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #158 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-159",
+      "fen": "6k1/5ppp/8/8/8/7P/5PP1/6K1 b - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #159 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-160",
+      "fen": "6k1/5ppp/8/8/7P/8/5PP1/6K1 b - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #160 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-161",
+      "fen": "6k1/5ppp/8/8/5P2/8/6PP/6K1 b - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #161 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-162",
+      "fen": "6k1/5ppp/8/8/6P1/8/5P1P/6K1 b - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #162 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-163",
+      "fen": "6k1/5ppp/8/8/8/5P2/6PP/6K1 b - - 0 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #163 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-164",
+      "fen": "6k1/5ppp/8/8/8/8/5PPP/7K b - - 1 1",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #164 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-165",
+      "fen": "6k1/6pp/5p2/8/8/8/5PPP/5K2 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #165 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-166",
+      "fen": "6k1/6pp/8/5p2/8/8/5PPP/5K2 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #166 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-167",
+      "fen": "6k1/5pp1/7p/8/8/8/5PPP/5K2 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #167 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-168",
+      "fen": "6k1/5p1p/8/6p1/8/8/5PPP/5K2 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #168 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-169",
+      "fen": "6k1/5pp1/8/7p/8/8/5PPP/5K2 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #169 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-170",
+      "fen": "7k/5ppp/8/8/8/8/5PPP/5K2 w - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #170 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-171",
+      "fen": "6k1/5p1p/6p1/8/8/8/5PPP/5K2 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #171 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-172",
+      "fen": "5k2/5ppp/8/8/8/8/5PPP/5K2 w - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #172 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-173",
+      "fen": "6k1/6pp/5p2/8/8/6P1/5P1P/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #173 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-174",
+      "fen": "7k/5ppp/8/8/8/6P1/5P1P/6K1 w - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #174 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-175",
+      "fen": "6k1/5pp1/8/7p/8/6P1/5P1P/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #175 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-176",
+      "fen": "6k1/5pp1/7p/8/8/6P1/5P1P/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #176 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-177",
+      "fen": "5k2/5ppp/8/8/8/6P1/5P1P/6K1 w - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #177 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-178",
+      "fen": "6k1/5p1p/8/6p1/8/6P1/5P1P/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #178 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-179",
+      "fen": "6k1/5p1p/6p1/8/8/6P1/5P1P/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #179 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-180",
+      "fen": "6k1/6pp/8/5p2/8/6P1/5P1P/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #180 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-181",
+      "fen": "6k1/5p1p/6p1/8/8/7P/5PP1/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #181 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-182",
+      "fen": "6k1/5pp1/7p/8/8/7P/5PP1/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #182 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-183",
+      "fen": "6k1/5p1p/8/6p1/8/7P/5PP1/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #183 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-184",
+      "fen": "6k1/5pp1/8/7p/8/7P/5PP1/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #184 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-185",
+      "fen": "6k1/6pp/8/5p2/8/7P/5PP1/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #185 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-186",
+      "fen": "6k1/6pp/5p2/8/8/7P/5PP1/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #186 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-187",
+      "fen": "7k/5ppp/8/8/8/7P/5PP1/6K1 w - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #187 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-188",
+      "fen": "5k2/5ppp/8/8/8/7P/5PP1/6K1 w - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #188 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-189",
+      "fen": "6k1/6pp/8/5p2/7P/8/5PP1/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #189 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-190",
+      "fen": "7k/5ppp/8/8/7P/8/5PP1/6K1 w - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #190 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-191",
+      "fen": "5k2/5ppp/8/8/7P/8/5PP1/6K1 w - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #191 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-192",
+      "fen": "6k1/5p1p/6p1/8/7P/8/5PP1/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #192 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-193",
+      "fen": "6k1/5pp1/7p/8/7P/8/5PP1/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #193 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-194",
+      "fen": "6k1/5p1p/8/6p1/7P/8/5PP1/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #194 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-195",
+      "fen": "6k1/6pp/5p2/8/7P/8/5PP1/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #195 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-196",
+      "fen": "6k1/5pp1/8/7p/7P/8/5PP1/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #196 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-197",
+      "fen": "6k1/5pp1/8/7p/5P2/8/6PP/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #197 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-198",
+      "fen": "6k1/6pp/8/5p2/5P2/8/6PP/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #198 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-199",
+      "fen": "6k1/5pp1/7p/8/5P2/8/6PP/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #199 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-200",
+      "fen": "7k/5ppp/8/8/5P2/8/6PP/6K1 w - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #200 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-201",
+      "fen": "5k2/5ppp/8/8/5P2/8/6PP/6K1 w - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #201 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-202",
+      "fen": "6k1/5p1p/6p1/8/5P2/8/6PP/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #202 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-203",
+      "fen": "6k1/6pp/5p2/8/5P2/8/6PP/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #203 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-204",
+      "fen": "6k1/5p1p/8/6p1/5P2/8/6PP/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #204 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-205",
+      "fen": "5k2/5ppp/8/8/6P1/8/5P1P/6K1 w - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #205 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-206",
+      "fen": "6k1/6pp/5p2/8/6P1/8/5P1P/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #206 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-207",
+      "fen": "7k/5ppp/8/8/6P1/8/5P1P/6K1 w - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #207 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-208",
+      "fen": "6k1/5pp1/8/7p/6P1/8/5P1P/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #208 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-209",
+      "fen": "6k1/6pp/8/5p2/6P1/8/5P1P/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #209 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-210",
+      "fen": "6k1/5pp1/7p/8/6P1/8/5P1P/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #210 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-211",
+      "fen": "6k1/5p1p/8/6p1/6P1/8/5P1P/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #211 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-212",
+      "fen": "6k1/5p1p/6p1/8/6P1/8/5P1P/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #212 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-213",
+      "fen": "5k2/5ppp/8/8/8/5P2/6PP/6K1 w - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #213 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-214",
+      "fen": "6k1/6pp/8/5p2/8/5P2/6PP/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #214 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-215",
+      "fen": "6k1/5p1p/6p1/8/8/5P2/6PP/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #215 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-216",
+      "fen": "6k1/5pp1/8/7p/8/5P2/6PP/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #216 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-217",
+      "fen": "6k1/6pp/5p2/8/8/5P2/6PP/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #217 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-218",
+      "fen": "6k1/5pp1/7p/8/8/5P2/6PP/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #218 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-219",
+      "fen": "7k/5ppp/8/8/8/5P2/6PP/6K1 w - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #219 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-220",
+      "fen": "6k1/5p1p/8/6p1/8/5P2/6PP/6K1 w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #220 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-221",
+      "fen": "7k/5ppp/8/8/8/8/5PPP/7K w - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #221 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-222",
+      "fen": "6k1/5pp1/8/7p/8/8/5PPP/7K w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #222 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-223",
+      "fen": "6k1/6pp/8/5p2/8/8/5PPP/7K w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #223 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-224",
+      "fen": "5k2/5ppp/8/8/8/8/5PPP/7K w - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #224 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-225",
+      "fen": "6k1/6pp/5p2/8/8/8/5PPP/7K w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #225 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-226",
+      "fen": "6k1/5p1p/8/6p1/8/8/5PPP/7K w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #226 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-227",
+      "fen": "6k1/5pp1/7p/8/8/8/5PPP/7K w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #227 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-228",
+      "fen": "6k1/5p1p/6p1/8/8/8/5PPP/7K w - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #228 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-229",
+      "fen": "6k1/6pp/5p2/8/5P2/8/6PP/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #229 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-230",
+      "fen": "6k1/6pp/5p2/8/8/8/5PPP/6K1 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #230 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-231",
+      "fen": "6k1/6pp/5p2/8/8/8/5PPP/4K3 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #231 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-232",
+      "fen": "6k1/6pp/5p2/8/6P1/8/5P1P/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #232 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-233",
+      "fen": "6k1/6pp/5p2/8/7P/8/5PP1/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #233 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-234",
+      "fen": "6k1/6pp/5p2/8/8/8/4KPPP/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #234 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-235",
+      "fen": "6k1/6pp/5p2/8/8/7P/5PP1/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #235 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-236",
+      "fen": "6k1/6pp/5p2/8/8/6P1/5P1P/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #236 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-237",
+      "fen": "6k1/6pp/5p2/8/8/5P2/6PP/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #237 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-238",
+      "fen": "6k1/6pp/8/5p2/8/8/5PPP/4K3 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #238 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-239",
+      "fen": "6k1/6pp/8/5p2/8/7P/5PP1/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #239 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-240",
+      "fen": "6k1/6pp/8/5p2/6P1/8/5P1P/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #240 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-241",
+      "fen": "6k1/6pp/8/5p2/7P/8/5PP1/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #241 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-242",
+      "fen": "6k1/6pp/8/5p2/8/8/5PPP/6K1 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #242 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-243",
+      "fen": "6k1/6pp/8/5p2/8/8/4KPPP/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #243 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-244",
+      "fen": "6k1/6pp/8/5p2/5P2/8/6PP/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #244 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-245",
+      "fen": "6k1/6pp/8/5p2/8/6P1/5P1P/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #245 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-246",
+      "fen": "6k1/6pp/8/5p2/8/5P2/6PP/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #246 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-247",
+      "fen": "6k1/5pp1/7p/8/6P1/8/5P1P/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #247 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-248",
+      "fen": "6k1/5pp1/7p/8/8/8/4KPPP/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #248 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-249",
+      "fen": "6k1/5pp1/7p/8/8/8/5PPP/6K1 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #249 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-250",
+      "fen": "6k1/5pp1/7p/8/8/7P/5PP1/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #250 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-251",
+      "fen": "6k1/5pp1/7p/8/8/8/5PPP/4K3 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #251 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-252",
+      "fen": "6k1/5pp1/7p/8/8/6P1/5P1P/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #252 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-253",
+      "fen": "6k1/5pp1/7p/8/5P2/8/6PP/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #253 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-254",
+      "fen": "6k1/5pp1/7p/8/7P/8/5PP1/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #254 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-255",
+      "fen": "6k1/5pp1/7p/8/8/5P2/6PP/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #255 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-256",
+      "fen": "6k1/5p1p/8/6p1/5P2/8/6PP/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #256 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-257",
+      "fen": "6k1/5p1p/8/6p1/8/5P2/6PP/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #257 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-258",
+      "fen": "6k1/5p1p/8/6p1/7P/8/5PP1/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #258 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-259",
+      "fen": "6k1/5p1p/8/6p1/8/6P1/5P1P/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #259 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-260",
+      "fen": "6k1/5p1p/8/6p1/8/8/5PPP/4K3 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #260 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-261",
+      "fen": "6k1/5p1p/8/6p1/8/8/4KPPP/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #261 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-262",
+      "fen": "6k1/5p1p/8/6p1/8/7P/5PP1/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #262 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-263",
+      "fen": "6k1/5p1p/8/6p1/8/8/5PPP/6K1 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #263 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-264",
+      "fen": "6k1/5p1p/8/6p1/6P1/8/5P1P/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #264 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-265",
+      "fen": "6k1/5pp1/8/7p/8/8/5PPP/6K1 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #265 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-266",
+      "fen": "6k1/5pp1/8/7p/7P/8/5PP1/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #266 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-267",
+      "fen": "6k1/5pp1/8/7p/8/8/4KPPP/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #267 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-268",
+      "fen": "6k1/5pp1/8/7p/5P2/8/6PP/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #268 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-269",
+      "fen": "6k1/5pp1/8/7p/6P1/8/5P1P/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #269 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-270",
+      "fen": "6k1/5pp1/8/7p/8/5P2/6PP/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #270 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-271",
+      "fen": "6k1/5pp1/8/7p/8/7P/5PP1/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #271 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-272",
+      "fen": "6k1/5pp1/8/7p/8/8/5PPP/4K3 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #272 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-273",
+      "fen": "6k1/5pp1/8/7p/8/6P1/5P1P/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #273 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-274",
+      "fen": "7k/5ppp/8/8/8/6P1/5P1P/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #274 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-275",
+      "fen": "7k/5ppp/8/8/8/8/5PPP/4K3 b - - 3 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #275 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-276",
+      "fen": "7k/5ppp/8/8/8/8/5PPP/6K1 b - - 3 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #276 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-277",
+      "fen": "7k/5ppp/8/8/8/8/4KPPP/8 b - - 3 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #277 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-278",
+      "fen": "7k/5ppp/8/8/5P2/8/6PP/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #278 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-279",
+      "fen": "7k/5ppp/8/8/8/5P2/6PP/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #279 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-280",
+      "fen": "7k/5ppp/8/8/8/7P/5PP1/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #280 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-281",
+      "fen": "7k/5ppp/8/8/7P/8/5PP1/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #281 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-282",
+      "fen": "7k/5ppp/8/8/6P1/8/5P1P/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #282 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-283",
+      "fen": "6k1/5p1p/6p1/8/8/5P2/6PP/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #283 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-284",
+      "fen": "6k1/5p1p/6p1/8/8/8/5PPP/4K3 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #284 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-285",
+      "fen": "6k1/5p1p/6p1/8/5P2/8/6PP/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #285 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-286",
+      "fen": "6k1/5p1p/6p1/8/8/8/4KPPP/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #286 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-287",
+      "fen": "6k1/5p1p/6p1/8/8/8/5PPP/6K1 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #287 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-288",
+      "fen": "6k1/5p1p/6p1/8/6P1/8/5P1P/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #288 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-289",
+      "fen": "6k1/5p1p/6p1/8/7P/8/5PP1/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #289 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-290",
+      "fen": "6k1/5p1p/6p1/8/8/6P1/5P1P/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #290 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-291",
+      "fen": "6k1/5p1p/6p1/8/8/7P/5PP1/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #291 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-292",
+      "fen": "5k2/5ppp/8/8/8/5P2/6PP/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #292 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-293",
+      "fen": "5k2/5ppp/8/8/8/8/5PPP/6K1 b - - 3 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #293 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-294",
+      "fen": "5k2/5ppp/8/8/8/7P/5PP1/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #294 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-295",
+      "fen": "5k2/5ppp/8/8/8/8/4KPPP/8 b - - 3 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #295 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-296",
+      "fen": "5k2/5ppp/8/8/5P2/8/6PP/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #296 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-297",
+      "fen": "5k2/5ppp/8/8/7P/8/5PP1/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #297 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-298",
+      "fen": "5k2/5ppp/8/8/8/8/5PPP/4K3 b - - 3 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #298 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-299",
+      "fen": "5k2/5ppp/8/8/8/6P1/5P1P/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #299 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-300",
+      "fen": "5k2/5ppp/8/8/6P1/8/5P1P/5K2 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #300 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-301",
+      "fen": "6k1/6pp/5p2/8/5P2/6P1/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #301 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-302",
+      "fen": "6k1/6pp/5p2/8/6P1/8/5P1P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #302 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-303",
+      "fen": "6k1/6pp/5p2/8/8/6P1/5P1P/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #303 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-304",
+      "fen": "6k1/6pp/5p2/8/8/6P1/5P1P/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #304 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-305",
+      "fen": "6k1/6pp/5p2/8/8/6P1/5PKP/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #305 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-306",
+      "fen": "6k1/6pp/5p2/8/8/5PP1/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #306 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-307",
+      "fen": "6k1/6pp/5p2/8/8/6PP/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #307 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-308",
+      "fen": "6k1/6pp/5p2/8/7P/6P1/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #308 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-309",
+      "fen": "7k/5ppp/8/8/6P1/8/5P1P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #309 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-310",
+      "fen": "7k/5ppp/8/8/8/6P1/5P1P/7K b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #310 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-311",
+      "fen": "7k/5ppp/8/8/8/6P1/5P1P/5K2 b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #311 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-312",
+      "fen": "7k/5ppp/8/8/8/6P1/5PKP/8 b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #312 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-313",
+      "fen": "7k/5ppp/8/8/8/5PP1/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #313 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-314",
+      "fen": "7k/5ppp/8/8/7P/6P1/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #314 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-315",
+      "fen": "7k/5ppp/8/8/5P2/6P1/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #315 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-316",
+      "fen": "7k/5ppp/8/8/8/6PP/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #316 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-317",
+      "fen": "6k1/5pp1/8/7p/8/6P1/5P1P/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #317 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-318",
+      "fen": "6k1/5pp1/8/7p/8/6P1/5PKP/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #318 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-319",
+      "fen": "6k1/5pp1/8/7p/7P/6P1/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #319 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-320",
+      "fen": "6k1/5pp1/8/7p/8/5PP1/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #320 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-321",
+      "fen": "6k1/5pp1/8/7p/8/6PP/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #321 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-322",
+      "fen": "6k1/5pp1/8/7p/6P1/8/5P1P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #322 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-323",
+      "fen": "6k1/5pp1/8/7p/5P2/6P1/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #323 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-324",
+      "fen": "6k1/5pp1/8/7p/8/6P1/5P1P/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #324 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-325",
+      "fen": "6k1/5pp1/7p/8/8/6P1/5P1P/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #325 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-326",
+      "fen": "6k1/5pp1/7p/8/8/6PP/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #326 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-327",
+      "fen": "6k1/5pp1/7p/8/5P2/6P1/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #327 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-328",
+      "fen": "6k1/5pp1/7p/8/7P/6P1/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #328 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-329",
+      "fen": "6k1/5pp1/7p/8/8/6P1/5P1P/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #329 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-330",
+      "fen": "6k1/5pp1/7p/8/8/6P1/5PKP/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #330 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-331",
+      "fen": "6k1/5pp1/7p/8/6P1/8/5P1P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #331 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-332",
+      "fen": "6k1/5pp1/7p/8/8/5PP1/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #332 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-333",
+      "fen": "5k2/5ppp/8/8/7P/6P1/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #333 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-334",
+      "fen": "5k2/5ppp/8/8/8/5PP1/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #334 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-335",
+      "fen": "5k2/5ppp/8/8/8/6P1/5PKP/8 b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #335 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-336",
+      "fen": "5k2/5ppp/8/8/5P2/6P1/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #336 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-337",
+      "fen": "5k2/5ppp/8/8/8/6PP/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #337 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-338",
+      "fen": "5k2/5ppp/8/8/6P1/8/5P1P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #338 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-339",
+      "fen": "5k2/5ppp/8/8/8/6P1/5P1P/7K b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #339 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-340",
+      "fen": "5k2/5ppp/8/8/8/6P1/5P1P/5K2 b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #340 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-341",
+      "fen": "6k1/5p1p/8/6p1/7P/6P1/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #341 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-342",
+      "fen": "6k1/5p1p/8/6p1/8/6P1/5PKP/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #342 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-343",
+      "fen": "6k1/5p1p/8/6p1/5P2/6P1/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #343 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-344",
+      "fen": "6k1/5p1p/8/6p1/8/6P1/5P1P/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #344 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-345",
+      "fen": "6k1/5p1p/8/6p1/8/5PP1/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #345 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-346",
+      "fen": "6k1/5p1p/8/6p1/6P1/8/5P1P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #346 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-347",
+      "fen": "6k1/5p1p/8/6p1/8/6P1/5P1P/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #347 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-348",
+      "fen": "6k1/5p1p/8/6p1/8/6PP/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #348 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-349",
+      "fen": "6k1/5p1p/6p1/8/6P1/8/5P1P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #349 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-350",
+      "fen": "6k1/5p1p/6p1/8/8/6PP/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #350 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-351",
+      "fen": "6k1/5p1p/6p1/8/8/6P1/5PKP/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #351 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-352",
+      "fen": "6k1/5p1p/6p1/8/8/6P1/5P1P/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #352 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-353",
+      "fen": "6k1/5p1p/6p1/8/8/6P1/5P1P/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #353 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-354",
+      "fen": "6k1/5p1p/6p1/8/7P/6P1/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #354 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-355",
+      "fen": "6k1/5p1p/6p1/8/8/5PP1/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #355 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-356",
+      "fen": "6k1/5p1p/6p1/8/5P2/6P1/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #356 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-357",
+      "fen": "6k1/6pp/8/5p2/8/6P1/5P1P/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #357 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-358",
+      "fen": "6k1/6pp/8/5p2/5P2/6P1/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #358 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-359",
+      "fen": "6k1/6pp/8/5p2/8/6PP/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #359 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-360",
+      "fen": "6k1/6pp/8/5p2/8/6P1/5PKP/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #360 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-361",
+      "fen": "6k1/6pp/8/5p2/7P/6P1/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #361 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-362",
+      "fen": "6k1/6pp/8/5p2/6P1/8/5P1P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #362 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-363",
+      "fen": "6k1/6pp/8/5p2/8/5PP1/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #363 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-364",
+      "fen": "6k1/6pp/8/5p2/8/6P1/5P1P/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #364 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-365",
+      "fen": "6k1/5p1p/6p1/8/8/7P/5PP1/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #365 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-366",
+      "fen": "6k1/5p1p/6p1/8/8/7P/5PPK/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #366 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-367",
+      "fen": "6k1/5p1p/6p1/8/7P/8/5PP1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #367 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-368",
+      "fen": "6k1/5p1p/6p1/8/8/7P/5PP1/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #368 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-369",
+      "fen": "6k1/5p1p/6p1/8/6P1/7P/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #369 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-370",
+      "fen": "6k1/5p1p/6p1/8/8/5P1P/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #370 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-371",
+      "fen": "6k1/5p1p/6p1/8/5P2/7P/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #371 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-372",
+      "fen": "6k1/5pp1/7p/8/6P1/7P/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #372 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-373",
+      "fen": "6k1/5pp1/7p/8/5P2/7P/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #373 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-374",
+      "fen": "6k1/5pp1/7p/8/7P/8/5PP1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #374 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-375",
+      "fen": "6k1/5pp1/7p/8/8/5P1P/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #375 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-376",
+      "fen": "6k1/5pp1/7p/8/8/7P/5PP1/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #376 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-377",
+      "fen": "6k1/5pp1/7p/8/8/7P/5PPK/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #377 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-378",
+      "fen": "6k1/5pp1/7p/8/8/7P/5PP1/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #378 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-379",
+      "fen": "6k1/5p1p/8/6p1/5P2/7P/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #379 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-380",
+      "fen": "6k1/5p1p/8/6p1/7P/8/5PP1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #380 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-381",
+      "fen": "6k1/5p1p/8/6p1/8/7P/5PP1/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #381 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-382",
+      "fen": "6k1/5p1p/8/6p1/8/7P/5PPK/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #382 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-383",
+      "fen": "6k1/5p1p/8/6p1/6P1/7P/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #383 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-384",
+      "fen": "6k1/5p1p/8/6p1/8/7P/5PP1/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #384 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-385",
+      "fen": "6k1/5p1p/8/6p1/8/5P1P/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #385 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-386",
+      "fen": "6k1/5pp1/8/7p/8/7P/5PP1/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #386 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-387",
+      "fen": "6k1/5pp1/8/7p/8/7P/5PPK/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #387 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-388",
+      "fen": "6k1/5pp1/8/7p/8/7P/5PP1/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #388 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-389",
+      "fen": "6k1/5pp1/8/7p/8/5P1P/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #389 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-390",
+      "fen": "6k1/5pp1/8/7p/7P/8/5PP1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #390 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-391",
+      "fen": "6k1/5pp1/8/7p/5P2/7P/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #391 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-392",
+      "fen": "6k1/5pp1/8/7p/6P1/7P/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #392 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-393",
+      "fen": "6k1/6pp/8/5p2/7P/8/5PP1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #393 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-394",
+      "fen": "6k1/6pp/8/5p2/6P1/7P/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #394 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-395",
+      "fen": "6k1/6pp/8/5p2/5P2/7P/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #395 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-396",
+      "fen": "6k1/6pp/8/5p2/8/7P/5PP1/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #396 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-397",
+      "fen": "6k1/6pp/8/5p2/8/5P1P/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #397 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-398",
+      "fen": "6k1/6pp/8/5p2/8/7P/5PP1/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #398 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-399",
+      "fen": "6k1/6pp/8/5p2/8/7P/5PPK/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #399 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-400",
+      "fen": "6k1/6pp/5p2/8/6P1/7P/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #400 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-401",
+      "fen": "6k1/6pp/5p2/8/7P/8/5PP1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #401 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-402",
+      "fen": "6k1/6pp/5p2/8/8/7P/5PPK/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #402 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-403",
+      "fen": "6k1/6pp/5p2/8/8/5P1P/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #403 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-404",
+      "fen": "6k1/6pp/5p2/8/8/7P/5PP1/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #404 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-405",
+      "fen": "6k1/6pp/5p2/8/8/7P/5PP1/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #405 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-406",
+      "fen": "6k1/6pp/5p2/8/5P2/7P/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #406 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-407",
+      "fen": "7k/5ppp/8/8/8/7P/5PP1/5K2 b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #407 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-408",
+      "fen": "7k/5ppp/8/8/8/7P/5PPK/8 b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #408 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-409",
+      "fen": "7k/5ppp/8/8/8/5P1P/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #409 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-410",
+      "fen": "7k/5ppp/8/8/8/7P/5PP1/7K b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #410 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-411",
+      "fen": "7k/5ppp/8/8/6P1/7P/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #411 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-412",
+      "fen": "7k/5ppp/8/8/5P2/7P/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #412 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-413",
+      "fen": "7k/5ppp/8/8/7P/8/5PP1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #413 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-414",
+      "fen": "5k2/5ppp/8/8/8/7P/5PP1/7K b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #414 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-415",
+      "fen": "5k2/5ppp/8/8/8/5P1P/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #415 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-416",
+      "fen": "5k2/5ppp/8/8/8/7P/5PP1/5K2 b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #416 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-417",
+      "fen": "5k2/5ppp/8/8/7P/8/5PP1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #417 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-418",
+      "fen": "5k2/5ppp/8/8/8/7P/5PPK/8 b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #418 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-419",
+      "fen": "5k2/5ppp/8/8/5P2/7P/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #419 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-420",
+      "fen": "5k2/5ppp/8/8/6P1/7P/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #420 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-421",
+      "fen": "6k1/6pp/8/5p2/5P1P/8/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #421 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-422",
+      "fen": "6k1/6pp/8/5p1P/8/8/5PP1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #422 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-423",
+      "fen": "6k1/6pp/8/5p2/7P/8/5PP1/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #423 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-424",
+      "fen": "6k1/6pp/8/5p2/6PP/8/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #424 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-425",
+      "fen": "6k1/6pp/8/5p2/7P/5P2/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #425 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-426",
+      "fen": "6k1/6pp/8/5p2/7P/8/5PPK/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #426 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-427",
+      "fen": "6k1/6pp/8/5p2/7P/8/5PP1/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #427 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-428",
+      "fen": "7k/5ppp/8/8/6PP/8/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #428 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-429",
+      "fen": "7k/5ppp/8/8/7P/5P2/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #429 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-430",
+      "fen": "7k/5ppp/8/8/5P1P/8/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #430 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-431",
+      "fen": "7k/5ppp/8/8/7P/8/5PPK/8 b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #431 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-432",
+      "fen": "7k/5ppp/8/7P/8/8/5PP1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #432 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-433",
+      "fen": "7k/5ppp/8/8/7P/8/5PP1/5K2 b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #433 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-434",
+      "fen": "7k/5ppp/8/8/7P/8/5PP1/7K b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #434 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-435",
+      "fen": "5k2/5ppp/8/8/7P/8/5PPK/8 b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #435 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-436",
+      "fen": "5k2/5ppp/8/8/7P/8/5PP1/5K2 b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #436 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-437",
+      "fen": "5k2/5ppp/8/8/5P1P/8/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #437 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-438",
+      "fen": "5k2/5ppp/8/8/7P/5P2/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #438 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-439",
+      "fen": "5k2/5ppp/8/8/7P/8/5PP1/7K b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #439 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-440",
+      "fen": "5k2/5ppp/8/8/6PP/8/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #440 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-441",
+      "fen": "5k2/5ppp/8/7P/8/8/5PP1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #441 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-442",
+      "fen": "6k1/5p1p/6p1/7P/8/8/5PP1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #442 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-443",
+      "fen": "6k1/5p1p/6p1/8/6PP/8/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #443 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-444",
+      "fen": "6k1/5p1p/6p1/8/7P/8/5PPK/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #444 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-445",
+      "fen": "6k1/5p1p/6p1/8/5P1P/8/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #445 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-446",
+      "fen": "6k1/5p1p/6p1/8/7P/8/5PP1/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #446 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-447",
+      "fen": "6k1/5p1p/6p1/8/7P/5P2/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #447 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-448",
+      "fen": "6k1/5p1p/6p1/8/7P/8/5PP1/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #448 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-449",
+      "fen": "6k1/5pp1/7p/7P/8/8/5PP1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #449 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-450",
+      "fen": "6k1/5pp1/7p/8/5P1P/8/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #450 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-451",
+      "fen": "6k1/5pp1/7p/8/7P/8/5PP1/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #451 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-452",
+      "fen": "6k1/5pp1/7p/8/7P/5P2/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #452 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-453",
+      "fen": "6k1/5pp1/7p/8/6PP/8/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #453 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-454",
+      "fen": "6k1/5pp1/7p/8/7P/8/5PP1/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #454 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-455",
+      "fen": "6k1/5pp1/7p/8/7P/8/5PPK/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #455 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-456",
+      "fen": "6k1/5p1p/8/6p1/7P/8/5PPK/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #456 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-457",
+      "fen": "6k1/5p1p/8/6p1/5P1P/8/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #457 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-458",
+      "fen": "6k1/5p1p/8/6pP/8/8/5PP1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #458 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-459",
+      "fen": "6k1/5p1p/8/6p1/7P/5P2/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #459 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-460",
+      "fen": "6k1/5p1p/8/6P1/8/8/5PP1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P2",
+      "pieceCount": 7,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #460 (7 pieces)"
+    },
+    {
+      "id": "eg-pool-461",
+      "fen": "6k1/5p1p/8/6p1/6PP/8/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #461 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-462",
+      "fen": "6k1/5p1p/8/6p1/7P/8/5PP1/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #462 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-463",
+      "fen": "6k1/5p1p/8/6p1/7P/8/5PP1/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #463 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-464",
+      "fen": "6k1/6pp/5p2/8/7P/8/5PP1/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #464 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-465",
+      "fen": "6k1/6pp/5p2/8/6PP/8/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #465 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-466",
+      "fen": "6k1/6pp/5p2/8/5P1P/8/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #466 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-467",
+      "fen": "6k1/6pp/5p2/8/7P/8/5PP1/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #467 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-468",
+      "fen": "6k1/6pp/5p2/8/7P/8/5PPK/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #468 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-469",
+      "fen": "6k1/6pp/5p2/8/7P/5P2/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #469 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-470",
+      "fen": "6k1/6pp/5p2/7P/8/8/5PP1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #470 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-471",
+      "fen": "6k1/5pp1/8/7p/7P/8/5PP1/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #471 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-472",
+      "fen": "6k1/5pp1/8/7p/6PP/8/5P2/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #472 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-473",
+      "fen": "6k1/5pp1/8/7p/5P1P/8/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #473 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-474",
+      "fen": "6k1/5pp1/8/7p/7P/8/5PP1/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #474 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-475",
+      "fen": "6k1/5pp1/8/7p/7P/8/5PPK/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #475 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-476",
+      "fen": "6k1/5pp1/8/7p/7P/5P2/6P1/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #476 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-477",
+      "fen": "6k1/5pp1/8/7p/5P2/8/6PP/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #477 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-478",
+      "fen": "6k1/5pp1/8/7p/5P2/8/6PP/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #478 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-479",
+      "fen": "6k1/5pp1/8/5P1p/8/8/6PP/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #479 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-480",
+      "fen": "6k1/5pp1/8/7p/5PP1/8/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #480 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-481",
+      "fen": "6k1/5pp1/8/7p/5P2/8/5KPP/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #481 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-482",
+      "fen": "6k1/6pp/8/5p2/5P2/8/6PP/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #482 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-483",
+      "fen": "6k1/6pp/8/5p2/5P2/8/6PP/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #483 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-484",
+      "fen": "6k1/6pp/8/5p2/5PP1/8/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #484 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-485",
+      "fen": "6k1/6pp/8/5p2/5P2/8/5KPP/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #485 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-486",
+      "fen": "6k1/5pp1/7p/8/5PP1/8/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #486 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-487",
+      "fen": "6k1/5pp1/7p/8/5P2/8/5KPP/8 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #487 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-488",
+      "fen": "6k1/5pp1/7p/8/5P2/8/6PP/5K2 b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #488 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-489",
+      "fen": "6k1/5pp1/7p/5P2/8/8/6PP/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #489 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-490",
+      "fen": "6k1/5pp1/7p/8/5P2/8/6PP/7K b - - 1 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #490 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-491",
+      "fen": "7k/5ppp/8/8/5PP1/8/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #491 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-492",
+      "fen": "7k/5ppp/8/8/5P2/8/6PP/7K b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #492 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-493",
+      "fen": "7k/5ppp/8/5P2/8/8/6PP/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #493 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-494",
+      "fen": "7k/5ppp/8/8/5P2/8/6PP/5K2 b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #494 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-495",
+      "fen": "7k/5ppp/8/8/5P2/8/5KPP/8 b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #495 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-496",
+      "fen": "5k2/5ppp/8/8/5P2/8/5KPP/8 b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #496 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-497",
+      "fen": "5k2/5ppp/8/8/5P2/8/6PP/7K b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #497 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-498",
+      "fen": "5k2/5ppp/8/5P2/8/8/6PP/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #498 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-499",
+      "fen": "5k2/5ppp/8/8/5PP1/8/7P/6K1 b - - 0 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #499 (8 pieces)"
+    },
+    {
+      "id": "eg-pool-500",
+      "fen": "5k2/5ppp/8/8/5P2/8/6PP/5K2 b - - 2 2",
+      "materialSignature": "w:P3:b:P3",
+      "pieceCount": 8,
+      "tags": [
+        "endgame",
+        "pawns"
+      ],
+      "note": "Generated endgame #500 (8 pieces)"
+    }
+  ]
+}

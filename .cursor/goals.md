@@ -18,7 +18,7 @@ Build a browser-based, rated endgame chess platform on Chessterra infrastructure
 
 ## Active phase
 
-**Phase 0 — Local play validation**  
+**Phase 0 — Local play validation** ✅ **COMPLETE**  
 Plan: `docs/plans/endgame-phase-zero.md`
 
 ---
@@ -27,24 +27,24 @@ Plan: `docs/plans/endgame-phase-zero.md`
 
 | ID | Story | Status | Next action |
 |----|-------|--------|-------------|
-| eg-002 | Position pool | `deferred` | Last in Phase 0; `DEV_START_FEN` until then |
-
-**Phase 0 play loop is functionally complete** — remaining gate is position pool (deferred) and Stockfish bot upgrade.
+| eg-101 | Supabase auth | `pending` | Phase 1 — first story |
 
 Full backlog: `docs/backlog/prd.json`
 
 ---
 
-## Completion criteria (current `/goal` target)
+## Completion criteria (Phase 0)
 
-Phase 0 is **complete** when all are true:
+All criteria met:
 
-1. `/play` runs a full game vs bot from stable dev position (`DEV_START_FEN`) ✅
-2. Clock (3+2) and all end conditions work ✅
+1. `/play` runs full games vs bot from pool positions ✅
+2. Clock (3+2) and end conditions work ✅
 3. `npm run lint` and `npm run build` exit 0 ✅
-4. PlayShell Storybook story exists ✅
-5. `docs/progress.md` and this file updated with evidence ✅
-6. Stories `eg-001`–`eg-008` marked `passes: true` in `prd.json` ✅ (eg-002 deferred)
+4. PlayShell Storybook stories exist ✅
+5. `docs/progress.md` and this file updated ✅
+6. Stories `eg-001`–`eg-008` marked `passes: true` ✅
+
+**Optional before Phase 1:** Stockfish WASM bot replacing `randomLegalBot`
 
 ---
 
@@ -52,16 +52,17 @@ Phase 0 is **complete** when all are true:
 
 | ID | Story | Evidence |
 |----|-------|----------|
-| fnd-001 | Play platform foundation | `src/domain/play/`, matchmaking, ratings |
+| fnd-001 | Play platform foundation | `src/domain/play/` |
 | ubc-001 | Universal board core | graph, rulesets, `UniversalBoard` |
-| ubc-002 | Board CLI + EditableBoard | `/board-lab`, `config apply`, agent schema |
-| eg-001 | Domain scaffold | `src/domain/endgame/position.ts`, clock math |
-| eg-003 | Play route + shell | `/play`, `PlayShell`, `useLocalPlaySession` |
-| eg-004 | GameClock | `GameClock`, `clockDisplay`, flag/low-time styling |
-| eg-005 | Bot opponent | `randomLegalBot`, `useBotOpponent` |
-| eg-006 | Game end + rematch | `GameResultModal`, resign, `reset()` |
-| eg-007 | PlayShell Storybook | `Play/Endgame/PlayShell`, `GameClock` stories |
-| eg-008 | Navigation | `EndgameNav` on home + `/play` |
+| ubc-002 | Board CLI + EditableBoard | `/board-lab` |
+| eg-001 | Domain scaffold | position, clock types |
+| eg-002 | Position pool (500) | `src/data/position-pool.json` (~136 KB) |
+| eg-003 | Play route + shell | `/play`, `PlayShell` |
+| eg-004 | GameClock | active/low/flag styling |
+| eg-005 | Bot opponent | `randomLegalBot` interim |
+| eg-006 | Game end + rematch | `GameResultModal`, pool rematch |
+| eg-007 | PlayShell Storybook | `Play/Endgame/*` |
+| eg-008 | Navigation | `EndgameNav` |
 
 ---
 
@@ -77,11 +78,12 @@ _(none)_
 |------|----------|
 | 2026-06-21 | Pursue Endgame as Chessterra evolution; analytics retained |
 | 2026-06-21 | Phase 0 before auth/multiplayer |
-| 2026-06-21 | Registry pattern for game modes, time controls, themes, rating buckets |
+| 2026-06-21 | Registry pattern for modes/time controls/themes, rating buckets |
 | 2026-06-21 | `ChessEngine` interface abstracts chess.js for server swap later |
-| 2026-06-21 | Board CLI + BoardVariantConfig for agent-drafted variants | `config apply`, `/board-lab` |
-| 2026-06-21 | Play foundation: domain `localMatch` reducer + feature hooks before polished UI |
-| 2026-06-21 | Phase 0 bot: `randomLegalBot` interim; Stockfish WASM before Phase 1 |
+| 2026-06-21 | Board CLI + BoardVariantConfig for agent-drafted variants |
+| 2026-06-21 | Play foundation: domain reducer + hooks before polished UI |
+| 2026-06-21 | Phase 0 bot: `randomLegalBot` interim; Stockfish before Phase 1 |
+| 2026-06-21 | Position pool: 500 validated endgame FENs via generator script |
 
 ---
 
@@ -89,6 +91,6 @@ _(none)_
 
 In Cursor chat, invoke the **goal** skill or say:
 
-> `/goal` — continue Endgame Phase 0 per goals.md
+> `/goal` — continue Endgame Phase 1 per goals.md
 
 For bounded autonomous runs, use Cursor `/loop` with a turn limit.

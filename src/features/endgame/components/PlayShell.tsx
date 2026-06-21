@@ -2,7 +2,7 @@
 
 import { BoardSessionView } from '@/features/board/components/BoardSessionView';
 import type { LocalPlayConfig } from '@/domain/endgame/play';
-import { DEV_POSITION_LABEL } from '@/domain/endgame/devPosition';
+import { getPoolEntry } from '@/domain/endgame/pool';
 import type { PieceColor } from '@/features/chessboard/types';
 import { useBotOpponent } from '../hooks/useBotOpponent';
 import { useLocalPlaySession } from '../hooks/useLocalPlaySession';
@@ -62,6 +62,12 @@ export const PlayShell = ({ boardSize = 480, config }: PlayShellProps) => {
 
   const playerColor = playConfig.playerColor;
   const opponentColor: PieceColor = playerColor === 'w' ? 'b' : 'w';
+  const poolEntry = playConfig.positionId ? getPoolEntry(playConfig.positionId) : null;
+  const positionLabel =
+    poolEntry?.note ??
+    (poolEntry
+      ? `${poolEntry.materialSignature} (${poolEntry.pieceCount} pieces)`
+      : 'Curated endgame position');
   const matchWinner =
     matchState.outcome.kind === 'terminal' ? (matchState.outcome.winner as PieceColor | undefined) : undefined;
 
@@ -77,7 +83,10 @@ export const PlayShell = ({ boardSize = 480, config }: PlayShellProps) => {
       <header className="space-y-1 text-center">
         <p className="text-xs uppercase tracking-widest text-slate-500">Endgame — Phase 0</p>
         <h1 className="text-lg font-semibold text-slate-100">Local play</h1>
-        <p className="text-sm text-slate-400">{DEV_POSITION_LABEL}</p>
+        <p className="text-sm text-slate-400">{positionLabel}</p>
+        {poolEntry ? (
+          <p className="font-mono text-xs text-slate-500">{poolEntry.id}</p>
+        ) : null}
       </header>
 
       <GameClock

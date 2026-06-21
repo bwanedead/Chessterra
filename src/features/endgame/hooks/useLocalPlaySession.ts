@@ -125,7 +125,8 @@ export const useLocalPlaySession = (
   );
 
   const reset = useCallback(() => {
-    const nextConfig = createPhase0PlayConfig(options.config);
+    const excludeIds = matchRef.current.positionId ? [matchRef.current.positionId] : [];
+    const nextConfig = createPhase0PlayConfig(options.config, excludeIds);
     resetSession(boardConfigFromPlay(nextConfig));
     dispatchMatch({
       type: 'RESET',

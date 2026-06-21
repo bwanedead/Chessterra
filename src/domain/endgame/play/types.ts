@@ -1,3 +1,4 @@
+import type { PositionId } from '@/platform/ids';
 import type { PieceColor } from '@/features/chessboard/types';
 import type { RuleOutcome } from '@/domain/board-core/types';
 import type { MatchClockState } from '@/domain/play/time-control/types';
@@ -18,6 +19,7 @@ export interface LocalMatchState {
   rulesetId: string;
   timeControlId: string;
   startingFen: string;
+  positionId?: PositionId;
   playerColor: PieceColor;
   opponentKind: 'bot' | 'human' | 'none';
   clock: MatchClockState;
@@ -29,6 +31,7 @@ export interface LocalMatchState {
 export interface LocalPlayConfig {
   rulesetId: string;
   fen: string;
+  positionId?: PositionId;
   timeControlId: string;
   playerColor: PieceColor;
   opponentKind: LocalMatchState['opponentKind'];

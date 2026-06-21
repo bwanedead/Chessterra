@@ -75,9 +75,10 @@
       "phase": "0",
       "title": "Curated position pool JSON (50+ FENs)",
       "priority": 99,
-      "passes": false,
-      "deferred": true,
-      "acceptance": "src/data/position-pool.json; pickRandomPosition(); rematch uses pool — build after play loop works"
+      "passes": true,
+      "deferred": false,
+      "acceptance": "src/data/position-pool.json; pickRandomPosition(); rematch uses pool — build after play loop works",
+      "note": "500 validated endgame FENs (~136 KB JSON); regenerate via npm run generate:position-pool"
     },
     {
       "id": "eg-101",
