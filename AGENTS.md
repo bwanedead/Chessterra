@@ -37,3 +37,9 @@ All development must follow modular, scalable architecture with strict separatio
 - Centralise overlay state changes through `src/features/chessboard/state/heatmapSettingsContext.tsx` so the board, tray, and terminal stay aligned.
 - Register new schemes or colour profiles via the respective registry files under `src/features/chessboard/overlays/` to make them available in the UI and terminal automatically.
 - The in-app terminal supports `heatmap` commands (status, scheme set/list, sub-scheme set, colors set/list, include, check). Update the help output when behaviour changes.
+
+## Cursor Cloud specific instructions
+- This is a single Next.js frontend app; there is no backend, database, or required environment variables. Dependencies install cleanly with `npm install`.
+- Standard commands live in `package.json` (`npm run dev`, `npm run build`, `npm run lint`, `npm run storybook`).
+- Despite older docs mentioning port 3001, `npm run dev` starts on the Next.js default `http://localhost:3000` (the `dev` script is plain `next dev` with no `-p` flag). Use port 3000 unless a `-p` flag is added.
+- PGN loading is done through the in-app terminal at the bottom of the page, not a standalone textarea. Enter the PGN as a single line (e.g. `1. e4 e5 2. Nf3 Nc6`); a bare newline submits the command, so multi-line paste is treated as separate commands and fails.
