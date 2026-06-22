@@ -46,6 +46,23 @@ We rely on Storybook interaction tests while formal test suites evolve. Add visu
 ## Commit & Pull Request Guidelines
 Keep commits focused and imperative (e.g., `Add heatmap legend toggle`). Reference issue IDs when applicable. Pull requests need a summary, testing notes (commands run, Storybook checks), and screenshots or screen recordings for UI updates. Mention cross-browser or performance considerations when relevant, and ensure reviewers know which parts of the board evaluation logic changed.
 
+## Remote sync (required — multi-agent review)
+
+**Other agents and reviewers can only see work that is pushed to GitHub.** Local-only commits are invisible to the team.
+
+- **Push early and often** — after each meaningful commit, not only at session end.
+- **Always push at the end of an edit pass** — before handing off, switching tasks, or ending a session.
+- Use `git push -u origin <branch-name>` on first push; `git push` on follow-ups.
+- If push fails (network), retry with backoff (4s → 8s → 16s → 32s). Do not end the session with unpushed commits without documenting the blocker in `docs/progress.md`.
+- Open or update a **draft PR** against `cursor/dev-main-2440` so reviewers have a stable link (not `main`, unless releasing).
+- After merging into `cursor/dev-main-2440`, push that integration branch too so all agents share the same baseline.
+
+```bash
+git add -A
+git commit -m "Describe the change"
+git push -u origin "$(git branch --show-current)"
+```
+
 ## Branching & releases
 See `docs/development-insights/branching-workflow.md` and `docs/plans/integration-verification.md`.
 

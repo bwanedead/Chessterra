@@ -1,16 +1,13 @@
 # Agent & Team Progress
 
-**North star:** `docs/project-visions/endgame.md`  
-**Active plan:** `docs/plans/phase-1-platform-contract.md`  
 **Integration checklist:** `docs/plans/integration-verification.md`  
-**Goal ledger:** `.cursor/goals.md`  
-**Branching:** `docs/development-insights/branching-workflow.md`
+**Goal ledger:** `.cursor/goals.md`
 
 ---
 
 ## Current focus
 
-**Merge platform stack → `cursor/dev-main-2440`; verify on preview deploy**
+**Phase 6 — integration preview E2E** (blocked on Vercel Supabase env)
 
 ---
 
@@ -18,27 +15,25 @@
 
 **Date:** 2026-06-21  
 **Work:**
-- `MATCH_COMPLETED` + `RATING_UPDATED` audit events on match lifecycle
-- Participant guards on move/resign; HTTP 403/409 mapping via `matchErrorStatus`
-- `docs/plans/integration-verification.md` — full E2E checklist for integration branch
-- Branching docs aligned; merge platform stack into `cursor/dev-main-2440`
+- Fixed branch policy docs: `cursor/<name>-2440` (was stale `-117d`)
+- Typed `MatchServiceError` codes; API returns `{ error, code }` with stable HTTP mapping
+- Atomic match persistence: `commit_match_update` Supabase RPC + `repository.commit()`
+- `planRatedMatchCompletion` — rating events in same commit; rating rows saved after
+- Noted PR #11 superseded in branching-workflow.md
 
-**Evidence:** `npm run lint` exit 0; `npm run build` exit 0
+**Evidence:** `npm run lint` exit 0; `npm run build` blocked by Google Fonts fetch (env network, not code)
 
-**Stories:** `eg-105` passes (code); `eg-105b` pending (preview E2E)
-
-**Next:** Configure Supabase env on Vercel for `cursor/dev-main-2440` preview; run integration checklist
+**Next:** Push `cursor/platform-fixes-2440` and merge to `cursor/dev-main-2440`; close PR #11; configure Vercel preview env; run E2E checklist
 
 ---
 
 ## Phase checklist
 
-### Phase 0
-- [x] All stories eg-001–eg-008
+### Phase 1 code
+- [x] eg-105 platform hardening + atomic commit + typed errors
 
-### Phase 1
-- [x] eg-101 through eg-105 (platform code on integration branch)
-- [ ] eg-105b integration E2E on preview deploy
-
-### Phase 2
-- [ ] eg-201 matchmaking (blocked until eg-105b)
+### Phase 6 (ops)
+- [ ] Vercel Supabase env on integration preview
+- [ ] Apply migrations including `commit_match_update` RPC
+- [ ] Two-user invite game E2E
+- [ ] Close PR #11 (superseded)
