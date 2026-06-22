@@ -29,6 +29,7 @@ cursor/<descriptive-name>-2440  →  cursor/dev-main-2440  →  main (release)
 ## Agent defaults
 
 - **Never** target `main` for platform/auth/match work unless explicitly releasing.
+- **Push after every edit pass** — see `AGENTS.md` → Remote sync (required). Other agents cannot review unpushed work.
 - The historical stacked platform PRs were merged into integration in order: **#8 → #9 → #10 → #12**.
 - PR #11 is superseded by the integration branch copy of this workflow and should remain closed/ignored rather than merged.
 - Verification checklist: `docs/plans/integration-verification.md`
