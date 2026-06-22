@@ -49,10 +49,10 @@ Keep commits focused and imperative (e.g., `Add heatmap legend toggle`). Referen
 
 ## Remote sync (required — multi-agent review)
 
-**Other agents and reviewers can only see work that is pushed to GitHub.** Local-only commits are invisible to the team.
+**Other agents and reviewers can only see work that is pushed to GitHub.** Local-only commits are invisible to the team. In cloud agent runs, **push is not optional**.
 
 - **Push early and often** — after each meaningful commit, not only at session end.
-- **Always push at the end of an edit pass** — before handing off, switching tasks, or ending a session.
+- **Always push at the end of an edit pass** — before handing off, switching tasks, or ending a session. **Do not report work as complete until `git push` succeeds.**
 - Use `git push -u origin <branch-name>` on first push; `git push` on follow-ups.
 - If push fails (network), retry with backoff (4s → 8s → 16s → 32s). Do not end the session with unpushed commits without documenting the blocker in `docs/progress.md`.
 - Open or update a **draft PR** against `cursor/dev-main-2440` so reviewers have a stable link (not `main`, unless releasing).
