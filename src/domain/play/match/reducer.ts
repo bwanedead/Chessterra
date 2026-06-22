@@ -19,6 +19,9 @@ export const reduceMatch = (
         positionId: event.positionId ? (event.positionId as MatchSnapshot['positionId']) : null,
       };
 
+    case 'PLAYER_JOINED':
+      return state;
+
     case 'MATCH_STARTED':
       return {
         ...state,

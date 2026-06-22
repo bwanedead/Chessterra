@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { MatchSnapshot } from '@/domain/play/match/types';
-import type { MatchRepository } from './types';
+import type { MatchEvent } from '@/domain/play/match/events';
+import type { MatchRepository, SaveMatchResult } from './types';
 
 interface MatchRow {
   id: string;
@@ -8,15 +9,14 @@ interface MatchRow {
   status: MatchSnapshot['status'];
   snapshot: MatchSnapshot;
   rated: boolean;
+  version: number;
 }
-
-const parseSnapshot = (row: Pick<MatchRow, 'snapshot'>): MatchSnapshot => row.snapshot;
 
 export const createSupabaseMatchRepository = (supabase: SupabaseClient): MatchRepository => ({
   async get(matchId) {
     const { data, error } = await supabase
       .from('matches')
-      .select('snapshot')
+      .select('snapshot, version')
       .eq('id', matchId)
       .maybeSingle();
 
@@ -24,42 +24,71 @@ export const createSupabaseMatchRepository = (supabase: SupabaseClient): MatchRe
       return null;
     }
 
-    return parseSnapshot(data as Pick<MatchRow, 'snapshot'>);
+    const row = data as Pick<MatchRow, 'snapshot' | 'version'>;
+    return { snapshot: row.snapshot, version: row.version };
   },
 
-  async save(snapshot) {
-    const { error } = await supabase.from('matches').upsert(
-      {
-        id: snapshot.id,
+  async save(snapshot, expectedVersion): Promise<SaveMatchResult> {
+    if (expectedVersion === 0) {
+      const { data, error } = await supabase
+        .from('matches')
+        .insert({
+          id: snapshot.id,
+          pool_key: snapshot.poolKey,
+          status: snapshot.status,
+          snapshot,
+          rated: snapshot.rated,
+          version: 1,
+          updated_at: new Date().toISOString(),
+        })
+        .select('version')
+        .maybeSingle();
+
+      if (error) {
+        if (error.code === '23505') {
+          return { ok: false, reason: 'version_conflict' };
+        }
+        throw new Error(`Failed to create match: ${error.message}`);
+      }
+
+      return { ok: true, version: (data as { version: number }).version };
+    }
+
+    const { data, error } = await supabase
+      .from('matches')
+      .update({
         pool_key: snapshot.poolKey,
         status: snapshot.status,
         snapshot,
         rated: snapshot.rated,
+        version: expectedVersion + 1,
         updated_at: new Date().toISOString(),
-      },
-      { onConflict: 'id' },
-    );
+      })
+      .eq('id', snapshot.id)
+      .eq('version', expectedVersion)
+      .select('version')
+      .maybeSingle();
 
     if (error) {
       throw new Error(`Failed to save match: ${error.message}`);
     }
 
-    await supabase.from('match_events').insert({
-      match_id: snapshot.id,
-      event_type: `status:${snapshot.status}`,
-      payload: {
-        status: snapshot.status,
-        ply: snapshot.moves.length,
-        outcome: snapshot.outcome,
-      },
-    });
+    if (!data) {
+      const existing = await supabase.from('matches').select('id').eq('id', snapshot.id).maybeSingle();
+      if (!existing.data) {
+        return { ok: false, reason: 'not_found' };
+      }
+      return { ok: false, reason: 'version_conflict' };
+    }
+
+    return { ok: true, version: (data as { version: number }).version };
   },
 
-  async appendEvent(matchId, eventType, payload) {
+  async appendEvent(matchId, event: MatchEvent) {
     const { error } = await supabase.from('match_events').insert({
       match_id: matchId,
-      event_type: eventType,
-      payload,
+      event_type: event.type,
+      payload: event,
     });
 
     if (error) {

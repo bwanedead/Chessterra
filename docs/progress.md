@@ -2,14 +2,15 @@
 
 **North star:** `docs/project-visions/endgame.md`  
 **Active plan:** `docs/plans/phase-1-platform-contract.md`  
-**Goal ledger:** `.cursor/goals.md`
+**Goal ledger:** `.cursor/goals.md`  
+**Branching:** `docs/development-insights/branching-workflow.md`
 
 ---
 
 ## Current focus
 
-**Phase 1 — Supabase persistence complete (code)**  
-Next: Apply migrations to production project; Phase 2 matchmaking queue
+**Phase 1 — platform hardening**  
+Next: Merge platform stack into `cursor/dev-main-2440`; manual E2E on integration
 
 ---
 
@@ -17,21 +18,19 @@ Next: Apply migrations to production project; Phase 2 matchmaking queue
 
 **Date:** 2026-06-21  
 **Work:**
-- **eg-101b:** `createSupabaseServiceClient`, `isSupabasePersistenceEnabled`, `.env.example` service role, `supabase/config.toml`, `npm run db:push`
-- **eg-102b:** `supabaseRepository` (matches upsert + match_events), `getMatchRepository` factory
-- **eg-103b:** `useMatchRealtime` postgres_changes on `matches`; poll only when Supabase unset
-- **eg-104b:** `supabaseRatingStore` — Glicko updates persist to `ratings` table for authenticated users
+- Documented branch model in `AGENTS.md`, `docs/README.md`, `branching-workflow.md`
+- RLS hardening migration: participant-scoped reads, removed client match writes
+- Optimistic concurrency: `matches.version` + conditional save
+- Guest/rated boundaries: `assertActorCanPlayRated`, API 403 for rated guests
+- Match GET access control: pending = invite link; active+ = participants only
+- Audit events: domain `MatchEvent` types persisted to `match_events`
+- Realtime: authenticated users only; guests poll with `X-Player-Id`
 
 **Evidence:** `npm run lint` exit 0; `npm run build` exit 0
 
-**Stories:** `eg-101b`, `eg-102b`, `eg-103b`, `eg-104`, `eg-104b` pass
+**Stories:** `eg-105` partial (hardening code shipped)
 
-**Manual setup (production):**
-1. Copy `.env.example` → `.env.local` with URL, anon key, service role key
-2. `npm run db:push` or run SQL migrations in Supabase dashboard
-3. Enable OAuth providers per `docs/plans/auth-strategy.md`
-
-**Next:** eg-201 skill-based matchmaking queue
+**Next:** Merge PRs #8–#11 into `cursor/dev-main-2440`; fix Vercel check on integration
 
 ---
 
@@ -50,3 +49,7 @@ Next: Apply migrations to production project; Phase 2 matchmaking queue
 - [x] eg-103b Realtime sync
 - [x] eg-104 persisted ratings
 - [x] eg-104b ratings table wiring
+- [ ] eg-105 platform hardening (merge + verify on integration)
+
+### Phase 2
+- [ ] eg-201 matchmaking (deferred until integration verified)

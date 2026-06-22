@@ -25,7 +25,7 @@ export const useOnlineMatch = ({ matchId, playerId, autoJoin = true }: UseOnline
 
   const refresh = useCallback(async () => {
     try {
-      const next = await fetchMatch(matchId);
+      const next = await fetchMatch(matchId, playerId);
       setMatch(next);
       setError(null);
     } catch (refreshError) {
@@ -33,7 +33,7 @@ export const useOnlineMatch = ({ matchId, playerId, autoJoin = true }: UseOnline
     } finally {
       setLoading(false);
     }
-  }, [matchId]);
+  }, [matchId, playerId]);
 
   const handleRealtimeUpdate = useCallback((snapshot: MatchSnapshot) => {
     setMatch(snapshot);
@@ -41,7 +41,11 @@ export const useOnlineMatch = ({ matchId, playerId, autoJoin = true }: UseOnline
     setLoading(false);
   }, []);
 
-  useMatchRealtime(matchId, handleRealtimeUpdate, isSupabaseConfigured());
+  useMatchRealtime(
+    matchId,
+    handleRealtimeUpdate,
+    isSupabaseConfigured() && Boolean(playerId && !playerId.startsWith('guest-')),
+  );
 
   useEffect(() => {
     void refresh();
@@ -65,12 +69,15 @@ export const useOnlineMatch = ({ matchId, playerId, autoJoin = true }: UseOnline
       });
   }, [autoJoin, joinAttempted, match, matchId, playerId]);
 
+  const usePolling =
+    !isSupabaseConfigured() || Boolean(playerId && playerId.startsWith('guest-'));
+
   useEffect(() => {
     if (!match || match.status === 'completed' || match.status === 'aborted') {
       return undefined;
     }
 
-    if (isSupabaseConfigured()) {
+    if (!usePolling) {
       return undefined;
     }
 
@@ -79,7 +86,7 @@ export const useOnlineMatch = ({ matchId, playerId, autoJoin = true }: UseOnline
     }, POLL_MS);
 
     return () => window.clearInterval(intervalId);
-  }, [match, refresh]);
+  }, [match, playerId, refresh, usePolling]);
 
   const player = useMemo(() => {
     if (!match || !playerId) {

@@ -148,9 +148,27 @@
       "phase": "1",
       "title": "Glicko-2 rating per time control",
       "priority": 4,
-      "passes": false,
-      "note": "processCompletedRatedMatch in-memory; persist to ratings table next",
+      "passes": true,
+      "note": "processCompletedRatedMatch persists to ratings table via service role; in-memory fallback for guests/dev",
       "acceptance": "Rating updates after rated game; provisional for first 20"
+    },
+    {
+      "id": "eg-104b",
+      "phase": "1",
+      "title": "Persisted ratings",
+      "priority": 4,
+      "passes": true,
+      "note": "supabaseRatingStore load/upsert on completed rated matches",
+      "acceptance": "Authenticated player ratings survive server restart"
+    },
+    {
+      "id": "eg-105",
+      "phase": "1",
+      "title": "Platform hardening",
+      "priority": 5,
+      "passes": false,
+      "note": "RLS tightening, version concurrency, guest/rated guards, audit events, match access control; merge to cursor/dev-main-2440",
+      "acceptance": "Invite game E2E on integration; no broad public match write; rated requires auth"
     },
     {
       "id": "eg-201",

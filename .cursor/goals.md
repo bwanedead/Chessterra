@@ -3,14 +3,15 @@
 Persistent pursuit state for Chessterra → **Endgame** vision.
 
 **Vision:** `docs/project-visions/endgame.md`  
-**Phase 1 contract:** `docs/plans/phase-1-platform-contract.md`
+**Phase 1 contract:** `docs/plans/phase-1-platform-contract.md`  
+**Branching:** `docs/development-insights/branching-workflow.md`
 
 ---
 
 ## Active phase
 
-**Phase 1 — Competitive core (persistence shipped)**  
-Next: Production Supabase project setup + rated queue (Phase 2)
+**Phase 1 — Platform hardening (in progress)**  
+Next: Merge PR stack into `cursor/dev-main-2440`, verify invite game E2E
 
 ---
 
@@ -18,7 +19,8 @@ Next: Production Supabase project setup + rated queue (Phase 2)
 
 | ID | Story | Status | Next action |
 |----|-------|--------|-------------|
-| eg-201 | Skill-based matchmaking queue | `pending` | Widening rating window pairing |
+| eg-105 | Platform hardening | `in_progress` | Merge #8–#11 into integration branch |
+| eg-201 | Skill-based matchmaking queue | `blocked` | After invite games verified on integration |
 
 Full backlog: `docs/backlog/prd.json`
 
@@ -48,7 +50,7 @@ All `eg-001`–`eg-008` including 500-position pool (`eg-002`).
 
 ## Blocked
 
-_(none — apply migrations + `.env.local` for production Supabase)_
+_(none — apply migrations + `.env.local` on Supabase project for integration deploy)_
 
 ---
 
@@ -62,3 +64,6 @@ _(none — apply migrations + `.env.local` for production Supabase)_
 | 2026-06-21 | API auth: verified Supabase session first; `guest-*` header fallback only |
 | 2026-06-21 | Service role key required for server-side match/rating persistence |
 | 2026-06-21 | Realtime when Supabase configured; poll fallback otherwise |
+| 2026-06-21 | `main` = live; `cursor/dev-main-2440` = integration; feature PRs target integration |
+| 2026-06-21 | Harden before matchmaking: RLS, guest/rated boundaries, version concurrency, audit events |
+| 2026-06-21 | Rated games require signed-in users; guests casual invite only |

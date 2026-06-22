@@ -4,6 +4,7 @@ import type { MatchClockState } from '../time-control/types';
 
 export type MatchEvent =
   | { type: 'MATCH_CREATED'; startingFen: FenString; positionId?: string }
+  | { type: 'PLAYER_JOINED'; userId: string; slot: 'white' | 'black' }
   | { type: 'MATCH_STARTED'; at: string }
   | { type: 'MOVE_COMMITTED'; move: ChessMove; san: string; fen: FenString; mover: PieceColor; clock: MatchClockState }
   | { type: 'CLOCK_TICK'; clock: MatchClockState; flagColor: PieceColor | null }

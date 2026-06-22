@@ -14,6 +14,7 @@ This directory is split into collections so contributors and agents can find the
 | `plans/` | Execution contracts with steps and acceptance criteria (e.g. `endgame-phase-zero.md`, `foundation-architecture.md`) |
 | `backlog/` | Machine-readable stories (`prd.json`) for `/goal` pursuit |
 | `development-insights/` | Implementation notes and architectural breadcrumbs for the current system |
+| `development-insights/branching-workflow.md` | **Branch model** — `main` (live) vs `cursor/dev-main-2440` (integration) |
 | `progress.md` | Session handoff — focus, blockers, evidence (update every agent session) |
 
 ## Agent workflow

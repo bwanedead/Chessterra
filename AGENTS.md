@@ -46,6 +46,13 @@ We rely on Storybook interaction tests while formal test suites evolve. Add visu
 ## Commit & Pull Request Guidelines
 Keep commits focused and imperative (e.g., `Add heatmap legend toggle`). Reference issue IDs when applicable. Pull requests need a summary, testing notes (commands run, Storybook checks), and screenshots or screen recordings for UI updates. Mention cross-browser or performance considerations when relevant, and ensure reviewers know which parts of the board evaluation logic changed.
 
+## Branching & releases
+See `docs/development-insights/branching-workflow.md`.
+
+- **`main`** — live production source (Vercel deploy). Do not merge in-progress platform work here by default.
+- **`cursor/dev-main-2440`** — integration/staging branch. **Default PR base** for feature and agent branches.
+- Feature branches use `cursor/<descriptive-name>-117d` and merge into integration first; promote integration → `main` only when intentionally releasing.
+
 ## Security & Configuration Tips
 Store Supabase keys and other secrets in `.env.local`; never commit them. Mirror any new environment variables in `PROJECT_PLAN.md` and team documentation. Validate that analytics or logging code guards against leaking PGN data before merging.
 

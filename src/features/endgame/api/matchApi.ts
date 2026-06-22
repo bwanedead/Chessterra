@@ -6,8 +6,14 @@ const jsonHeaders = (playerId: string) => ({
   'X-Player-Id': playerId,
 });
 
-export const fetchMatch = async (matchId: string): Promise<MatchSnapshot> => {
-  const response = await authenticatedFetch(`/api/matches/${matchId}`, { cache: 'no-store' });
+export const fetchMatch = async (
+  matchId: string,
+  playerId?: string | null,
+): Promise<MatchSnapshot> => {
+  const response = await authenticatedFetch(`/api/matches/${matchId}`, {
+    cache: 'no-store',
+    playerId: playerId ?? null,
+  });
   if (!response.ok) {
     throw new Error('Failed to load match');
   }

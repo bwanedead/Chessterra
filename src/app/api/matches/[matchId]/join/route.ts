@@ -13,7 +13,7 @@ export async function POST(request: Request, context: RouteContext) {
     return NextResponse.json({ error: resolved.error }, { status: resolved.status });
   }
 
-  const result = await matchService.joinMatch(matchId, resolved.actor.userId);
+  const result = await matchService.joinMatch(matchId, resolved.actor.userId, resolved.actor.isGuest);
   if (!result.ok) {
     return NextResponse.json({ error: result.error }, { status: 400 });
   }

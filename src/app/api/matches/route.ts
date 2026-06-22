@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { requireRequestActor } from '@/server/auth';
+import { assertActorCanPlayRated, requireRequestActor } from '@/server/auth';
 import { matchService } from '@/server/match';
 
 export async function POST(request: Request) {
@@ -17,11 +17,18 @@ export async function POST(request: Request) {
     body = {};
   }
 
+  const rated = body.rated ?? false;
+  const ratedError = assertActorCanPlayRated(actor, rated);
+  if (ratedError) {
+    return NextResponse.json({ error: ratedError }, { status: 403 });
+  }
+
   const result = await matchService.createInviteMatch({
     hostUserId: actor.userId,
+    hostIsGuest: actor.isGuest,
     gameModeId: body.gameModeId,
     timeControlId: body.timeControlId,
-    rated: body.rated,
+    rated,
   });
 
   if (!result.ok) {
