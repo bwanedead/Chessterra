@@ -166,9 +166,18 @@
       "phase": "1",
       "title": "Platform hardening",
       "priority": 5,
+      "passes": true,
+      "note": "RLS, version concurrency, guest/rated guards, MATCH_COMPLETED/RATING_UPDATED audit events, participant API guards",
+      "acceptance": "Invite game code path production-shaped; merged to cursor/dev-main-2440"
+    },
+    {
+      "id": "eg-105b",
+      "phase": "1",
+      "title": "Integration E2E verification",
+      "priority": 6,
       "passes": false,
-      "note": "RLS tightening, version concurrency, guest/rated guards, audit events, match access control; merge to cursor/dev-main-2440",
-      "acceptance": "Invite game E2E on integration; no broad public match write; rated requires auth"
+      "note": "docs/plans/integration-verification.md; requires Supabase env on Vercel preview",
+      "acceptance": "Two signed-in users complete invite game on integration deploy; persistence verified"
     },
     {
       "id": "eg-201",

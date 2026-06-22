@@ -16,6 +16,7 @@ import type { MatchmakingPoolKey } from '@/domain/play/matchmaking/types';
 import { asUserId, type UserId } from '@/platform/ids';
 import { err, ok, type Result } from '@/platform/result';
 import { assertActorCanPlayRated } from '@/server/auth/policy';
+import { assertActorIsParticipant } from './access';
 import { memoryMatchRepository } from './memoryRepository';
 import { getMatchRepository } from './getMatchRepository';
 import type { MatchRepository } from './types';
@@ -34,10 +35,17 @@ const VERSION_CONFLICT_ERROR = 'Match state changed; please retry';
 export class MatchService {
   constructor(private readonly repository: MatchRepository = memoryMatchRepository) {}
 
+  private async appendAuditEvent(matchId: string, event: MatchEvent): Promise<void> {
+    if (this.repository.appendEvent) {
+      await this.repository.appendEvent(matchId, event);
+    }
+  }
+
   private async persist(
     snapshot: MatchSnapshot,
     expectedVersion: number,
-    auditEvent?: MatchEvent,
+    auditEvent: MatchEvent | undefined,
+    previousStatus: MatchSnapshot['status'],
   ): Promise<Result<MatchSnapshot, string>> {
     const saveResult = await this.repository.save(snapshot, expectedVersion);
     if (!saveResult.ok) {
@@ -47,12 +55,21 @@ export class MatchService {
       return err('Match not found');
     }
 
-    if (auditEvent && this.repository.appendEvent) {
-      await this.repository.appendEvent(snapshot.id, auditEvent);
+    if (auditEvent) {
+      await this.appendAuditEvent(snapshot.id, auditEvent);
     }
 
-    if (snapshot.status === 'completed') {
-      await processCompletedRatedMatch(snapshot);
+    const justCompleted = snapshot.status === 'completed' && previousStatus !== 'completed';
+    if (justCompleted) {
+      await this.appendAuditEvent(snapshot.id, {
+        type: 'MATCH_COMPLETED',
+        outcome: snapshot.outcome,
+        endedAt: snapshot.endedAt ?? new Date().toISOString(),
+      });
+
+      await processCompletedRatedMatch(snapshot, async (ratingEvent) => {
+        await this.appendAuditEvent(snapshot.id, ratingEvent);
+      });
     }
 
     return ok(snapshot);
@@ -90,7 +107,7 @@ export class MatchService {
       positionId: picked.positionId ?? undefined,
     };
 
-    return this.persist(snapshot, 0, auditEvent);
+    return this.persist(snapshot, 0, auditEvent, 'pending');
   }
 
   async getMatch(matchId: string): Promise<MatchSnapshot | null> {
@@ -112,26 +129,29 @@ export class MatchService {
       return err(assertActorCanPlayRated({ userId: asUserId(guestUserId), isGuest: true }, true)!);
     }
 
+    const hostId = record.snapshot.players.find((p) => p.slot === 'white')?.userId;
+    if (hostId && hostId === asUserId(guestUserId)) {
+      return err('Host cannot join as opponent');
+    }
+
     try {
       const joined = joinMatchAsBlack(record.snapshot, asUserId(guestUserId));
       const started = startJoinedMatch(joined);
 
-      const saveResult = await this.persist(started, record.version);
+      const saveResult = await this.persist(started, record.version, undefined, record.snapshot.status);
       if (!saveResult.ok) {
         return saveResult;
       }
 
-      if (this.repository.appendEvent) {
-        await this.repository.appendEvent(matchId, {
-          type: 'PLAYER_JOINED',
-          userId: guestUserId,
-          slot: 'black',
-        });
-        await this.repository.appendEvent(matchId, {
-          type: 'MATCH_STARTED',
-          at: started.startedAt ?? new Date().toISOString(),
-        });
-      }
+      await this.appendAuditEvent(matchId, {
+        type: 'PLAYER_JOINED',
+        userId: guestUserId,
+        slot: 'black',
+      });
+      await this.appendAuditEvent(matchId, {
+        type: 'MATCH_STARTED',
+        at: started.startedAt ?? new Date().toISOString(),
+      });
 
       return ok(started);
     } catch (error) {
@@ -147,6 +167,11 @@ export class MatchService {
     const record = await this.repository.get(matchId);
     if (!record) {
       return err('Match not found');
+    }
+
+    const participantError = assertActorIsParticipant(record.snapshot, asUserId(actorUserId));
+    if (participantError) {
+      return err(participantError);
     }
 
     const chessMove: ChessMove = {
@@ -171,7 +196,7 @@ export class MatchService {
       clock: result.value.clock,
     };
 
-    return this.persist(result.value, record.version, auditEvent);
+    return this.persist(result.value, record.version, auditEvent, record.snapshot.status);
   }
 
   async resign(matchId: string, actorUserId: string): Promise<Result<MatchSnapshot, string>> {
@@ -180,18 +205,23 @@ export class MatchService {
       return err('Match not found');
     }
 
+    const participantError = assertActorIsParticipant(record.snapshot, asUserId(actorUserId));
+    if (participantError) {
+      return err(participantError);
+    }
+
     const result = applyMatchResign(record.snapshot, asUserId(actorUserId));
     if (!result.ok) {
       return result;
     }
 
-    const player = record.snapshot.players.find((p) => p.userId === asUserId(actorUserId));
+    const player = findPlayerByUserId(record.snapshot, asUserId(actorUserId));
     const auditEvent: MatchEvent = {
       type: 'RESIGN',
       color: player?.color ?? 'w',
     };
 
-    return this.persist(result.value, record.version, auditEvent);
+    return this.persist(result.value, record.version, auditEvent, record.snapshot.status);
   }
 }
 

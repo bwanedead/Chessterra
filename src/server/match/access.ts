@@ -20,3 +20,14 @@ export const canViewMatch = (
 
   return findPlayerByUserId(snapshot, actorUserId) !== null;
 };
+
+/** Mutating routes require the actor to be a match participant. */
+export const assertActorIsParticipant = (
+  snapshot: MatchSnapshot,
+  actorUserId: UserId,
+): string | null => {
+  if (findPlayerByUserId(snapshot, actorUserId) === null) {
+    return 'Forbidden: not a match participant';
+  }
+  return null;
+};

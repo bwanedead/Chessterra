@@ -1,9 +1,10 @@
-import { createSupabaseServiceClient } from '@/platform/supabase/service';
 import type { MatchSnapshot } from '@/domain/play/match/types';
+import type { MatchEvent } from '@/domain/play/match/events';
 import { toRatingBucketId } from '@/domain/play/rating/bucket';
 import { createDefaultRating, updateRatings } from '@/domain/play/rating/glicko2';
 import type { RatingRecord } from '@/domain/play/rating/types';
 import { asRatingBucketId, type UserId } from '@/platform/ids';
+import { createSupabaseServiceClient } from '@/platform/supabase/service';
 import { createSupabaseRatingStore } from './supabaseRatingStore';
 
 const memoryRatings = new Map<string, RatingRecord>();
@@ -35,8 +36,23 @@ const scoreForColor = (
   return 0.5;
 };
 
+const toRatingUpdatedEvent = (record: RatingRecord, bucketId: string): MatchEvent => ({
+  type: 'RATING_UPDATED',
+  userId: record.userId,
+  bucketId,
+  rating: record.rating,
+  ratingDeviation: record.ratingDeviation,
+  gamesPlayed: record.gamesPlayed,
+  provisional: record.provisional,
+});
+
+export type RatingAuditCallback = (event: MatchEvent) => Promise<void>;
+
 /** Updates ratings after a completed rated match (Supabase when configured, else in-memory). */
-export const processCompletedRatedMatch = async (snapshot: MatchSnapshot): Promise<void> => {
+export const processCompletedRatedMatch = async (
+  snapshot: MatchSnapshot,
+  onAudit?: RatingAuditCallback,
+): Promise<void> => {
   if (!snapshot.rated || snapshot.status !== 'completed') {
     return;
   }
@@ -63,6 +79,11 @@ export const processCompletedRatedMatch = async (snapshot: MatchSnapshot): Promi
 
     await store.save(whiteResult.player);
     await store.save(whiteResult.opponent);
+
+    if (onAudit) {
+      await onAudit(toRatingUpdatedEvent(whiteResult.player, bucketId));
+      await onAudit(toRatingUpdatedEvent(whiteResult.opponent, bucketId));
+    }
     return;
   }
 
@@ -77,6 +98,11 @@ export const processCompletedRatedMatch = async (snapshot: MatchSnapshot): Promi
 
   memoryRatings.set(ratingKey(white, bucketId), whiteResult.player);
   memoryRatings.set(ratingKey(black, bucketId), whiteResult.opponent);
+
+  if (onAudit) {
+    await onAudit(toRatingUpdatedEvent(whiteResult.player, bucketId));
+    await onAudit(toRatingUpdatedEvent(whiteResult.opponent, bucketId));
+  }
 };
 
 export const getMemoryRating = (userId: UserId, bucketId: string): RatingRecord | null =>

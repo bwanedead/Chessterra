@@ -29,7 +29,8 @@ cursor/<feature>-117d  →  cursor/dev-main-2440  →  main (release)
 ## Agent defaults
 
 - **Never** target `main` for platform/auth/match work unless explicitly releasing.
-- Stack related PRs (#8 platform → #9 auth → #10 persistence → hardening) into integration before live promotion.
+- Merge stacked platform PRs into integration in order: **#8 → #9 → #10 → #12** (or merge top branch `cursor/platform-hardening-117d` / `cursor/integration-platform-117d` which contains the full stack).
+- Verification checklist: `docs/plans/integration-verification.md`
 - Record session outcomes in `.cursor/goals.md` and `docs/progress.md`.
 
 ## Future naming

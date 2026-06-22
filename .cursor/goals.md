@@ -4,14 +4,15 @@ Persistent pursuit state for Chessterra → **Endgame** vision.
 
 **Vision:** `docs/project-visions/endgame.md`  
 **Phase 1 contract:** `docs/plans/phase-1-platform-contract.md`  
+**Integration verification:** `docs/plans/integration-verification.md`  
 **Branching:** `docs/development-insights/branching-workflow.md`
 
 ---
 
 ## Active phase
 
-**Phase 1 — Platform hardening (in progress)**  
-Next: Merge PR stack into `cursor/dev-main-2440`, verify invite game E2E
+**Integration branch — production-shaped platform**  
+Next: Supabase env on Vercel preview + manual E2E on `cursor/dev-main-2440`
 
 ---
 
@@ -19,8 +20,8 @@ Next: Merge PR stack into `cursor/dev-main-2440`, verify invite game E2E
 
 | ID | Story | Status | Next action |
 |----|-------|--------|-------------|
-| eg-105 | Platform hardening | `in_progress` | Merge #8–#11 into integration branch |
-| eg-201 | Skill-based matchmaking queue | `blocked` | After invite games verified on integration |
+| eg-105b | Integration E2E verification | `pending` | Run checklist on Vercel preview with Supabase env |
+| eg-201 | Skill-based matchmaking queue | `blocked` | After eg-105b passes |
 
 Full backlog: `docs/backlog/prd.json`
 
@@ -45,12 +46,13 @@ All `eg-001`–`eg-008` including 500-position pool (`eg-002`).
 | eg-103b | Realtime sync | `useMatchRealtime`, polling fallback |
 | eg-104 | Rating hook | `processCompletedRatedMatch` |
 | eg-104b | Persisted ratings | `supabaseRatingStore` |
+| eg-105 | Platform hardening | RLS, concurrency, audit events, participant guards |
 
 ---
 
 ## Blocked
 
-_(none — apply migrations + `.env.local` on Supabase project for integration deploy)_
+_(none — Vercel preview needs Supabase env for eg-105b)_
 
 ---
 
@@ -67,3 +69,5 @@ _(none — apply migrations + `.env.local` on Supabase project for integration d
 | 2026-06-21 | `main` = live; `cursor/dev-main-2440` = integration; feature PRs target integration |
 | 2026-06-21 | Harden before matchmaking: RLS, guest/rated boundaries, version concurrency, audit events |
 | 2026-06-21 | Rated games require signed-in users; guests casual invite only |
+| 2026-06-21 | Full platform stack merges to integration before `main` promotion |
+| 2026-06-21 | Audit events: MATCH_COMPLETED + RATING_UPDATED on lifecycle completion |
