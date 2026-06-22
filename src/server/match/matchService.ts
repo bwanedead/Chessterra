@@ -17,10 +17,14 @@ import { asUserId, type UserId } from '@/platform/ids';
 import { err, ok, type Result } from '@/platform/result';
 import { assertActorCanPlayRated } from '@/server/auth/policy';
 import { assertActorIsParticipant } from './access';
+import { matchServiceError, type MatchServiceError } from './errors';
 import { memoryMatchRepository } from './memoryRepository';
 import { getMatchRepository } from './getMatchRepository';
 import type { MatchRepository } from './types';
-import { processCompletedRatedMatch } from '../rating/ratingService';
+import {
+  buildCompletedRatedMatchUpdate,
+  persistCompletedRatingUpdate,
+} from '../rating/ratingService';
 
 export interface CreateMatchInput {
   hostUserId: string;
@@ -30,52 +34,48 @@ export interface CreateMatchInput {
   rated?: boolean;
 }
 
-const VERSION_CONFLICT_ERROR = 'Match state changed; please retry';
+const saveError = (reason: 'not_found' | 'version_conflict'): MatchServiceError =>
+  reason === 'version_conflict'
+    ? matchServiceError('version_conflict', 'Match state changed; please retry')
+    : matchServiceError('not_found', 'Match not found');
 
 export class MatchService {
   constructor(private readonly repository: MatchRepository = memoryMatchRepository) {}
 
-  private async appendAuditEvent(matchId: string, event: MatchEvent): Promise<void> {
-    if (this.repository.appendEvent) {
-      await this.repository.appendEvent(matchId, event);
-    }
-  }
-
   private async persist(
     snapshot: MatchSnapshot,
     expectedVersion: number,
-    auditEvent: MatchEvent | undefined,
+    auditEvents: MatchEvent[],
     previousStatus: MatchSnapshot['status'],
-  ): Promise<Result<MatchSnapshot, string>> {
-    const saveResult = await this.repository.save(snapshot, expectedVersion);
-    if (!saveResult.ok) {
-      if (saveResult.reason === 'version_conflict') {
-        return err(VERSION_CONFLICT_ERROR);
-      }
-      return err('Match not found');
-    }
-
-    if (auditEvent) {
-      await this.appendAuditEvent(snapshot.id, auditEvent);
-    }
+  ): Promise<Result<MatchSnapshot, MatchServiceError>> {
+    const events = [...auditEvents];
+    let ratingUpdate = null;
 
     const justCompleted = snapshot.status === 'completed' && previousStatus !== 'completed';
     if (justCompleted) {
-      await this.appendAuditEvent(snapshot.id, {
+      events.push({
         type: 'MATCH_COMPLETED',
         outcome: snapshot.outcome,
         endedAt: snapshot.endedAt ?? new Date().toISOString(),
       });
 
-      await processCompletedRatedMatch(snapshot, async (ratingEvent) => {
-        await this.appendAuditEvent(snapshot.id, ratingEvent);
-      });
+      ratingUpdate = await buildCompletedRatedMatchUpdate(snapshot);
+      if (ratingUpdate) {
+        events.push(...ratingUpdate.events);
+      }
     }
+
+    const saveResult = await this.repository.commit(snapshot, expectedVersion, events);
+    if (!saveResult.ok) {
+      return err(saveError(saveResult.reason));
+    }
+
+    await persistCompletedRatingUpdate(ratingUpdate);
 
     return ok(snapshot);
   }
 
-  async createInviteMatch(input: CreateMatchInput): Promise<Result<MatchSnapshot, string>> {
+  async createInviteMatch(input: CreateMatchInput): Promise<Result<MatchSnapshot, MatchServiceError>> {
     const poolKey: MatchmakingPoolKey = {
       gameModeId: input.gameModeId ?? 'endgame-standard',
       timeControlId: input.timeControlId ?? 'blitz_3_2',
@@ -83,12 +83,15 @@ export class MatchService {
     };
 
     if (poolKey.rated && input.hostIsGuest) {
-      return err(assertActorCanPlayRated({ userId: asUserId(input.hostUserId), isGuest: true }, true)!);
+      return err(matchServiceError(
+        'rated_requires_auth',
+        assertActorCanPlayRated({ userId: asUserId(input.hostUserId), isGuest: true }, true)!,
+      ));
     }
 
     const picked = pickPoolPositionForMatch();
     if (!picked) {
-      return err('Position pool is empty');
+      return err(matchServiceError('invalid_request', 'Position pool is empty'));
     }
 
     const matchId = crypto.randomUUID();
@@ -107,7 +110,7 @@ export class MatchService {
       positionId: picked.positionId ?? undefined,
     };
 
-    return this.persist(snapshot, 0, auditEvent, 'pending');
+    return this.persist(snapshot, 0, [auditEvent], 'pending');
   }
 
   async getMatch(matchId: string): Promise<MatchSnapshot | null> {
@@ -119,43 +122,49 @@ export class MatchService {
     matchId: string,
     guestUserId: string,
     joinerIsGuest: boolean,
-  ): Promise<Result<MatchSnapshot, string>> {
+  ): Promise<Result<MatchSnapshot, MatchServiceError>> {
     const record = await this.repository.get(matchId);
     if (!record) {
-      return err('Match not found');
+      return err(matchServiceError('not_found', 'Match not found'));
     }
 
     if (record.snapshot.rated && joinerIsGuest) {
-      return err(assertActorCanPlayRated({ userId: asUserId(guestUserId), isGuest: true }, true)!);
+      return err(matchServiceError(
+        'rated_requires_auth',
+        assertActorCanPlayRated({ userId: asUserId(guestUserId), isGuest: true }, true)!,
+      ));
     }
 
     const hostId = record.snapshot.players.find((p) => p.slot === 'white')?.userId;
     if (hostId && hostId === asUserId(guestUserId)) {
-      return err('Host cannot join as opponent');
+      return err(matchServiceError('forbidden', 'Host cannot join as opponent'));
     }
 
     try {
       const joined = joinMatchAsBlack(record.snapshot, asUserId(guestUserId));
       const started = startJoinedMatch(joined);
 
-      const saveResult = await this.persist(started, record.version, undefined, record.snapshot.status);
-      if (!saveResult.ok) {
-        return saveResult;
-      }
-
-      await this.appendAuditEvent(matchId, {
-        type: 'PLAYER_JOINED',
-        userId: guestUserId,
-        slot: 'black',
-      });
-      await this.appendAuditEvent(matchId, {
-        type: 'MATCH_STARTED',
-        at: started.startedAt ?? new Date().toISOString(),
-      });
-
-      return ok(started);
+      return this.persist(
+        started,
+        record.version,
+        [
+          {
+            type: 'PLAYER_JOINED',
+            userId: guestUserId,
+            slot: 'black',
+          },
+          {
+            type: 'MATCH_STARTED',
+            at: started.startedAt ?? new Date().toISOString(),
+          },
+        ],
+        record.snapshot.status,
+      );
     } catch (error) {
-      return err(error instanceof Error ? error.message : 'Unable to join match');
+      return err(matchServiceError(
+        'illegal_state',
+        error instanceof Error ? error.message : 'Unable to join match',
+      ));
     }
   }
 
@@ -163,15 +172,15 @@ export class MatchService {
     matchId: string,
     actorUserId: string,
     move: { from: string; to: string; promotion?: string },
-  ): Promise<Result<MatchSnapshot, string>> {
+  ): Promise<Result<MatchSnapshot, MatchServiceError>> {
     const record = await this.repository.get(matchId);
     if (!record) {
-      return err('Match not found');
+      return err(matchServiceError('not_found', 'Match not found'));
     }
 
     const participantError = assertActorIsParticipant(record.snapshot, asUserId(actorUserId));
     if (participantError) {
-      return err(participantError);
+      return err(matchServiceError('forbidden', participantError));
     }
 
     const chessMove: ChessMove = {
@@ -182,7 +191,7 @@ export class MatchService {
 
     const result = applyMatchMove(record.snapshot, asUserId(actorUserId), chessMove, Date.now());
     if (!result.ok) {
-      return result;
+      return err(matchServiceError('illegal_state', result.error));
     }
 
     const lastMove = result.value.moves[result.value.moves.length - 1];
@@ -196,23 +205,23 @@ export class MatchService {
       clock: result.value.clock,
     };
 
-    return this.persist(result.value, record.version, auditEvent, record.snapshot.status);
+    return this.persist(result.value, record.version, [auditEvent], record.snapshot.status);
   }
 
-  async resign(matchId: string, actorUserId: string): Promise<Result<MatchSnapshot, string>> {
+  async resign(matchId: string, actorUserId: string): Promise<Result<MatchSnapshot, MatchServiceError>> {
     const record = await this.repository.get(matchId);
     if (!record) {
-      return err('Match not found');
+      return err(matchServiceError('not_found', 'Match not found'));
     }
 
     const participantError = assertActorIsParticipant(record.snapshot, asUserId(actorUserId));
     if (participantError) {
-      return err(participantError);
+      return err(matchServiceError('forbidden', participantError));
     }
 
     const result = applyMatchResign(record.snapshot, asUserId(actorUserId));
     if (!result.ok) {
-      return result;
+      return err(matchServiceError('illegal_state', result.error));
     }
 
     const player = findPlayerByUserId(record.snapshot, asUserId(actorUserId));
@@ -221,7 +230,7 @@ export class MatchService {
       color: player?.color ?? 'w',
     };
 
-    return this.persist(result.value, record.version, auditEvent, record.snapshot.status);
+    return this.persist(result.value, record.version, [auditEvent], record.snapshot.status);
   }
 }
 

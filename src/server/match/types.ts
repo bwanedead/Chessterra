@@ -12,6 +12,5 @@ export type SaveMatchResult =
 
 export interface MatchRepository {
   get(matchId: string): Promise<MatchRecord | null>;
-  save(snapshot: MatchSnapshot, expectedVersion: number): Promise<SaveMatchResult>;
-  appendEvent?(matchId: string, event: MatchEvent): Promise<void>;
+  commit(snapshot: MatchSnapshot, expectedVersion: number, events: MatchEvent[]): Promise<SaveMatchResult>;
 }

@@ -51,7 +51,7 @@ See `docs/development-insights/branching-workflow.md` and `docs/plans/integratio
 
 - **`main`** — live production source (Vercel deploy). Do not merge in-progress platform work here by default.
 - **`cursor/dev-main-2440`** — integration/staging branch. **Default PR base** for feature and agent branches.
-- Feature branches use `cursor/<descriptive-name>-117d` and merge into integration first; promote integration → `main` only when intentionally releasing.
+- Feature branches use `cursor/<descriptive-name>-2440` and merge into integration first; promote integration → `main` only when intentionally releasing.
 
 ## Security & Configuration Tips
 Store Supabase keys and other secrets in `.env.local`; never commit them. Mirror any new environment variables in `PROJECT_PLAN.md` and team documentation. Validate that analytics or logging code guards against leaking PGN data before merging.

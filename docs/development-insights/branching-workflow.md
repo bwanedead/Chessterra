@@ -8,12 +8,12 @@ Chessterra uses a two-tier integration model so **live production** stays stable
 |--------|------|
 | `main` | **Live production** — what Vercel/hosting deploys. Merge here only when intentionally releasing. |
 | `cursor/dev-main-2440` | **Integration / staging** — shared branch for in-progress platform work. Default PR target for feature and agent branches. |
-| `cursor/<feature>-117d` | Short-lived agent or feature branches. Branch from integration (or `main` if integration is behind), merge back into integration. |
+| `cursor/<descriptive-name>-2440` | Short-lived agent or feature branches. Branch from integration (or `main` if integration is behind), merge back into integration. |
 
 ## Flow
 
 ```
-cursor/<feature>-117d  →  cursor/dev-main-2440  →  main (release)
+cursor/<descriptive-name>-2440  →  cursor/dev-main-2440  →  main (release)
 ```
 
 1. Create feature branch from latest `cursor/dev-main-2440` (or `main` if integration has not caught up).
@@ -29,7 +29,8 @@ cursor/<feature>-117d  →  cursor/dev-main-2440  →  main (release)
 ## Agent defaults
 
 - **Never** target `main` for platform/auth/match work unless explicitly releasing.
-- Merge stacked platform PRs into integration in order: **#8 → #9 → #10 → #12** (or merge top branch `cursor/platform-hardening-117d` / `cursor/integration-platform-117d` which contains the full stack).
+- The historical stacked platform PRs were merged into integration in order: **#8 → #9 → #10 → #12**.
+- PR #11 is superseded by the integration branch copy of this workflow and should remain closed/ignored rather than merged.
 - Verification checklist: `docs/plans/integration-verification.md`
 - Record session outcomes in `.cursor/goals.md` and `docs/progress.md`.
 

@@ -28,71 +28,35 @@ export const createSupabaseMatchRepository = (supabase: SupabaseClient): MatchRe
     return { snapshot: row.snapshot, version: row.version };
   },
 
-  async save(snapshot, expectedVersion): Promise<SaveMatchResult> {
-    if (expectedVersion === 0) {
-      const { data, error } = await supabase
-        .from('matches')
-        .insert({
-          id: snapshot.id,
-          pool_key: snapshot.poolKey,
-          status: snapshot.status,
-          snapshot,
-          rated: snapshot.rated,
-          version: 1,
-          updated_at: new Date().toISOString(),
-        })
-        .select('version')
-        .maybeSingle();
-
-      if (error) {
-        if (error.code === '23505') {
-          return { ok: false, reason: 'version_conflict' };
-        }
-        throw new Error(`Failed to create match: ${error.message}`);
-      }
-
-      return { ok: true, version: (data as { version: number }).version };
-    }
-
+  async commit(snapshot, expectedVersion, events: MatchEvent[]): Promise<SaveMatchResult> {
     const { data, error } = await supabase
-      .from('matches')
-      .update({
-        pool_key: snapshot.poolKey,
-        status: snapshot.status,
-        snapshot,
-        rated: snapshot.rated,
-        version: expectedVersion + 1,
-        updated_at: new Date().toISOString(),
+      .rpc('commit_match_update', {
+        p_match_id: snapshot.id,
+        p_expected_version: expectedVersion,
+        p_pool_key: snapshot.poolKey,
+        p_status: snapshot.status,
+        p_snapshot: snapshot,
+        p_rated: snapshot.rated,
+        p_events: events,
       })
-      .eq('id', snapshot.id)
-      .eq('version', expectedVersion)
-      .select('version')
       .maybeSingle();
 
     if (error) {
-      throw new Error(`Failed to save match: ${error.message}`);
+      throw new Error(`Failed to commit match: ${error.message}`);
     }
 
-    if (!data) {
-      const existing = await supabase.from('matches').select('id').eq('id', snapshot.id).maybeSingle();
-      if (!existing.data) {
-        return { ok: false, reason: 'not_found' };
+    const result = data as { ok: boolean; reason: string | null; version: number | null } | null;
+    if (!result) {
+      throw new Error('Failed to commit match: empty RPC result');
+    }
+
+    if (!result.ok) {
+      if (result.reason === 'not_found' || result.reason === 'version_conflict') {
+        return { ok: false, reason: result.reason };
       }
-      return { ok: false, reason: 'version_conflict' };
+      throw new Error(`Failed to commit match: ${result.reason ?? 'unknown error'}`);
     }
 
-    return { ok: true, version: (data as { version: number }).version };
-  },
-
-  async appendEvent(matchId, event: MatchEvent) {
-    const { error } = await supabase.from('match_events').insert({
-      match_id: matchId,
-      event_type: event.type,
-      payload: event,
-    });
-
-    if (error) {
-      throw new Error(`Failed to append match event: ${error.message}`);
-    }
+    return { ok: true, version: result.version ?? expectedVersion + 1 };
   },
 });

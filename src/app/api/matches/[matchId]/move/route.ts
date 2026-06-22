@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireRequestActor } from '@/server/auth';
-import { matchErrorStatus, matchService } from '@/server/match';
+import { matchErrorResponse, matchErrorStatus, matchService } from '@/server/match';
 
 interface RouteContext {
   params: Promise<{ matchId: string }>;
@@ -26,7 +26,10 @@ export async function POST(request: Request, context: RouteContext) {
 
   const result = await matchService.commitMove(matchId, resolved.actor.userId, body);
   if (!result.ok) {
-    return NextResponse.json({ error: result.error }, { status: matchErrorStatus(result.error) });
+    return NextResponse.json(
+      matchErrorResponse(result.error),
+      { status: matchErrorStatus(result.error.code) },
+    );
   }
 
   return NextResponse.json({ match: result.value });

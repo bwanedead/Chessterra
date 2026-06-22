@@ -3,5 +3,5 @@ export * from './memoryRepository';
 export * from './supabaseRepository';
 export * from './getMatchRepository';
 export * from './access';
-export * from './httpErrors';
+export * from './errors';
 export * from './matchService';

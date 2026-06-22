@@ -17,7 +17,7 @@ export const memoryMatchRepository: MatchRepository = {
     return { snapshot: entry.snapshot, version: entry.version };
   },
 
-  async save(snapshot, expectedVersion): Promise<SaveMatchResult> {
+  async commit(snapshot, expectedVersion): Promise<SaveMatchResult> {
     const existing = store.get(snapshot.id);
 
     if (!existing) {
@@ -35,10 +35,6 @@ export const memoryMatchRepository: MatchRepository = {
     const nextVersion = expectedVersion + 1;
     store.set(snapshot.id, { snapshot, version: nextVersion });
     return { ok: true, version: nextVersion };
-  },
-
-  async appendEvent() {
-    // In-memory dev mode: audit log optional
   },
 };
 

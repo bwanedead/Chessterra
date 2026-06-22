@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { assertActorCanPlayRated, requireRequestActor } from '@/server/auth';
-import { matchService } from '@/server/match';
+import { matchErrorResponse, matchErrorStatus, matchService } from '@/server/match';
 
 export async function POST(request: Request) {
   const resolved = await requireRequestActor(request);
@@ -20,7 +20,10 @@ export async function POST(request: Request) {
   const rated = body.rated ?? false;
   const ratedError = assertActorCanPlayRated(actor, rated);
   if (ratedError) {
-    return NextResponse.json({ error: ratedError }, { status: 403 });
+    return NextResponse.json(
+      { error: ratedError, code: 'rated_requires_auth' },
+      { status: 403 },
+    );
   }
 
   const result = await matchService.createInviteMatch({
@@ -32,7 +35,10 @@ export async function POST(request: Request) {
   });
 
   if (!result.ok) {
-    return NextResponse.json({ error: result.error }, { status: 400 });
+    return NextResponse.json(
+      matchErrorResponse(result.error),
+      { status: matchErrorStatus(result.error.code) },
+    );
   }
 
   return NextResponse.json({

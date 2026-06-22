@@ -48,19 +48,23 @@ const toRatingUpdatedEvent = (record: RatingRecord, bucketId: string): MatchEven
 
 export type RatingAuditCallback = (event: MatchEvent) => Promise<void>;
 
-/** Updates ratings after a completed rated match (Supabase when configured, else in-memory). */
-export const processCompletedRatedMatch = async (
+export interface CompletedRatingUpdate {
+  records: RatingRecord[];
+  events: MatchEvent[];
+}
+
+/** Builds rating updates for a completed rated match without persisting them. */
+export const buildCompletedRatedMatchUpdate = async (
   snapshot: MatchSnapshot,
-  onAudit?: RatingAuditCallback,
-): Promise<void> => {
+): Promise<CompletedRatingUpdate | null> => {
   if (!snapshot.rated || snapshot.status !== 'completed') {
-    return;
+    return null;
   }
 
   const white = snapshot.players.find((player) => player.color === 'w')?.userId;
   const black = snapshot.players.find((player) => player.color === 'b')?.userId;
   if (!white || !black) {
-    return;
+    return null;
   }
 
   const bucketId = toRatingBucketId(snapshot.poolKey);
@@ -77,14 +81,13 @@ export const processCompletedRatedMatch = async (
       score: scoreForColor(snapshot, 'w'),
     });
 
-    await store.save(whiteResult.player);
-    await store.save(whiteResult.opponent);
-
-    if (onAudit) {
-      await onAudit(toRatingUpdatedEvent(whiteResult.player, bucketId));
-      await onAudit(toRatingUpdatedEvent(whiteResult.opponent, bucketId));
-    }
-    return;
+    return {
+      records: [whiteResult.player, whiteResult.opponent],
+      events: [
+        toRatingUpdatedEvent(whiteResult.player, bucketId),
+        toRatingUpdatedEvent(whiteResult.opponent, bucketId),
+      ],
+    };
   }
 
   const whiteRating = loadMemoryRating(white, bucketId);
@@ -96,12 +99,47 @@ export const processCompletedRatedMatch = async (
     score: scoreForColor(snapshot, 'w'),
   });
 
-  memoryRatings.set(ratingKey(white, bucketId), whiteResult.player);
-  memoryRatings.set(ratingKey(black, bucketId), whiteResult.opponent);
+  return {
+    records: [whiteResult.player, whiteResult.opponent],
+    events: [
+      toRatingUpdatedEvent(whiteResult.player, bucketId),
+      toRatingUpdatedEvent(whiteResult.opponent, bucketId),
+    ],
+  };
+};
 
-  if (onAudit) {
-    await onAudit(toRatingUpdatedEvent(whiteResult.player, bucketId));
-    await onAudit(toRatingUpdatedEvent(whiteResult.opponent, bucketId));
+/** Persists prepared rating records (Supabase when configured, else in-memory). */
+export const persistCompletedRatingUpdate = async (
+  update: CompletedRatingUpdate | null,
+): Promise<void> => {
+  if (!update) {
+    return;
+  }
+
+  const serviceClient = createSupabaseServiceClient();
+  if (serviceClient) {
+    const store = createSupabaseRatingStore(serviceClient);
+    await Promise.all(update.records.map((record) => store.save(record)));
+    return;
+  }
+
+  for (const record of update.records) {
+    memoryRatings.set(ratingKey(record.userId, record.bucketId), record);
+  }
+};
+
+/** Updates ratings after a completed rated match (Supabase when configured, else in-memory). */
+export const processCompletedRatedMatch = async (
+  snapshot: MatchSnapshot,
+  onAudit?: RatingAuditCallback,
+): Promise<void> => {
+  const update = await buildCompletedRatedMatchUpdate(snapshot);
+  await persistCompletedRatingUpdate(update);
+
+  if (onAudit && update) {
+    for (const event of update.events) {
+      await onAudit(event);
+    }
   }
 };
 
