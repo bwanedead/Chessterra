@@ -2,6 +2,31 @@
 
 Checklist before promoting integration → `main`. Run against a Supabase project with migrations applied and env vars set in Vercel preview.
 
+## Status (last updated: 2025-06-21)
+
+| Area | Status | Notes |
+|------|--------|-------|
+| Local readiness script | **available** | `npm run verify:integration` — env/migration/auth/API file checks; no secrets logged |
+| Domain/server unit tests | **available** | `npm run test` — match service guards, moves, events, version conflict |
+| Build gates | **automated locally** | `npm run lint`, `npm run build` |
+| Supabase migrations on disk | **present** | phase1, realtime, RLS hardening (`matches.version`), `commit_match_update` RPC |
+| Migrations applied (remote) | **manual** | Run `npm run db:push` or apply SQL in Supabase dashboard |
+| Auth E2E | **manual** | Guest vs signed-in, rated boundaries |
+| Invite game E2E (two users) | **manual** | Requires preview deploy + Supabase env (eg-105b) |
+| Realtime/reconnect polish | **not started** | Phase D — after Supabase E2E passes |
+| Match history | **not started** | Phase E |
+| Matchmaking | **blocked** | Do not build until invite games are boringly reliable |
+
+**Quick local check:**
+
+```bash
+npm run verify:integration   # config readiness (exit 0 = local prerequisites met)
+npm run test                 # server/domain match tests (no live Supabase)
+npm run lint && npm run build
+```
+
+Set `VERIFY_API_BASE_URL=https://your-preview.vercel.app` to probe a live `/api/me` endpoint (optional).
+
 ## Prerequisites
 
 - [ ] `.env.local` (local) or Vercel env (preview) has:
