@@ -1,9 +1,11 @@
+import type { MatchEvent } from '@/domain/play/match/events';
 import type { MatchSnapshot } from '@/domain/play/match/types';
 import type { MatchRepository, MatchRecord, SaveMatchResult } from './types';
 
 interface MemoryEntry {
   snapshot: MatchSnapshot;
   version: number;
+  events: MatchEvent[];
 }
 
 const store = new Map<string, MemoryEntry>();
@@ -17,14 +19,14 @@ export const memoryMatchRepository: MatchRepository = {
     return { snapshot: entry.snapshot, version: entry.version };
   },
 
-  async commit(snapshot, expectedVersion): Promise<SaveMatchResult> {
+  async commit(snapshot, expectedVersion, events): Promise<SaveMatchResult> {
     const existing = store.get(snapshot.id);
 
     if (!existing) {
       if (expectedVersion !== 0) {
         return { ok: false, reason: 'not_found' };
       }
-      store.set(snapshot.id, { snapshot, version: 1 });
+      store.set(snapshot.id, { snapshot, version: 1, events: [...events] });
       return { ok: true, version: 1 };
     }
 
@@ -33,7 +35,11 @@ export const memoryMatchRepository: MatchRepository = {
     }
 
     const nextVersion = expectedVersion + 1;
-    store.set(snapshot.id, { snapshot, version: nextVersion });
+    store.set(snapshot.id, {
+      snapshot,
+      version: nextVersion,
+      events: [...existing.events, ...events],
+    });
     return { ok: true, version: nextVersion };
   },
 };
@@ -48,4 +54,9 @@ export const getMemoryMatchRecord = (matchId: string): MatchRecord | null => {
     return null;
   }
   return { snapshot: entry.snapshot, version: entry.version };
+};
+
+export const getMemoryMatchEvents = (matchId: string): MatchEvent[] => {
+  const entry = store.get(matchId);
+  return entry ? [...entry.events] : [];
 };
