@@ -23,7 +23,19 @@
 
 **Evidence:** `npm run lint` exit 0; `npm run build` blocked by Google Fonts fetch (env network, not code)
 
-**Next:** Push `cursor/platform-fixes-2440` and merge to `cursor/dev-main-2440`; close PR #11; configure Vercel preview env; run E2E checklist
+**Blocker:** GitHub push failing (`Recv failure: Connection reset by peer`) after 4× retry. **Unpushed commits on `cursor/dev-main-2440`:**
+
+- `1879993` Cross-reference push requirement in branching workflow doc
+- `2871233` Require regular git push in AGENTS.md for multi-agent review
+- `f610bdd` Harden platform commit boundaries (already on remote platform-fixes; dev-main includes it)
+
+**Manual push required:**
+
+```bash
+git push origin cursor/platform-fixes-2440 cursor/dev-main-2440
+```
+
+**Next:** Configure Vercel preview env; run E2E checklist; close PR #11 if still open
 
 ---
 
