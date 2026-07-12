@@ -13,4 +13,6 @@ export type SaveMatchResult =
 export interface MatchRepository {
   get(matchId: string): Promise<MatchRecord | null>;
   commit(snapshot: MatchSnapshot, expectedVersion: number, events: MatchEvent[]): Promise<SaveMatchResult>;
+  /** Completed matches where the user was a participant, newest first. */
+  listCompletedForUser(userId: string, limit: number): Promise<MatchSnapshot[]>;
 }

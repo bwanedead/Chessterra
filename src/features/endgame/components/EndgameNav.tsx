@@ -12,6 +12,9 @@ export const EndgameNav = () => (
     <Link href="/play" className="font-medium text-sky-400 transition hover:text-sky-300">
       Play
     </Link>
+    <Link href="/history" className="text-slate-400 transition hover:text-slate-200">
+      History
+    </Link>
     <Link href="/auth" className="text-slate-400 transition hover:text-slate-200">
       Account
     </Link>

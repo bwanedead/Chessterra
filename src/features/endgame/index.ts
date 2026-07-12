@@ -5,6 +5,7 @@ export { GameClockPair } from './components/GameClockPair';
 export { GameResultModal } from './components/GameResultModal';
 export { OnlinePlayShell } from './components/OnlinePlayShell';
 export { InviteMatchPanel } from './components/InviteMatchPanel';
+export { MatchHistoryPanel } from './components/MatchHistoryPanel';
 export { useOnlineMatch, type MatchConnectionMode } from './hooks/useOnlineMatch';
 export { MatchApiError } from './api/matchApi';
 export { describeMatchError, isVersionConflict, isNetworkError } from './lib/matchErrorMessages';
