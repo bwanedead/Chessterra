@@ -1,6 +1,7 @@
 import { assertActorCanPlayRated, requireRequestActor } from '@/server/auth';
 import { matchErrorResponse, matchErrorStatus, matchService } from '@/server/match';
 import { createMatchRouteResponder } from '@/server/observability/matchRoute';
+import { checkMatchRateLimit } from '@/server/security/matchRateLimits';
 
 export async function POST(request: Request) {
   const respond = createMatchRouteResponder('create');
@@ -11,6 +12,11 @@ export async function POST(request: Request) {
     }
 
     const { actor } = resolved;
+
+    const rate = checkMatchRateLimit('create', actor.userId, request);
+    if (!rate.allowed) {
+      return respond.rateLimited(rate.retryAfterSeconds, actor);
+    }
 
     let body: { gameModeId?: string; timeControlId?: string; rated?: boolean } = {};
     try {

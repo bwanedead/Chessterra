@@ -15,6 +15,8 @@ export const describeMatchError = (error: unknown, fallback: string): string => 
         return 'Rated games require a signed-in account.';
       case 'not_found':
         return 'Match not found — it may have expired or the link is wrong.';
+      case 'rate_limited':
+        return 'Too many requests — take a breath and try again shortly.';
       default:
         break;
     }

@@ -1,6 +1,7 @@
 import { requireRequestActor } from '@/server/auth';
 import { matchErrorResponse, matchErrorStatus, matchService } from '@/server/match';
 import { createMatchRouteResponder } from '@/server/observability/matchRoute';
+import { checkMatchRateLimit } from '@/server/security/matchRateLimits';
 
 interface RouteContext {
   params: Promise<{ matchId: string }>;
@@ -13,6 +14,11 @@ export async function POST(request: Request, context: RouteContext) {
     const resolved = await requireRequestActor(request);
     if ('error' in resolved) {
       return respond.fail(resolved.status, { error: resolved.error });
+    }
+
+    const rate = checkMatchRateLimit('resign', resolved.actor.userId);
+    if (!rate.allowed) {
+      return respond.rateLimited(rate.retryAfterSeconds, resolved.actor);
     }
 
     const result = await matchService.resign(matchId, resolved.actor.userId);

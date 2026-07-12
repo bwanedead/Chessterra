@@ -18,6 +18,11 @@ describe('describeMatchError', () => {
     expect(describeMatchError(error, 'fallback')).toBe('Rated games require a signed-in account.');
   });
 
+  it('maps rate_limited to slow-down message', () => {
+    const error = new MatchApiError('Too many requests', 429, 'rate_limited');
+    expect(describeMatchError(error, 'fallback')).toContain('Too many requests');
+  });
+
   it('maps not_found to expired-link message', () => {
     const error = new MatchApiError('Match not found', 404, 'not_found');
     expect(describeMatchError(error, 'fallback')).toContain('expired');

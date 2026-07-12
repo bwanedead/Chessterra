@@ -15,6 +15,7 @@ export interface MatchRouteResponder {
     body: { error: string; code?: string },
     actor?: RequestActor,
   ) => NextResponse;
+  rateLimited: (retryAfterSeconds: number, actor?: RequestActor) => NextResponse;
   exception: (error: unknown) => NextResponse;
   setMatchId: (matchId: string) => void;
 }
@@ -60,6 +61,23 @@ export const createMatchRouteResponder = (
         durationMs: performance.now() - startedAt,
       });
       return NextResponse.json(body, { status });
+    },
+
+    rateLimited(retryAfterSeconds, actor) {
+      logMatchRoute({
+        action,
+        matchId: currentMatchId,
+        actorId: actor?.userId ?? null,
+        actorIsGuest: actor?.isGuest,
+        ok: false,
+        status: 429,
+        code: 'rate_limited',
+        durationMs: performance.now() - startedAt,
+      });
+      return NextResponse.json(
+        { error: 'Too many requests — please slow down.', code: 'rate_limited' },
+        { status: 429, headers: { 'Retry-After': String(retryAfterSeconds) } },
+      );
     },
 
     exception(error) {
