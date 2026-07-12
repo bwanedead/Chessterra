@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
 import { resolveRequestActor } from '@/server/auth';
 import { canViewMatch } from '@/server/match/access';
 import { matchService } from '@/server/match';
+import { createMatchRouteResponder } from '@/server/observability/matchRoute';
 
 interface RouteContext {
   params: Promise<{ matchId: string }>;
@@ -9,15 +9,20 @@ interface RouteContext {
 
 export async function GET(request: Request, context: RouteContext) {
   const { matchId } = await context.params;
-  const match = await matchService.getMatch(matchId);
-  if (!match) {
-    return NextResponse.json({ error: 'Match not found' }, { status: 404 });
-  }
+  const respond = createMatchRouteResponder('get', matchId);
+  try {
+    const match = await matchService.getMatch(matchId);
+    if (!match) {
+      return respond.fail(404, { error: 'Match not found', code: 'not_found' });
+    }
 
-  const actor = await resolveRequestActor(request);
-  if (!canViewMatch(match, actor?.userId ?? null)) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+    const actor = await resolveRequestActor(request);
+    if (!canViewMatch(match, actor?.userId ?? null)) {
+      return respond.fail(403, { error: 'Forbidden', code: 'forbidden' }, actor ?? undefined);
+    }
 
-  return NextResponse.json({ match });
+    return respond.ok({ match }, actor ?? undefined);
+  } catch (error) {
+    return respond.exception(error);
+  }
 }

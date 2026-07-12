@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
 import { requireRequestActor } from '@/server/auth';
 import { matchErrorResponse, matchErrorStatus, matchService } from '@/server/match';
+import { createMatchRouteResponder } from '@/server/observability/matchRoute';
 
 interface RouteContext {
   params: Promise<{ matchId: string }>;
@@ -8,18 +8,24 @@ interface RouteContext {
 
 export async function POST(request: Request, context: RouteContext) {
   const { matchId } = await context.params;
-  const resolved = await requireRequestActor(request);
-  if ('error' in resolved) {
-    return NextResponse.json({ error: resolved.error }, { status: resolved.status });
-  }
+  const respond = createMatchRouteResponder('resign', matchId);
+  try {
+    const resolved = await requireRequestActor(request);
+    if ('error' in resolved) {
+      return respond.fail(resolved.status, { error: resolved.error });
+    }
 
-  const result = await matchService.resign(matchId, resolved.actor.userId);
-  if (!result.ok) {
-    return NextResponse.json(
-      matchErrorResponse(result.error),
-      { status: matchErrorStatus(result.error.code) },
-    );
-  }
+    const result = await matchService.resign(matchId, resolved.actor.userId);
+    if (!result.ok) {
+      return respond.fail(
+        matchErrorStatus(result.error.code),
+        matchErrorResponse(result.error),
+        resolved.actor,
+      );
+    }
 
-  return NextResponse.json({ match: result.value });
+    return respond.ok({ match: result.value }, resolved.actor);
+  } catch (error) {
+    return respond.exception(error);
+  }
 }

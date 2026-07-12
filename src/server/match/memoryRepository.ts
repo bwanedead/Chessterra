@@ -42,6 +42,28 @@ export const memoryMatchRepository: MatchRepository = {
     });
     return { ok: true, version: nextVersion };
   },
+
+  async listCompletedForUser(userId, limit) {
+    const completed: MatchSnapshot[] = [];
+    for (const entry of store.values()) {
+      if (
+        entry.snapshot.status === 'completed'
+        && entry.snapshot.players.some((player) => player.userId === userId)
+      ) {
+        completed.push(entry.snapshot);
+      }
+    }
+    completed.sort((a, b) => (b.endedAt ?? '').localeCompare(a.endedAt ?? ''));
+    return completed.slice(0, limit);
+  },
+
+  async listEvents(matchId) {
+    const entry = store.get(matchId);
+    if (!entry) {
+      return [];
+    }
+    return entry.events.map((event) => ({ event, recordedAt: null }));
+  },
 };
 
 export const clearMemoryMatchStore = (): void => {

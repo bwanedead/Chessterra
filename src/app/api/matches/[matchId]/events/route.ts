@@ -6,27 +6,21 @@ interface RouteContext {
   params: Promise<{ matchId: string }>;
 }
 
-export async function POST(request: Request, context: RouteContext) {
+/**
+ * Audit event replay for debugging a match.
+ * Participant-only: events contain FENs and move detail, which participants
+ * already see on the board. Not a public surface.
+ */
+export async function GET(request: Request, context: RouteContext) {
   const { matchId } = await context.params;
-  const respond = createMatchRouteResponder('move', matchId);
+  const respond = createMatchRouteResponder('events', matchId);
   try {
     const resolved = await requireRequestActor(request);
     if ('error' in resolved) {
       return respond.fail(resolved.status, { error: resolved.error });
     }
 
-    let body: { from: string; to: string; promotion?: string };
-    try {
-      body = await request.json();
-    } catch {
-      return respond.fail(400, { error: 'Invalid JSON body' }, resolved.actor);
-    }
-
-    if (!body.from || !body.to) {
-      return respond.fail(400, { error: 'from and to are required' }, resolved.actor);
-    }
-
-    const result = await matchService.commitMove(matchId, resolved.actor.userId, body);
+    const result = await matchService.listMatchEvents(matchId, resolved.actor.userId);
     if (!result.ok) {
       return respond.fail(
         matchErrorStatus(result.error.code),
@@ -35,7 +29,7 @@ export async function POST(request: Request, context: RouteContext) {
       );
     }
 
-    return respond.ok({ match: result.value }, resolved.actor);
+    return respond.ok({ events: result.value }, resolved.actor);
   } catch (error) {
     return respond.exception(error);
   }

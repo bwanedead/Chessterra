@@ -171,6 +171,12 @@ describe('MatchService', () => {
       async commit(snapshot, expectedVersion, events) {
         return memoryMatchRepository.commit(snapshot, expectedVersion, events);
       },
+      async listCompletedForUser(userId, limit) {
+        return memoryMatchRepository.listCompletedForUser(userId, limit);
+      },
+      async listEvents(id) {
+        return memoryMatchRepository.listEvents(id);
+      },
     };
 
     const service = createService(staleRepository);
@@ -218,6 +224,73 @@ describe('MatchService', () => {
     const ratingEvents = events.filter((event) => event.type === 'RATING_UPDATED');
     expect(ratingEvents).toHaveLength(2);
     expect(events.some((event) => event.type === 'MATCH_COMPLETED')).toBe(true);
+  });
+
+  it('lists completed matches only for participants, newest first', async () => {
+    const service = createService();
+
+    const first = await setupActiveMatch(service);
+    const firstResign = await service.resign(first.id, playerForColor(first, activeColor(first.currentFen)));
+    expect(firstResign.ok).toBe(true);
+
+    // endedAt has millisecond precision; ensure distinct ordering timestamps.
+    await new Promise((resolve) => setTimeout(resolve, 5));
+
+    const second = await setupActiveMatch(service);
+    const secondResign = await service.resign(second.id, playerForColor(second, activeColor(second.currentFen)));
+    expect(secondResign.ok).toBe(true);
+
+    const hostHistory = await service.listMatchHistory(HOST_ID);
+    expect(hostHistory).toHaveLength(2);
+    expect(hostHistory.every((entry) => entry.result === 'win' || entry.result === 'loss' || entry.result === 'draw')).toBe(true);
+    expect(hostHistory[0]?.matchId).toBe(second.id);
+    expect(hostHistory[1]?.matchId).toBe(first.id);
+    expect(hostHistory[0]?.opponentUserId).toBe(JOINER_ID);
+
+    const outsiderHistory = await service.listMatchHistory(OUTSIDER_ID);
+    expect(outsiderHistory).toHaveLength(0);
+  });
+
+  it('excludes pending and active matches from history', async () => {
+    const service = createService();
+    const created = await service.createInviteMatch({ hostUserId: HOST_ID, hostIsGuest: false });
+    expect(created.ok).toBe(true);
+
+    const active = await setupActiveMatch(service);
+    expect(active.status).toBe('active');
+
+    const history = await service.listMatchHistory(HOST_ID);
+    expect(history).toHaveLength(0);
+  });
+
+  it('exposes event replay to participants only', async () => {
+    const service = createService();
+    const snapshot = await setupActiveMatch(service);
+    const resigner = playerForColor(snapshot, activeColor(snapshot.currentFen));
+    const resigned = await service.resign(snapshot.id, resigner);
+    expect(resigned.ok).toBe(true);
+
+    const participantEvents = await service.listMatchEvents(snapshot.id, HOST_ID);
+    expect(participantEvents.ok).toBe(true);
+    if (participantEvents.ok) {
+      const types = participantEvents.value.map((record) => record.event.type);
+      expect(types).toContain('MATCH_CREATED');
+      expect(types).toContain('MATCH_STARTED');
+      expect(types).toContain('RESIGN');
+      expect(types).toContain('MATCH_COMPLETED');
+    }
+
+    const outsiderEvents = await service.listMatchEvents(snapshot.id, OUTSIDER_ID);
+    expect(outsiderEvents.ok).toBe(false);
+    if (!outsiderEvents.ok) {
+      expect(outsiderEvents.error.code).toBe('forbidden');
+    }
+
+    const missing = await service.listMatchEvents('00000000-0000-0000-0000-000000000000', HOST_ID);
+    expect(missing.ok).toBe(false);
+    if (!missing.ok) {
+      expect(missing.error.code).toBe('not_found');
+    }
   });
 
   it('commits snapshot and audit events atomically through the repository', async () => {

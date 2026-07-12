@@ -15,9 +15,27 @@ export interface OnlinePlayShellProps {
   boardSize?: number;
 }
 
+const CONNECTION_BADGE: Record<string, { label: string; className: string }> = {
+  realtime: { label: 'Live', className: 'bg-emerald-500/10 text-emerald-400' },
+  polling: { label: 'Syncing', className: 'bg-sky-500/10 text-sky-400' },
+  reconnecting: { label: 'Reconnecting…', className: 'bg-amber-500/10 text-amber-400' },
+};
+
 export const OnlinePlayShell = ({ matchId, playerId, boardSize = 480 }: OnlinePlayShellProps) => {
   const online = useOnlineMatch({ matchId, playerId });
-  const { match, player, loading, error, canMove, isTerminal, commitMove, resign } = online;
+  const {
+    match,
+    player,
+    loading,
+    error,
+    canMove,
+    isTerminal,
+    connectionMode,
+    refresh,
+    commitMove,
+    resign,
+    clearError,
+  } = online;
 
   const startingFen = match?.currentFen ?? '8/8/8/8/8/8/8/8 w - - 0 1';
   const { state, apply } = useBoardSession({
@@ -40,8 +58,21 @@ export const OnlinePlayShell = ({ matchId, playerId, boardSize = 480 }: OnlinePl
   }
 
   if (!match) {
-    return <p className="text-center text-rose-400">{error ?? 'Match not found'}</p>;
+    return (
+      <div className="mx-auto flex w-full max-w-lg flex-col items-center gap-3 text-center">
+        <p className="text-rose-400">{error ?? 'Match not found'}</p>
+        <button
+          type="button"
+          onClick={() => void refresh()}
+          className="rounded-md border border-slate-700 px-3 py-1.5 text-xs text-slate-300 hover:border-slate-500 hover:text-slate-100"
+        >
+          Try again
+        </button>
+      </div>
+    );
   }
+
+  const badge = CONNECTION_BADGE[connectionMode] ?? CONNECTION_BADGE.polling;
 
   const orientation = player?.color === 'b' ? 'black' : 'white';
   const playerColor = player?.color ?? 'w';
@@ -78,9 +109,30 @@ export const OnlinePlayShell = ({ matchId, playerId, boardSize = 480 }: OnlinePl
           {match.status === 'pending' ? 'Waiting for opponent…' : 'Endgame duel'}
         </h1>
         <p className="font-mono text-xs text-slate-500 break-all">{match.id}</p>
+        <span
+          className={`inline-block rounded-full px-2.5 py-0.5 text-[11px] font-medium ${badge.className}`}
+          data-testid="connection-badge"
+        >
+          {badge.label}
+        </span>
       </header>
 
-      {error ? <p className="text-center text-sm text-rose-400">{error}</p> : null}
+      {error ? (
+        <div
+          className="flex items-start justify-between gap-3 rounded-md border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-sm text-rose-300"
+          role="alert"
+        >
+          <span>{error}</span>
+          <button
+            type="button"
+            onClick={clearError}
+            aria-label="Dismiss error"
+            className="shrink-0 text-rose-400/70 hover:text-rose-200"
+          >
+            ×
+          </button>
+        </div>
+      ) : null}
 
       <GameClock label={opponentColor === 'w' ? 'White' : 'Black'} color={opponentColor} clock={match.clock} />
 
