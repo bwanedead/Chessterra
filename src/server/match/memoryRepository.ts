@@ -56,6 +56,14 @@ export const memoryMatchRepository: MatchRepository = {
     completed.sort((a, b) => (b.endedAt ?? '').localeCompare(a.endedAt ?? ''));
     return completed.slice(0, limit);
   },
+
+  async listEvents(matchId) {
+    const entry = store.get(matchId);
+    if (!entry) {
+      return [];
+    }
+    return entry.events.map((event) => ({ event, recordedAt: null }));
+  },
 };
 
 export const clearMemoryMatchStore = (): void => {

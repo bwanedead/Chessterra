@@ -21,7 +21,7 @@ import { assertActorIsParticipant } from './access';
 import { matchServiceError, type MatchServiceError } from './errors';
 import { memoryMatchRepository } from './memoryRepository';
 import { getMatchRepository } from './getMatchRepository';
-import type { MatchRepository } from './types';
+import type { MatchEventRecord, MatchRepository } from './types';
 import {
   buildCompletedRatedMatchUpdate,
   persistCompletedRatingUpdate,
@@ -117,6 +117,28 @@ export class MatchService {
   async getMatch(matchId: string): Promise<MatchSnapshot | null> {
     const record = await this.repository.get(matchId);
     return record?.snapshot ?? null;
+  }
+
+  /**
+   * Ordered audit event log for debugging/replay.
+   * Participants only — events include FENs and move detail.
+   */
+  async listMatchEvents(
+    matchId: string,
+    actorUserId: string,
+  ): Promise<Result<MatchEventRecord[], MatchServiceError>> {
+    const record = await this.repository.get(matchId);
+    if (!record) {
+      return err(matchServiceError('not_found', 'Match not found'));
+    }
+
+    const participantError = assertActorIsParticipant(record.snapshot, asUserId(actorUserId));
+    if (participantError) {
+      return err(matchServiceError('forbidden', participantError));
+    }
+
+    const events = await this.repository.listEvents(matchId);
+    return ok(events);
   }
 
   /** Completed matches for the requesting user, summarised from their perspective. */
