@@ -11,8 +11,8 @@ Persistent pursuit state for Chessterra → **Endgame** vision.
 
 ## Active phase
 
-**Integration branch — production-shaped platform**  
-Next: Supabase env on Vercel preview + manual E2E on `cursor/dev-main-2440`
+**Foundation hardening — reliability before features**  
+Phases D–G code complete (PRs #16–#19 into integration). Next: merge stack, then Supabase env on Vercel preview + manual E2E (eg-105b).
 
 ---
 
@@ -20,8 +20,12 @@ Next: Supabase env on Vercel preview + manual E2E on `cursor/dev-main-2440`
 
 | ID | Story | Status | Next action |
 |----|-------|--------|-------------|
-| eg-105b | Integration E2E verification | `pending` | Run checklist on Vercel preview with Supabase env |
-| eg-201 | Skill-based matchmaking queue | `blocked` | After eg-105b passes |
+| eg-105b | Integration E2E verification | `pending` | Merge PRs #16–#19, run checklist on Vercel preview with Supabase env |
+| eg-106 | Reconnect/error resilience | `code done` | PR #16 — verify in manual E2E |
+| eg-107 | Match history foundation | `code done` | PR #17 — verify in manual E2E |
+| eg-108 | Observability + event replay | `code done` | PR #18 |
+| eg-109 | Rate limiting / abuse guards | `code done` | PR #19 |
+| eg-201 | Skill-based matchmaking queue | `blocked` | Last — after all foundations verified |
 
 Full backlog: `docs/backlog/prd.json`
 
@@ -71,3 +75,8 @@ _(none — Vercel preview needs Supabase env for eg-105b)_
 | 2026-06-21 | Rated games require signed-in users; guests casual invite only |
 | 2026-06-21 | Full platform stack merges to integration before `main` promotion |
 | 2026-06-21 | Audit events: MATCH_COMPLETED + RATING_UPDATED on lifecycle completion |
+| 2026-07-12 | Next.js 15.2.9 security patch (React2Shell CVEs) on integration |
+| 2026-07-12 | Foundation order: reconnect → history → observability → rate limits; matchmaking last |
+| 2026-07-12 | Polling is the universal fallback: activates whenever realtime channel unhealthy |
+| 2026-07-12 | Event replay is participant-scoped until an admin role exists |
+| 2026-07-12 | Rate limiter in-memory per instance; Vercel WAF then shared store are prod upgrades |

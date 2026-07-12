@@ -180,11 +180,49 @@
       "acceptance": "Two signed-in users complete invite game on integration deploy; persistence verified"
     },
     {
+      "id": "eg-106",
+      "phase": "1",
+      "title": "Reconnect resilience and friendly errors",
+      "priority": 7,
+      "passes": true,
+      "note": "PR #16: MatchApiError codes, realtime health -> poll fallback, resync on reconnect/focus/online, 409 auto-refresh, connection badge",
+      "acceptance": "Two-browser game survives refresh/disconnect; version conflict does not break the UI"
+    },
+    {
+      "id": "eg-107",
+      "phase": "1",
+      "title": "Match history foundation",
+      "priority": 8,
+      "passes": true,
+      "note": "PR #17: toMatchHistoryEntry, listCompletedForUser (memory + Supabase), GET /api/me/matches, /history page",
+      "acceptance": "Signed-in user sees own completed games; others cannot access them"
+    },
+    {
+      "id": "eg-108",
+      "phase": "1",
+      "title": "Observability and event replay",
+      "priority": 9,
+      "passes": true,
+      "note": "PR #18: structured match API logs (no FEN/PGN), safe 500s, GET /api/matches/:id/events participant-scoped",
+      "acceptance": "Broken games reconstructable from match_events; no PGN/FEN leakage beyond intended surfaces"
+    },
+    {
+      "id": "eg-109",
+      "phase": "1",
+      "title": "Rate limiting and abuse guards",
+      "priority": 10,
+      "passes": true,
+      "note": "PR #19: sliding-window limiter; create 10/5min (+IP cap), join 20/5min, move 120/min, resign 10/min; docs/development-insights/rate-limits.md",
+      "acceptance": "Obvious spam paths blocked or throttled; guest id rotation caught by IP cap"
+    },
+    {
       "id": "eg-201",
       "phase": "2",
       "title": "Skill-based matchmaking queue",
       "priority": 1,
       "passes": false,
+      "blocked": true,
+      "note": "Do not build until invite games verified boringly reliable on integration (eg-105b) and queue design is planned",
       "acceptance": "Pair within widening rating window; bot backfill optional"
     },
     {

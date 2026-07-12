@@ -7,35 +7,30 @@
 
 ## Current focus
 
-**Phase 6 — integration preview E2E** (blocked on Vercel Supabase env)
+**Merge foundation-hardening PR stack, then Phase 6 integration preview E2E** (still blocked on Vercel Supabase env)
 
 ---
 
 ## Last session
 
-**Date:** 2026-06-21  
+**Date:** 2026-07-12  
 **Work:**
-- Fixed branch policy docs: `cursor/<name>-2440` (was stale `-117d`)
-- Typed `MatchServiceError` codes; API returns `{ error, code }` with stable HTTP mapping
-- Atomic match persistence: `commit_match_update` Supabase RPC + `repository.commit()`
-- `planRatedMatchCompletion` — rating events in same commit; rating rows saved after
-- Noted PR #11 superseded in branching-workflow.md
+- Next.js 15.2.1 → 15.2.9 security patch (React2Shell CVEs) — merged (#15)
+- Phase A/B verification tooling + match service tests — merged (#14)
+- Phase D reconnect resilience: realtime health → poll fallback, resync on reconnect/focus/online, 409 recovery, `MatchApiError` codes, friendly error copy, connection badge — PR #16
+- Phase E match history: `toMatchHistoryEntry`, `listCompletedForUser`, `GET /api/me/matches`, `/history` page, nav link — PR #17
+- Phase F observability: structured match API logs (no FEN/PGN), safe 500s, participant-scoped `GET /api/matches/:id/events` replay — PR #18
+- Phase G rate limits: create/join/move/resign throttled, guest-IP guard on create, `docs/development-insights/rate-limits.md` — PR #19
 
-**Evidence:** `npm run lint` exit 0; `npm run build` blocked by Google Fonts fetch (env network, not code)
+**Evidence:** `npm run test` 32 passed; `npm run lint` exit 0; `npm run build` exit 0 (all on tip of stack)
 
-**Blocker:** GitHub push failing (`Recv failure: Connection reset by peer`) after 4× retry. **Unpushed commits on `cursor/dev-main-2440`:**
+**PR stack (merge in order into `cursor/dev-main-2440`):**
+1. #16 `cursor/reconnect-polish-2440`
+2. #17 `cursor/match-history-2440` (stacked on #16)
+3. #18 `cursor/observability-2440` (stacked on #17)
+4. #19 `cursor/rate-limits-2440` (stacked on #18; includes docs/backlog updates)
 
-- `1879993` Cross-reference push requirement in branching workflow doc
-- `2871233` Require regular git push in AGENTS.md for multi-agent review
-- `f610bdd` Harden platform commit boundaries (already on remote platform-fixes; dev-main includes it)
-
-**Manual push required:**
-
-```bash
-git push origin cursor/platform-fixes-2440 cursor/dev-main-2440
-```
-
-**Next:** Configure Vercel preview env; run E2E checklist; close PR #11 if still open
+**Next:** Merge stack → configure Vercel preview Supabase env → run full E2E checklist including new reconnect checks → then promote to `main` when green
 
 ---
 
@@ -43,9 +38,18 @@ git push origin cursor/platform-fixes-2440 cursor/dev-main-2440
 
 ### Phase 1 code
 - [x] eg-105 platform hardening + atomic commit + typed errors
+- [x] eg-106 reconnect resilience (PR #16)
+- [x] eg-107 match history (PR #17)
+- [x] eg-108 observability + replay (PR #18)
+- [x] eg-109 rate limits (PR #19)
 
-### Phase 6 (ops)
+### Phase 6 (ops — human)
+- [ ] Merge PRs #16–#19
 - [ ] Vercel Supabase env on integration preview
 - [ ] Apply migrations including `commit_match_update` RPC
-- [ ] Two-user invite game E2E
-- [ ] Close PR #11 (superseded)
+- [ ] Two-user invite game E2E + reconnect checks
+- [ ] Promote integration → `main` when checklist green
+
+### Blocked (do not start)
+- Matchmaking (eg-201) — after eg-105b passes and queue design planned
+- Stripe, big UI expansion
