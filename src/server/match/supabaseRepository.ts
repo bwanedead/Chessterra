@@ -59,4 +59,37 @@ export const createSupabaseMatchRepository = (supabase: SupabaseClient): MatchRe
 
     return { ok: true, version: result.version ?? expectedVersion + 1 };
   },
+
+  async listCompletedForUser(userId, limit) {
+    const { data, error } = await supabase
+      .from('matches')
+      .select('snapshot')
+      .eq('status', 'completed')
+      .contains('snapshot->players', JSON.stringify([{ userId }]))
+      .order('snapshot->>endedAt', { ascending: false })
+      .limit(limit);
+
+    if (error || !data) {
+      return [];
+    }
+
+    return (data as Pick<MatchRow, 'snapshot'>[]).map((row) => row.snapshot);
+  },
+
+  async listEvents(matchId) {
+    const { data, error } = await supabase
+      .from('match_events')
+      .select('payload, created_at')
+      .eq('match_id', matchId)
+      .order('id', { ascending: true });
+
+    if (error || !data) {
+      return [];
+    }
+
+    return (data as { payload: MatchEvent; created_at: string | null }[]).map((row) => ({
+      event: row.payload,
+      recordedAt: row.created_at,
+    }));
+  },
 });

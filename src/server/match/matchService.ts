@@ -9,6 +9,7 @@ import {
   startJoinedMatch,
 } from '@/domain/play/match';
 import type { MatchEvent } from '@/domain/play/match/events';
+import { toMatchHistoryEntry, type MatchHistoryEntry } from '@/domain/play/match/history';
 import type { MatchSnapshot } from '@/domain/play/match/types';
 import type { ChessMove } from '@/domain/play/chess/types';
 import type { PromotionPieceType } from '@/features/chessboard/types';
@@ -20,7 +21,7 @@ import { assertActorIsParticipant } from './access';
 import { matchServiceError, type MatchServiceError } from './errors';
 import { memoryMatchRepository } from './memoryRepository';
 import { getMatchRepository } from './getMatchRepository';
-import type { MatchRepository } from './types';
+import type { MatchEventRecord, MatchRepository } from './types';
 import {
   buildCompletedRatedMatchUpdate,
   persistCompletedRatingUpdate,
@@ -116,6 +117,42 @@ export class MatchService {
   async getMatch(matchId: string): Promise<MatchSnapshot | null> {
     const record = await this.repository.get(matchId);
     return record?.snapshot ?? null;
+  }
+
+  /**
+   * Ordered audit event log for debugging/replay.
+   * Participants only — events include FENs and move detail.
+   */
+  async listMatchEvents(
+    matchId: string,
+    actorUserId: string,
+  ): Promise<Result<MatchEventRecord[], MatchServiceError>> {
+    const record = await this.repository.get(matchId);
+    if (!record) {
+      return err(matchServiceError('not_found', 'Match not found'));
+    }
+
+    const participantError = assertActorIsParticipant(record.snapshot, asUserId(actorUserId));
+    if (participantError) {
+      return err(matchServiceError('forbidden', participantError));
+    }
+
+    const events = await this.repository.listEvents(matchId);
+    return ok(events);
+  }
+
+  /** Completed matches for the requesting user, summarised from their perspective. */
+  async listMatchHistory(userId: string, limit = 50): Promise<MatchHistoryEntry[]> {
+    const boundedLimit = Math.min(Math.max(limit, 1), 100);
+    const snapshots = await this.repository.listCompletedForUser(userId, boundedLimit);
+    const entries: MatchHistoryEntry[] = [];
+    for (const snapshot of snapshots) {
+      const entry = toMatchHistoryEntry(snapshot, asUserId(userId));
+      if (entry) {
+        entries.push(entry);
+      }
+    }
+    return entries;
   }
 
   async joinMatch(

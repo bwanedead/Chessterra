@@ -6,6 +6,35 @@ const jsonHeaders = (playerId: string) => ({
   'X-Player-Id': playerId,
 });
 
+/** Typed client-side error carrying HTTP status and server error code. */
+export class MatchApiError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+    readonly code: string | null,
+  ) {
+    super(message);
+    this.name = 'MatchApiError';
+  }
+}
+
+const toApiError = async (response: Response, fallback: string): Promise<MatchApiError> => {
+  let message = fallback;
+  let code: string | null = null;
+  try {
+    const data = (await response.json()) as { error?: unknown; code?: unknown };
+    if (typeof data.error === 'string' && data.error.length > 0) {
+      message = data.error;
+    }
+    if (typeof data.code === 'string' && data.code.length > 0) {
+      code = data.code;
+    }
+  } catch {
+    // Non-JSON body (e.g. gateway error page); keep fallback message.
+  }
+  return new MatchApiError(message, response.status, code);
+};
+
 export const fetchMatch = async (
   matchId: string,
   playerId?: string | null,
@@ -15,7 +44,7 @@ export const fetchMatch = async (
     playerId: playerId ?? null,
   });
   if (!response.ok) {
-    throw new Error('Failed to load match');
+    throw await toApiError(response, 'Failed to load match');
   }
   const data = (await response.json()) as { match: MatchSnapshot };
   return data.match;
@@ -31,11 +60,10 @@ export const createInviteMatch = async (
     body: JSON.stringify(options ?? {}),
     playerId,
   });
-  const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.error ?? 'Failed to create match');
+    throw await toApiError(response, 'Failed to create match');
   }
-  return data;
+  return response.json();
 };
 
 export const joinMatch = async (matchId: string, playerId: string): Promise<MatchSnapshot> => {
@@ -44,10 +72,10 @@ export const joinMatch = async (matchId: string, playerId: string): Promise<Matc
     headers: jsonHeaders(playerId),
     playerId,
   });
-  const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.error ?? 'Failed to join match');
+    throw await toApiError(response, 'Failed to join match');
   }
+  const data = (await response.json()) as { match: MatchSnapshot };
   return data.match;
 };
 
@@ -62,10 +90,10 @@ export const postMatchMove = async (
     body: JSON.stringify(move),
     playerId,
   });
-  const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.error ?? 'Illegal move');
+    throw await toApiError(response, 'Illegal move');
   }
+  const data = (await response.json()) as { match: MatchSnapshot };
   return data.match;
 };
 
@@ -75,9 +103,9 @@ export const postMatchResign = async (matchId: string, playerId: string): Promis
     headers: jsonHeaders(playerId),
     playerId,
   });
-  const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.error ?? 'Failed to resign');
+    throw await toApiError(response, 'Failed to resign');
   }
+  const data = (await response.json()) as { match: MatchSnapshot };
   return data.match;
 };

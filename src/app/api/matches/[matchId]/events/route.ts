@@ -1,27 +1,26 @@
 import { requireRequestActor } from '@/server/auth';
 import { matchErrorResponse, matchErrorStatus, matchService } from '@/server/match';
 import { createMatchRouteResponder } from '@/server/observability/matchRoute';
-import { checkMatchRateLimit } from '@/server/security/matchRateLimits';
 
 interface RouteContext {
   params: Promise<{ matchId: string }>;
 }
 
-export async function POST(request: Request, context: RouteContext) {
+/**
+ * Audit event replay for debugging a match.
+ * Participant-only: events contain FENs and move detail, which participants
+ * already see on the board. Not a public surface.
+ */
+export async function GET(request: Request, context: RouteContext) {
   const { matchId } = await context.params;
-  const respond = createMatchRouteResponder('resign', matchId);
+  const respond = createMatchRouteResponder('events', matchId);
   try {
     const resolved = await requireRequestActor(request);
     if ('error' in resolved) {
       return respond.fail(resolved.status, { error: resolved.error });
     }
 
-    const rate = checkMatchRateLimit('resign', resolved.actor.userId);
-    if (!rate.allowed) {
-      return respond.rateLimited(rate.retryAfterSeconds, resolved.actor);
-    }
-
-    const result = await matchService.resign(matchId, resolved.actor.userId);
+    const result = await matchService.listMatchEvents(matchId, resolved.actor.userId);
     if (!result.ok) {
       return respond.fail(
         matchErrorStatus(result.error.code),
@@ -30,7 +29,7 @@ export async function POST(request: Request, context: RouteContext) {
       );
     }
 
-    return respond.ok({ match: result.value }, resolved.actor);
+    return respond.ok({ events: result.value }, resolved.actor);
   } catch (error) {
     return respond.exception(error);
   }

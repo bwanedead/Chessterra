@@ -2,20 +2,30 @@
 
 Checklist before promoting integration → `main`. Run against a Supabase project with migrations applied and env vars set in Vercel preview.
 
-## Status (last updated: 2025-06-21)
+## Status (last updated: 2026-07-12)
 
 | Area | Status | Notes |
 |------|--------|-------|
 | Local readiness script | **available** | `npm run verify:integration` — env/migration/auth/API file checks; no secrets logged |
-| Domain/server unit tests | **available** | `npm run test` — match service guards, moves, events, version conflict |
+| Domain/server unit tests | **available** | `npm run test` — match guards, moves, version conflict, history, replay, rate limits |
 | Build gates | **automated locally** | `npm run lint`, `npm run build` |
 | Supabase migrations on disk | **present** | phase1, realtime, RLS hardening (`matches.version`), `commit_match_update` RPC |
+| Security patch | **done** | Next.js 15.2.9 (React2Shell CVEs); `npx fix-react2shell-next` clean |
 | Migrations applied (remote) | **manual** | Run `npm run db:push` or apply SQL in Supabase dashboard |
 | Auth E2E | **manual** | Guest vs signed-in, rated boundaries |
 | Invite game E2E (two users) | **manual** | Requires preview deploy + Supabase env (eg-105b) |
-| Realtime/reconnect polish | **not started** | Phase D — after Supabase E2E passes |
-| Match history | **not started** | Phase E |
+| Realtime/reconnect polish | **code done (PR #16)** | Realtime health → poll fallback, resync on reconnect/focus/online, 409 recovery, friendly errors |
+| Match history | **code done (PR #17)** | `/history` + `GET /api/me/matches`, participant-scoped |
+| Observability | **code done (PR #18)** | Structured match API logs, `GET /api/matches/:id/events` replay |
+| Rate limiting | **code done (PR #19)** | create/join/move/resign throttled; guest IP guard; `docs/development-insights/rate-limits.md` |
 | Matchmaking | **blocked** | Do not build until invite games are boringly reliable |
+
+### Reconnect checks (add to manual E2E)
+
+- [ ] Kill/restore network in one browser mid-game → badge shows Reconnecting → board resyncs
+- [ ] Refresh a browser mid-game → game resumes with correct state
+- [ ] Simultaneous move race → loser sees friendly retry message, board refreshes
+- [ ] `/history` shows the completed game for both players; signed-out user gets 401 from `/api/me/matches`
 
 **Quick local check:**
 
