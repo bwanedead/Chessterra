@@ -1,15 +1,19 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { MatchSnapshot } from '@/domain/play/match/types';
 import { findPlayerByUserId } from '@/domain/play/match/factory';
 import type { PieceColor } from '@/features/chessboard/types';
 import { asUserId } from '@/platform/ids';
 import { isSupabaseConfigured } from '@/platform/supabase/env';
 import { fetchMatch, joinMatch, postMatchMove, postMatchResign } from '../api/matchApi';
-import { useMatchRealtime } from './useMatchRealtime';
+import { describeMatchError, isVersionConflict } from '../lib/matchErrorMessages';
+import { useMatchRealtime, type MatchRealtimeStatus } from './useMatchRealtime';
 
 const POLL_MS = 1500;
+
+/** How the client is currently kept in sync with server truth. */
+export type MatchConnectionMode = 'realtime' | 'polling' | 'reconnecting';
 
 export interface UseOnlineMatchOptions {
   matchId: string;
@@ -22,6 +26,8 @@ export const useOnlineMatch = ({ matchId, playerId, autoJoin = true }: UseOnline
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [joinAttempted, setJoinAttempted] = useState(false);
+  const [realtimeStatus, setRealtimeStatus] = useState<MatchRealtimeStatus>('idle');
+  const previousRealtimeStatus = useRef<MatchRealtimeStatus>('idle');
 
   const refresh = useCallback(async () => {
     try {
@@ -29,7 +35,7 @@ export const useOnlineMatch = ({ matchId, playerId, autoJoin = true }: UseOnline
       setMatch(next);
       setError(null);
     } catch (refreshError) {
-      setError(refreshError instanceof Error ? refreshError.message : 'Failed to refresh match');
+      setError(describeMatchError(refreshError, 'Failed to refresh match'));
     } finally {
       setLoading(false);
     }
@@ -41,14 +47,42 @@ export const useOnlineMatch = ({ matchId, playerId, autoJoin = true }: UseOnline
     setLoading(false);
   }, []);
 
-  useMatchRealtime(
-    matchId,
-    handleRealtimeUpdate,
-    isSupabaseConfigured() && Boolean(playerId && !playerId.startsWith('guest-')),
+  const handleRealtimeStatus = useCallback(
+    (status: MatchRealtimeStatus) => {
+      // Updates can be missed while the channel is down; resync on recovery.
+      if (status === 'connected' && previousRealtimeStatus.current === 'reconnecting') {
+        void refresh();
+      }
+      previousRealtimeStatus.current = status;
+      setRealtimeStatus(status);
+    },
+    [refresh],
   );
+
+  const realtimeEnabled =
+    isSupabaseConfigured() && Boolean(playerId && !playerId.startsWith('guest-'));
+
+  useMatchRealtime(matchId, handleRealtimeUpdate, realtimeEnabled, handleRealtimeStatus);
 
   useEffect(() => {
     void refresh();
+  }, [refresh]);
+
+  // Resync when the tab regains focus or the browser comes back online.
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        void refresh();
+      }
+    };
+    const handleOnline = () => void refresh();
+
+    document.addEventListener('visibilitychange', handleVisibility);
+    window.addEventListener('online', handleOnline);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('online', handleOnline);
+    };
   }, [refresh]);
 
   useEffect(() => {
@@ -65,12 +99,12 @@ export const useOnlineMatch = ({ matchId, playerId, autoJoin = true }: UseOnline
     void joinMatch(matchId, playerId)
       .then(setMatch)
       .catch((joinError) => {
-        setError(joinError instanceof Error ? joinError.message : 'Failed to join match');
+        setError(describeMatchError(joinError, 'Failed to join match'));
       });
   }, [autoJoin, joinAttempted, match, matchId, playerId]);
 
-  const usePolling =
-    !isSupabaseConfigured() || Boolean(playerId && playerId.startsWith('guest-'));
+  // Poll whenever realtime is unavailable (guests, Supabase unset) or unhealthy.
+  const usePolling = !realtimeEnabled || realtimeStatus !== 'connected';
 
   useEffect(() => {
     if (!match || match.status === 'completed' || match.status === 'aborted') {
@@ -86,7 +120,13 @@ export const useOnlineMatch = ({ matchId, playerId, autoJoin = true }: UseOnline
     }, POLL_MS);
 
     return () => window.clearInterval(intervalId);
-  }, [match, playerId, refresh, usePolling]);
+  }, [match, refresh, usePolling]);
+
+  const connectionMode: MatchConnectionMode = !realtimeEnabled
+    ? 'polling'
+    : realtimeStatus === 'connected'
+      ? 'realtime'
+      : 'reconnecting';
 
   const player = useMemo(() => {
     if (!match || !playerId) {
@@ -112,11 +152,15 @@ export const useOnlineMatch = ({ matchId, playerId, autoJoin = true }: UseOnline
         setError(null);
         return true;
       } catch (moveError) {
-        setError(moveError instanceof Error ? moveError.message : 'Move failed');
+        // Stale snapshot: pull latest board so the player can retry immediately.
+        if (isVersionConflict(moveError)) {
+          void refresh();
+        }
+        setError(describeMatchError(moveError, 'Move failed'));
         return false;
       }
     },
-    [matchId, playerId],
+    [matchId, playerId, refresh],
   );
 
   const resign = useCallback(async () => {
@@ -128,9 +172,14 @@ export const useOnlineMatch = ({ matchId, playerId, autoJoin = true }: UseOnline
       setMatch(next);
       setError(null);
     } catch (resignError) {
-      setError(resignError instanceof Error ? resignError.message : 'Resign failed');
+      if (isVersionConflict(resignError)) {
+        void refresh();
+      }
+      setError(describeMatchError(resignError, 'Resign failed'));
     }
-  }, [matchId, playerId]);
+  }, [matchId, playerId, refresh]);
+
+  const clearError = useCallback(() => setError(null), []);
 
   return {
     match,
@@ -140,8 +189,10 @@ export const useOnlineMatch = ({ matchId, playerId, autoJoin = true }: UseOnline
     canMove,
     activeColor,
     isTerminal,
+    connectionMode,
     refresh,
     commitMove,
     resign,
+    clearError,
   };
 };

@@ -59,4 +59,20 @@ export const createSupabaseMatchRepository = (supabase: SupabaseClient): MatchRe
 
     return { ok: true, version: result.version ?? expectedVersion + 1 };
   },
+
+  async listCompletedForUser(userId, limit) {
+    const { data, error } = await supabase
+      .from('matches')
+      .select('snapshot')
+      .eq('status', 'completed')
+      .contains('snapshot->players', JSON.stringify([{ userId }]))
+      .order('snapshot->>endedAt', { ascending: false })
+      .limit(limit);
+
+    if (error || !data) {
+      return [];
+    }
+
+    return (data as Pick<MatchRow, 'snapshot'>[]).map((row) => row.snapshot);
+  },
 });
